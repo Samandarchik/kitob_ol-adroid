@@ -8,5 +8,6 @@ const Color kGreyBorder = Color(0xffC1C1C1);
 const Color kGreyContainer = Color(0xffF8F8F8);
 const Color kImagesBackStart = Color(0xfffec5be);
 const Color kImagesBackEnd = Color(0xfffeeeea);
+Color kGreyBack = Colors.grey.shade100;
 const Color kTextColorImages = Color(0xff914746);
 const Color kred = Colors.red;

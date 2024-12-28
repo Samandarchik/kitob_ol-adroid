@@ -1,7 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:kitob_ol/color.dart';
-import 'package:kitob_ol/login/service/token.dart';
-import 'package:kitob_ol/login/service/verfication_code.dart';
 import 'package:kitob_ol/text_style.dart';
 import 'package:kitob_ol/widget/my_botton_text.dart';
 import 'package:kitob_ol/widget/text_class.dart';
@@ -19,18 +17,16 @@ class VerificationCode extends StatefulWidget {
 }
 
 class _VerificationCodeState extends State<VerificationCode> {
-  TokenStorage tokenStorage = TokenStorage();
-  VerificationPost verificationPost = VerificationPost();
   void verificationEmail() {
-    verificationPost.handleEmailLoginOrRegister(
-        widget.email, textcode.text, context, true);
+    // verificationPost.handleEmailLoginOrRegister(
+    //     widget.email, textcode.text, context, true);
     print(ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(content: Text("${widget.email}:${textcode.text}"))));
   }
 
   void verificationPhone() {
-    verificationPost.handleEmailLoginOrRegister(
-        widget.number, textcode.text, context, false);
+    // verificationPost.handleEmailLoginOrRegister(
+    //     widget.number, textcode.text, context, false);
     print(
       "${widget.number}:${textcode.text}",
     );
@@ -66,7 +62,7 @@ class _VerificationCodeState extends State<VerificationCode> {
                   MyElevedButtonBorder(
                     width: size.width * .42,
                     onTap: () {
-                      tokenStorage.removeToken;
+                      // tokenStorage.removeToken;
                     },
                     text: 'Orqaga',
                   ),

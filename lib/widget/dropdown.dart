@@ -13,13 +13,13 @@ class MyDropdown extends StatelessWidget {
       padding: const EdgeInsets.only(top: 12.0),
       child: DropdownButtonFormField<String>(
         decoration: InputDecoration(
-          labelText: label,
-          focusedBorder:
-              const OutlineInputBorder(borderSide: BorderSide(color: kBlack)),
-          border: const OutlineInputBorder(),
-          contentPadding: const EdgeInsets.all(8),
-          labelStyle: kTSFS16,
-        ),
+            labelText: label,
+            focusedBorder:
+                const OutlineInputBorder(borderSide: BorderSide(color: kBlack)),
+            border: const OutlineInputBorder(),
+            contentPadding: const EdgeInsets.all(8),
+            labelStyle: kTSFS16,
+            fillColor: kWhite),
         items: items.map((String value) {
           return DropdownMenuItem<String>(
             value: value,

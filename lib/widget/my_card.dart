@@ -28,11 +28,12 @@ class MyCard extends StatelessWidget {
       onTap: onTap,
       child: Container(
         decoration: BoxDecoration(
+            color: kWhite,
             border: Border.all(
               color: kGrey,
             ),
             borderRadius: BorderRadius.circular(10)),
-        margin: const EdgeInsets.all(8.0),
+        margin: const EdgeInsets.all(20.0),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
@@ -44,7 +45,7 @@ class MyCard extends StatelessWidget {
               ),
             ),
             Padding(
-              padding: const EdgeInsets.fromLTRB(8, 10, 0, 10),
+              padding: const EdgeInsets.fromLTRB(12, 10, 0, 10),
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
@@ -52,7 +53,7 @@ class MyCard extends StatelessWidget {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       SizedBox(
-                        width: MediaQuery.of(context).size.width * .29,
+                        width: MediaQuery.of(context).size.width * .7,
                         child: Text(
                           title,
                           style: TextStyle(
@@ -79,7 +80,7 @@ class MyCard extends StatelessWidget {
               ),
             ),
             Text(
-              " ${textClass.formatNumberWithSpaces(price)} So'm",
+              "  ${textClass.formatNumberWithSpaces(price)} So'm",
               style: const TextStyle(
                   fontWeight: FontWeight.bold, fontSize: 20, color: Colors.red),
             ),

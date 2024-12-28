@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:kitob_ol/color.dart';
-import 'package:kitob_ol/home/page/kitob.dart';
 import 'package:kitob_ol/widget/dropdown.dart';
 import 'package:kitob_ol/widget/my_botton_text.dart';
 import 'package:kitob_ol/widget/my_text_field.dart';
@@ -91,16 +90,16 @@ class _FilterControllerState extends State<FilterController> {
             top: 10,
             textColor: kWhite,
             onTap: () {
-              Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                      builder: (context) => Book(
-                            priceMax: 800000,
-                            priceMin: 2,
-                            //TODO Price Min Max
-                            // priceMin: _currentRangeValues.start.toInt(),
-                            // priceMax: _currentRangeValues.end.toInt(),
-                          )));
+              // Navigator.push(
+              //     context,
+              //     MaterialPageRoute(
+              //         builder: (context) => BookListScreen(
+              //             // priceMax: 800000,
+              //             // priceMin: 2,
+              //             //TODO Price Min Max
+              //             // priceMin: _currentRangeValues.start.toInt(),
+              //             // priceMax: _currentRangeValues.end.toInt(),
+              //             )));
             },
             text: "Qidirish",
             boxColor: imageColor),

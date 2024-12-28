@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:kitob_ol/color.dart';
-import 'package:kitob_ol/home/page/profile_edit.dart';
+import 'package:kitob_ol/profile/profile_edit.dart';
 import 'package:kitob_ol/widget/my_botton_text.dart';
 
 class MyProfile extends StatelessWidget {

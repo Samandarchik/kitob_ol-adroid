@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
 import 'package:kitob_ol/color.dart';
-import 'package:kitob_ol/home/page/details_info.dart';
-import 'package:kitob_ol/home/page/show_modal_bottom_sheet.dart';
+import 'package:kitob_ol/home/page/description.dart';
 import 'package:kitob_ol/text_style.dart';
 import 'package:kitob_ol/widget/my_botton_text.dart';
 import 'package:kitob_ol/widget/text_class.dart';
@@ -22,7 +22,7 @@ class Details extends StatelessWidget {
   final String imgUrl;
   final String writingType;
   final int viewCount;
-  final Map<String, String> location; // location endi Map bo'ldi
+  final String cityName;
   final String coverType;
   final String coverFormat;
   final String shitrixCode;
@@ -46,7 +46,7 @@ class Details extends StatelessWidget {
       required this.imgUrl,
       required this.writingType,
       required this.viewCount,
-      required this.location,
+      required this.cityName,
       required this.coverType,
       required this.coverFormat,
       required this.shitrixCode,
@@ -96,7 +96,7 @@ class Details extends StatelessWidget {
                       decoration: BoxDecoration(
                         image: DecorationImage(
                           image: NetworkImage(imageUrl),
-                          fit: BoxFit.cover,
+                          fit: BoxFit.contain,
                         ),
                         gradient: const LinearGradient(
                           colors: [kImagesBackStart, kImagesBackEnd],
@@ -128,11 +128,11 @@ class Details extends StatelessWidget {
                 const SizedBox(
                   height: 20,
                 ),
-                GridView.builder(
+                MasonryGridView.builder(
                   shrinkWrap: true,
                   physics: NeverScrollableScrollPhysics(),
-                  gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                      mainAxisExtent: 80, crossAxisCount: 2),
+                  gridDelegate: SliverSimpleGridDelegateWithFixedCrossAxisCount(
+                      crossAxisCount: 2),
                   itemCount: h1.length,
                   itemBuilder: (context, index) {
                     String key = h1.keys.elementAt(index);
@@ -143,6 +143,14 @@ class Details extends StatelessWidget {
                     );
                   },
                 ),
+                Align(
+                  alignment: Alignment.topRight,
+                  child: Text(
+                    "Ko'rishlar soni:$viewCount    ",
+                    style: kTSFW,
+                  ),
+                ),
+                SizedBox(height: 15),
                 // Additional info button
                 MyBottonText(
                   text: "Qo'shimcha malumot",
@@ -150,11 +158,10 @@ class Details extends StatelessWidget {
                   textColor: imageColor,
                   onTap: () {
                     Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                          builder: (context) =>
-                              DetailsInfo(description: description)),
-                    );
+                        context,
+                        MaterialPageRoute(
+                            builder: (context) =>
+                                DescriptionPage(description: description)));
                   },
                 ),
                 // Contact button (bottom sheet)
@@ -163,15 +170,7 @@ class Details extends StatelessWidget {
                   text: "Murojat",
                   boxColor: imageColor,
                   textColor: kWhite,
-                  onTap: () {
-                    showModalBottomSheet(
-                      backgroundColor: kWhite,
-                      context: context,
-                      builder: (BuildContext context) {
-                        return MyShowModalBottomSheet();
-                      },
-                    );
-                  },
+                  onTap: () {},
                 ),
                 const SizedBox(
                   height: 10,
@@ -203,7 +202,7 @@ class InfoGrid extends StatelessWidget {
             children: [
               Text(
                 h1,
-                style: TextStyle(color: kBlack.withOpacity(.4)),
+                style: TextStyle(color: Colors.black45),
               ),
               SizedBox(
                 width: MediaQuery.of(context).size.width / 2.5,

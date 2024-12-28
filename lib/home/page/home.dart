@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:kitob_ol/color.dart';
-import 'package:kitob_ol/filter_controller/filter_controller.dart';
+import 'package:kitob_ol/home/service/filter_controller.dart';
 import 'package:kitob_ol/text_style.dart';
 import 'package:kitob_ol/widget/app_bar.dart';
 import 'package:kitob_ol/widget/drawer.dart';

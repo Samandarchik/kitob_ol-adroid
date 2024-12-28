@@ -1,8 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:kitob_ol/color.dart'; // Sizning color.dart faylingizni import qilyapman
-import 'package:kitob_ol/login/page/register.dart'; // Register sahifasi
-import 'package:kitob_ol/home/page/home.dart';
-import 'package:kitob_ol/login/service/verfication_code.dart';
+import 'package:kitob_ol/home/page/ui.dart';
+import 'package:kitob_ol/login/page/register.dart';
+import 'package:kitob_ol/vacancies/ui/vacancies_ui.dart';
+import 'package:kitob_ol/vacancies/widgets/vacancies_card.dart'; // Register sahifasi
 
 void main() {
   runApp(const MyApp());
@@ -23,8 +24,7 @@ class MyApp extends StatelessWidget {
         scaffoldBackgroundColor: kWhite,
       ),
       debugShowCheckedModeBanner: false,
-      home:
-          const HomePage(), // Tokenni tekshirib, kerakli sahifaga yo'naltiramiz
+      home: VacancyListScreen(),
     );
   }
 }
@@ -34,23 +34,6 @@ class AuthRedirectPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return FutureBuilder<String?>(
-      future: VerificationPost().getToken(), //
-      builder: (context, snapshot) {
-        // Agar token o'qilayotgan bo'lsa
-        if (snapshot.connectionState == ConnectionState.waiting) {
-          return const Scaffold(
-            body: Center(child: CircularProgressIndicator()),
-          );
-        }
-
-        // Agar token mavjud bo'lsa, HomePage ga o'tkazamiz
-        if (snapshot.hasData && snapshot.data != null) {
-          return const HomePage(); // Agar foydalanuvchi allaqachon login bo'lsa
-        } else {
-          return const Register(); // Agar foydalanuvchi login bo'lmagan bo'lsa, Register sahifasini ko'rsatamiz
-        }
-      },
-    );
+    return Register();
   }
 }

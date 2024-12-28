@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:kitob_ol/color.dart';
-import 'package:kitob_ol/login/service/register_post.dart';
 import 'package:kitob_ol/text_style.dart';
 import 'package:kitob_ol/widget/app_bar.dart';
 import 'package:kitob_ol/widget/my_botton_text.dart';
@@ -15,8 +14,6 @@ class Register extends StatefulWidget {
 }
 
 class _RegisterState extends State<Register> {
-  RegisterPost post = RegisterPost();
-
   TextClass textClass = TextClass();
   TextEditingController number = TextEditingController();
   TextEditingController email = TextEditingController();
@@ -64,14 +61,13 @@ class _RegisterState extends State<Register> {
                 true,
                 TextInputType.number,
                 number, (value) {
-                setState(() {
-                  // Formatlash va TextController ga qaytarish
-                  number.text = textClass.formatPhoneNumber(value);
-                  // Kursorni oxiriga qo'yish
-                  number.selection =
-                      TextSelection.collapsed(offset: number.text.length);
-                });
-
+              setState(() {
+                // Formatlash va TextController ga qaytarish
+                number.text = textClass.formatPhoneNumber(value);
+                // Kursorni oxiriga qo'yish
+                number.selection =
+                    TextSelection.collapsed(offset: number.text.length);
+              });
             }),
             register(
                 context,
@@ -137,7 +133,6 @@ class _RegisterState extends State<Register> {
                           if (controller.text.length == 12) {
                             String rawNumber =
                                 controller.text.replaceAll(' ', '');
-                            post.registerUserNumber(rawNumber, context);
                           } else {
                             ScaffoldMessenger.of(context).showSnackBar(
                                 const SnackBar(
@@ -146,8 +141,6 @@ class _RegisterState extends State<Register> {
                           }
                         }
                       : () {
-                          post.registerUserEmail(controller.text, context);
-
                           if (controller.text.isEmpty) {
                             ScaffoldMessenger.of(context).showSnackBar(SnackBar(
                                 content: Text("Email masnzil kiriting")));
