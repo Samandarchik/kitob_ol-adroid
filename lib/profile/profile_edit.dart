@@ -14,11 +14,35 @@ class MyProfileEdit extends StatefulWidget {
 }
 
 class _MyProfileEditState extends State<MyProfileEdit> {
-  TextEditingController name = TextEditingController();
-  TextEditingController lastName = TextEditingController();
-  TextEditingController birthday = TextEditingController();
-  TextEditingController phoneNumber = TextEditingController();
-  TextEditingController email = TextEditingController();
+  late final TextEditingController name;
+
+  late final TextEditingController lastName;
+  late final TextEditingController birthday;
+  late final TextEditingController phoneNumber;
+  late final TextEditingController email;
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    name = TextEditingController();
+    lastName = TextEditingController();
+    birthday = TextEditingController();
+    phoneNumber = TextEditingController();
+    email = TextEditingController();
+  }
+
+  @override
+  void dispose() {
+    // TODO: implement dispose
+    super.dispose();
+    name.dispose();
+    lastName.dispose();
+    birthday.dispose();
+    phoneNumber.dispose();
+    email.dispose();
+  }
+
   @override
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
@@ -41,7 +65,7 @@ class _MyProfileEditState extends State<MyProfileEdit> {
                     IconButton(
                         style: ButtonStyle(
                             backgroundColor: WidgetStatePropertyAll<Color>(
-                                Colors.grey.withOpacity(.3))),
+                                Colors.grey.shade300)),
                         onPressed: () {},
                         icon: const Icon(Icons.logout))
                   ],

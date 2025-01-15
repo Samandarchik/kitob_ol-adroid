@@ -1,22 +1,22 @@
 import 'dart:convert';
 import 'package:http/http.dart' as http;
-import 'package:kitob_ol/home/model/books_list.dart';
+import 'package:kitob_ol/home/service/ish.dart';
 
-class BookService {
-  final String apiUrl = "https://gateway.axadjonovsardorbek.uz/books/list";
+class IshService {
+  final String apiUrl = "https://gateway.axadjonovsardorbek.uz/vacancies/list";
 
   /// Replace with your API URL
 
-  Future<List<Book>> fetchBooks() async {
+  Future<List<Ish>> fetchIshs() async {
     final response = await http.get(Uri.parse(apiUrl));
 
     if (response.statusCode == 200) {
       final data = json.decode(response.body);
 
       // Map the JSON response to Book objects
-      List<Book> books = [];
-      for (var bookJson in data['books']) {
-        books.add(Book.fromJson(bookJson));
+      List<Ish> books = [];
+      for (var bookJson in data['vacancies']) {
+        books.add(Ish.fromJson(bookJson));
       }
       return books;
     } else {
@@ -24,9 +24,10 @@ class BookService {
     }
   }
 
-  Future<String> getBook(String id) async {
+  Future<String> getIsh(String id) async {
+    //https://gateway.axadjonovsardorbek.uz/vacancies/get?id=12
     final String url =
-        "https://gateway.axadjonovsardorbek.uz/books/get/full?book_id=$id";
+        "https://gateway.axadjonovsardorbek.uz/vacancies/get?id=$id";
     final response = await http.get(Uri.parse(url));
 
     if (response.statusCode == 200) {

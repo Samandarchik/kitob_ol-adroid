@@ -25,57 +25,63 @@ class MyProfile extends StatelessWidget {
           )
         ],
       ),
-      body: Padding(
-        padding: const EdgeInsets.symmetric(
-          horizontal: 10.0,
-        ),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            const Divider(),
-            Center(
-              child: Stack(
-                children: [
-                  Container(
-                    height: 200,
-                    width: 200,
-                    decoration: const BoxDecoration(
-                        shape: BoxShape.circle,
-                        image: DecorationImage(
-                            fit: BoxFit.cover,
-                            image: AssetImage("assets/image/image.png"))),
-                  ),
-                  Positioned(
-                      bottom: 0,
-                      right: 10,
-                      child: Container(
-                          padding: const EdgeInsets.all(10),
-                          decoration: BoxDecoration(
-                              border: Border.all(width: 3, color: Colors.white),
-                              color: Colors.black,
-                              shape: BoxShape.circle),
-                          child: SvgPicture.asset(
-                              height: 25,
-                              width: 25,
-                              "assets/icon/Gallery Edit.svg")))
-                ],
+      body: SingleChildScrollView(
+        child: Padding(
+          padding: const EdgeInsets.symmetric(
+            horizontal: 10.0,
+          ),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              const Divider(),
+              Center(
+                child: Stack(
+                  children: [
+                    Container(
+                      height: 200,
+                      width: 200,
+                      decoration: const BoxDecoration(
+                          shape: BoxShape.circle,
+                          image: DecorationImage(
+                              fit: BoxFit.cover,
+                              image: AssetImage("assets/image/image.png"))),
+                    ),
+                    Positioned(
+                        bottom: 0,
+                        right: 10,
+                        child: Container(
+                            padding: const EdgeInsets.all(10),
+                            decoration: BoxDecoration(
+                                border:
+                                    Border.all(width: 3, color: Colors.white),
+                                color: Colors.black,
+                                shape: BoxShape.circle),
+                            child: SvgPicture.asset(
+                                height: 25,
+                                width: 25,
+                                "assets/icon/Gallery Edit.svg")))
+                  ],
+                ),
               ),
-            ),
-            myText("Ism", "Nasibjon"),
-            myText("Familiya", "Ikromov"),
-            myText("Tug'ulgan sana", "07.07.1997"),
-            myText("Telefon raqam", "+998 88 155 72 73"),
-            myText("Email manzil", "Nasibjon007@gmail.com"),
-            SizedBox(
-              height: 10,
-            ),
-            MyElevedButtonBorder(
-                onTap: () {
-                  Navigator.push(context,
-                      MaterialPageRoute(builder: (context) => MyProfileEdit()));
-                },
-                text: "Edit")
-          ],
+              myText("Ism", "Samandar"),
+              myText("Familiya", "Ibragimov"),
+              myText("Tug'ulgan sana", "07.07.1997"),
+              myText("Telefon raqam", "+998 88 155 72 73"),
+              myText("Email manzil", "Nasibjon007@gmail.com"),
+              SizedBox(
+                height: 10,
+              ),
+              MyElevedButtonBorder(
+                  onTap: () {
+                    Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                            builder: (context) => MyProfileEdit()));
+                  },
+                  text: "Edit"),
+              SizedBox(height: 30)
+            ],
+          ),
         ),
       ),
     );

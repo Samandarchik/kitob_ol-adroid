@@ -1,74 +1,36 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
 import 'package:kitob_ol/color.dart';
+import 'package:kitob_ol/home/model/books_list.dart';
 import 'package:kitob_ol/home/page/description.dart';
 import 'package:kitob_ol/text_style.dart';
 import 'package:kitob_ol/widget/my_botton_text.dart';
 import 'package:kitob_ol/widget/text_class.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 class Details extends StatelessWidget {
-  final String description;
-  final String id;
-  final String sellerId;
-  final String publisherId;
-  final String categoryId;
-  final String translatorId;
-  final String authorId;
-  final String languageId;
-  final String title;
-  final int totalPages;
-  final int price;
-  final String imageUrl;
-  final String imgUrl;
-  final String writingType;
-  final int viewCount;
-  final String cityName;
-  final String coverType;
-  final String coverFormat;
-  final String shitrixCode;
-  final String createdAt;
-  final String publishedYear;
-  final bool isNew; // is_new nullable bo'lishi mumkin
+  final Book book;
 
-  const Details(
-      {required this.id,
-      required this.description,
-      required this.sellerId,
-      required this.publisherId,
-      required this.categoryId,
-      required this.translatorId,
-      required this.authorId,
-      required this.languageId,
-      required this.title,
-      required this.totalPages,
-      required this.price,
-      required this.imageUrl,
-      required this.imgUrl,
-      required this.writingType,
-      required this.viewCount,
-      required this.cityName,
-      required this.coverType,
-      required this.coverFormat,
-      required this.shitrixCode,
-      required this.createdAt,
-      required this.isNew,
-      required this.publishedYear});
+  const Details({
+    super.key,
+    required this.book,
+  });
 
   @override
   Widget build(BuildContext context) {
     Map<String, String> h1 = {
-      "Muallif": authorId,
-      "Tarjimon": translatorId,
-      "Kategoriya": categoryId,
-      "ISBN(ID)": shitrixCode,
-      "Muqova": coverType,
-      "Safiha": totalPages.toString(),
-      "Holati": isNew ? "Yangi" : "O'qilgan",
-      "Qog’oz formati": coverFormat,
-      "Tili": languageId,
-      "Yozuvi": writingType,
-      "Nashriyot": publisherId,
-      "Yili": publishedYear
+      "Muallif": book.authorName,
+      "Tarjimon": book.translatorName,
+      "Kategoriya": book.categoryName,
+      "ISBN(ID)": book.shitrixCode,
+      "Muqova": book.coverType == "soft" ? "Qattiq" : "Yumshoq",
+      "Safiha": book.totalPages.toString(),
+      "Holati": book.isNew ? "Yangi" : "O'qilgan",
+      "Qog’oz formati": book.coverFormat,
+      "Tili": book.languageName,
+      "Yozuvi": book.writingType == "latin" ? "Lotin" : "Ruscha",
+      "Nashriyot": book.publisherName,
+      "Yili": book.publishedYear
     };
 
     Size size = MediaQuery.of(context).size;
@@ -77,7 +39,7 @@ class Details extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(
         title: Text(
-          title,
+          book.title,
           style: kTSFWB18.copyWith(fontSize: 22),
         ),
       ),
@@ -95,7 +57,7 @@ class Details extends StatelessWidget {
                       height: 200,
                       decoration: BoxDecoration(
                         image: DecorationImage(
-                          image: NetworkImage(imageUrl),
+                          image: NetworkImage(book.imageUrl),
                           fit: BoxFit.contain,
                         ),
                         gradient: const LinearGradient(
@@ -122,7 +84,7 @@ class Details extends StatelessWidget {
                   height: 15,
                 ),
                 Text(
-                  "${textClass.formatNumberWithSpaces(price)} So'm",
+                  "${textClass.formatNumberWithSpaces(book.price)} So'm",
                   style: kTSFWB18.copyWith(fontSize: 24),
                 ),
                 const SizedBox(
@@ -146,7 +108,7 @@ class Details extends StatelessWidget {
                 Align(
                   alignment: Alignment.topRight,
                   child: Text(
-                    "Ko'rishlar soni:$viewCount    ",
+                    "Ko'rishlar soni: ${book.viewCount}    ",
                     style: kTSFW,
                   ),
                 ),
@@ -160,18 +122,26 @@ class Details extends StatelessWidget {
                     Navigator.push(
                         context,
                         MaterialPageRoute(
-                            builder: (context) =>
-                                DescriptionPage(description: description)));
+                            builder: (context) => DescriptionPage(
+                                description: book.description)));
                   },
                 ),
                 // Contact button (bottom sheet)
                 MyBottonText(
-                  top: 10,
-                  text: "Murojat",
-                  boxColor: imageColor,
-                  textColor: kWhite,
-                  onTap: () {},
-                ),
+                    top: 10,
+                    text: "Telefon qilish",
+                    boxColor: imageColor,
+                    textColor: kWhite,
+                    onTap: () async {
+                      final Uri url =
+                          Uri(scheme: "tel", path: book.sellerPhoneNumber);
+                      if (await canLaunchUrl(url)) {
+                        await launchUrl(url);
+                      } else {
+                        ScaffoldMessenger.of(context).showSnackBar(
+                            SnackBar(content: Text("Not Number")));
+                      }
+                    }),
                 const SizedBox(
                   height: 10,
                 ),

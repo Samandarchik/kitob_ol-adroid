@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:kitob_ol/color.dart';
 
 class MyBottonText extends StatelessWidget {
+  final double bottom;
   final String text;
   final Color boxColor;
   final Color textColor;
@@ -16,23 +17,28 @@ class MyBottonText extends StatelessWidget {
       required this.textColor,
       required this.onTap,
       this.top = 0,
-      this.width = double.infinity});
+      this.width = double.infinity,
+      this.bottom = 0});
 
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: EdgeInsets.only(top: top),
-      child: ElevatedButton(
-        onPressed: onTap,
-        style: ElevatedButton.styleFrom(
-          backgroundColor: boxColor,
-          shape: BeveledRectangleBorder(borderRadius: BorderRadius.circular(2)),
-          minimumSize: Size(width, 50),
-        ),
-        child: Text(
-          text,
-          style: TextStyle(
-              color: textColor, fontWeight: FontWeight.bold, fontSize: 16),
+      padding: EdgeInsets.only(bottom: bottom),
+      child: Padding(
+        padding: EdgeInsets.only(top: top),
+        child: ElevatedButton(
+          onPressed: onTap,
+          style: ElevatedButton.styleFrom(
+            backgroundColor: boxColor,
+            shape:
+                BeveledRectangleBorder(borderRadius: BorderRadius.circular(2)),
+            minimumSize: Size(width, 50),
+          ),
+          child: Text(
+            text,
+            style: TextStyle(
+                color: textColor, fontWeight: FontWeight.bold, fontSize: 16),
+          ),
         ),
       ),
     );

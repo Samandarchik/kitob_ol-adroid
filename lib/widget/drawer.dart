@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:kitob_ol/color.dart';
+import 'package:kitob_ol/home/page/save.dart';
 import 'package:kitob_ol/profile/profile.dart';
+import 'package:kitob_ol/widget/bildirish_noma.dart';
 
 class CustomDrawer extends StatelessWidget {
   const CustomDrawer({Key? key}) : super(key: key);
@@ -24,7 +26,6 @@ class CustomDrawer extends StatelessWidget {
                   "E'lon berish",
                   style: TextStyle(color: kWhite),
                 ),
-                onTap: () {},
               ),
               ListTile(
                 leading: Icon(
@@ -35,18 +36,11 @@ class CustomDrawer extends StatelessWidget {
                   'Saqlanganlar',
                   style: TextStyle(color: kWhite),
                 ),
-                onTap: () {},
-              ),
-              ListTile(
-                leading: Icon(
-                  Icons.notifications,
-                  color: kWhite,
-                ),
-                title: const Text(
-                  'Bildirishnomalar',
-                  style: TextStyle(color: kWhite),
-                ),
-                onTap: () {},
+                onTap: () {
+                  Navigator.pop(context);
+                  Navigator.push(
+                      context, MaterialPageRoute(builder: (context) => Save()));
+                },
               ),
               ListTile(
                 leading: const Icon(Icons.person_outline, color: kWhite),

@@ -17,27 +17,23 @@ class _MySliderState extends State<MySlider> {
     return SizedBox(
       height: size.height * .2,
       child: PageView.builder(
-        
         controller: pageController,
         itemCount: 4,
-        itemBuilder: (context, index) => Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 10),
-          child: Container(
-            padding: const EdgeInsets.all(20),
-            width: MediaQuery.of(context).size.width * .9,
-            decoration: BoxDecoration(
-                color: imageColor, borderRadius: BorderRadius.circular(20)),
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                const Text(
-                  "It is never \nlate to start \nreading!",
-                  style: TextStyle(
-                      fontWeight: FontWeight.bold, color: kWhite, fontSize: 22),
-                ),
-                Image.asset("assets/image/book.png")
-              ],
-            ),
+        itemBuilder: (context, index) => Container(
+          padding: const EdgeInsets.all(20),
+          width: MediaQuery.of(context).size.width * .9,
+          decoration: BoxDecoration(
+              color: imageColor, borderRadius: BorderRadius.circular(20)),
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              const Text(
+                "It is never \nlate to start \nreading!",
+                style: TextStyle(
+                    fontWeight: FontWeight.bold, color: kWhite, fontSize: 22),
+              ),
+              Image.asset("assets/image/book.png")
+            ],
           ),
         ),
       ),

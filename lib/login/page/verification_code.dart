@@ -49,9 +49,10 @@ class _VerificationCodeState extends State<VerificationCode> {
             children: [
               Text(
                 widget.isEmail
-                    ? "Bu ${widget.email} sizga tegishli bo'lmasa agar bekor qilish tugmasini bosing\n"
+                    ? "${widget.email} emailiga \nyuborilgan kodni kiriting\n"
                     : "Siz kiritgan telefon raqamiga +998 ${textClass.formatPhoneNumber(widget.number)} kod yuborildi. Iltimos kodni kiriting!\n",
-                style: kTSFWB18,
+                style: kTSFW,
+                textAlign: TextAlign.center,
               ),
               const SizedBox(height: 20),
               code(textcode),

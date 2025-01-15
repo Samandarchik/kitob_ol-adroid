@@ -1,8 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:kitob_ol/color.dart';
+import 'package:kitob_ol/data/data_token.dart';
 import 'package:kitob_ol/widget/text_class.dart';
 
-class MyCard extends StatelessWidget {
+class MyCardBook extends StatelessWidget {
   final String title;
   final String image;
   final String city;
@@ -11,7 +12,7 @@ class MyCard extends StatelessWidget {
   final VoidCallback onTap;
   final bool isFavorite;
 
-  const MyCard(
+  const MyCardBook(
       {super.key,
       required this.index,
       required this.price,
@@ -33,7 +34,7 @@ class MyCard extends StatelessWidget {
               color: kGrey,
             ),
             borderRadius: BorderRadius.circular(10)),
-        margin: const EdgeInsets.all(20.0),
+        margin: const EdgeInsets.symmetric(vertical: 10),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
@@ -70,7 +71,9 @@ class MyCard extends StatelessWidget {
                       style: const ButtonStyle(
                           backgroundColor:
                               WidgetStatePropertyAll<Color>(kGreyContainer)),
-                      onPressed: () {},
+                      onPressed: () async {
+                        print(TokenStorage().getToken().toString());
+                      },
                       icon: Icon(
                         isFavorite ? Icons.favorite_border : Icons.favorite,
                         size: MediaQuery.of(context).size.width * .05,
