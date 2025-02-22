@@ -14,6 +14,7 @@ class RegisterPost {
       "https://auth.axadjonovsardorbek.uz/auth/sms/login/email";
 
   // Telefon raqam bilan ro'yxatdan o'tish
+
   Future<Map<String, dynamic>> registerUserNumber(
     String phone,
     BuildContext context,
@@ -126,6 +127,7 @@ class RegisterPost {
       );
 
       if (response.statusCode == 201) {
+        print(response.statusCode);
         var responseData = jsonDecode(response.body);
         if (responseData['message'] == 'Sms sent successfully') {
           Navigator.push(

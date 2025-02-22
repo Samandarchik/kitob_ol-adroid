@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
 import 'package:kitob_ol/color.dart';
-import 'package:kitob_ol/home/model/books_list.dart';
+import 'package:kitob_ol/home/model/books_modul.dart';
 import 'package:kitob_ol/home/page/description.dart';
 import 'package:kitob_ol/text_style.dart';
 import 'package:kitob_ol/widget/my_botton_text.dart';
@@ -53,11 +53,13 @@ class Details extends StatelessWidget {
                 SizedBox(
                   height: size.height * .28,
                   child: PageView.builder(
+                    itemCount: 2,
                     itemBuilder: (context, index) => Container(
                       height: 200,
                       decoration: BoxDecoration(
                         image: DecorationImage(
-                          image: NetworkImage(book.imageUrl),
+                          image: NetworkImage(
+                              index == 0 ? book.imageUrl : book.imgUrl),
                           fit: BoxFit.contain,
                         ),
                         gradient: const LinearGradient(

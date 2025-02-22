@@ -12,6 +12,14 @@
 	<string>$(PRODUCT_BUNDLE_IDENTIFIER)</string>
 	<key>CFBundleInfoDictionaryVersion</key>
 	<string>6.0</string>
+	<key>NSCameraUsageDescription</key>
+	<string>Kameradan rasm olish uchun ruxsat</string>
+	<key>NSPhotoLibraryUsageDescription</key>
+	<string>Galereyadan rasm olish uchun ruxsat</string>
+	<key>NSMicrophoneUsageDescription</key>
+	<string>Video yozish uchun mikrofon ruxsati</string>
+	<key>NSPhotoLibraryAddUsageDescription</key>
+	<string>Rasmni galereyaga saqlash uchun ruxsat</string>
 	<key>CFBundleName</key>
 	<string>kitob_ol</string>
 	<key>CFBundlePackageType</key>

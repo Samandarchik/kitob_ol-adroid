@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:kitob_ol/color.dart';
+import 'package:kitob_ol/home/service/book_service.dart';
 import 'package:kitob_ol/home/service/ish.dart';
 import 'package:kitob_ol/home/service/ish_service.dart';
+import 'package:kitob_ol/vacancies/ui/vacancies_details.dart';
 import 'package:kitob_ol/vacancies/widgets/vacancies_card.dart';
 
 class IshList extends StatefulWidget {
@@ -49,6 +51,14 @@ class _IshListState extends State<IshList> {
             itemBuilder: (context, index) {
               Ish ish = ishs[index];
               return VacanciesCard(
+                onTap: () async {
+                  Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                          builder: (context) =>
+                              VacanciesDetails(vacancies: ish)));
+                  await BookService().getBook(ish.id);
+                },
                 ish: ish,
               );
             },

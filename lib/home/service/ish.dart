@@ -44,7 +44,7 @@ class Ish {
       districtName: Map<String, String>.from(json["district_name"] ?? {}),
       phoneNumber: json["phone_number"] ?? "",
       salaryTo: json["salary_to"] != null ? json["salary_to"] as int : 0,
-      viewCount: json["view_count"] ?? 0,
+      viewCount: json["view_count"] ?? 4,
       workingStyles: json["working_styles"] ?? "",
       workingTypes: json["working_types"] ?? "",
     );

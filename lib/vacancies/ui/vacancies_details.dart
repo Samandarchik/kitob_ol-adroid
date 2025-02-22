@@ -49,12 +49,12 @@ class VacanciesDetails extends StatelessWidget {
                     "Ish vaqti",
                     vacancies.workingTypes == "part_time"
                         ? "Doimiy"
-                        : "Ma'lum vaqtlarda"),
+                        : "Ma'lum soatlarda"),
                 myText("Ish turi", vacancies.description),
                 SizedBox(height: 10),
                 Align(
                     alignment: Alignment.topRight,
-                    child: Text("Ko'rilgan: ${vacancies.viewCount + 1}")),
+                    child: Text("Ko'rilgan: ${vacancies.viewCount}")),
               ],
             ),
           ),

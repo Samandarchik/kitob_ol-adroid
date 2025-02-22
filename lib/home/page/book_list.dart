@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:kitob_ol/color.dart';
-import 'package:kitob_ol/home/model/books_list.dart';
+import 'package:kitob_ol/home/model/books_modul.dart';
 import 'package:kitob_ol/home/page/details.dart';
 import 'package:kitob_ol/home/service/book_service.dart';
 import 'package:kitob_ol/widget/my_card.dart';
@@ -49,23 +49,18 @@ class _BookListState extends State<BookList> {
             itemCount: books.length,
             itemBuilder: (context, index) {
               Book book = books[index];
+
               return MyCardBook(
-                index: index,
-                price: book.price,
+                book: book,
                 onTap: () async {
-                  // Instead of casting, let's await the correct value
                   Navigator.push(
                       context,
                       MaterialPageRoute(
                           builder: (context) => Details(
                                 book: book,
                               )));
-                  String? viewCount = await BookService().getBook(book.id);
+                  await BookService().getBook(book.id);
                 },
-                title: book.title,
-                city: book.cityName,
-                image: book.imageUrl,
-                isFavorite: true,
               );
             },
           );

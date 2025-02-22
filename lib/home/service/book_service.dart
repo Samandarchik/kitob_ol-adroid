@@ -1,9 +1,11 @@
 import 'dart:convert';
 import 'package:http/http.dart' as http;
-import 'package:kitob_ol/home/model/books_list.dart';
+import 'package:kitob_ol/home/model/books_modul.dart';
+import 'package:kitob_ol/login/service/token.dart';
 
 class BookService {
-  final String apiUrl = "https://gateway.axadjonovsardorbek.uz/books/list";
+  final String apiUrl =
+      "https://gateway.axadjonovsardorbek.uz/books/list?status=active";
 
   /// Replace with your API URL
 
@@ -12,8 +14,10 @@ class BookService {
 
     if (response.statusCode == 200) {
       final data = json.decode(response.body);
-
+      minPrice = data["min_price"];
+      maxPrice = data["max_price"];
       // Map the JSON response to Book objects
+
       List<Book> books = [];
       for (var bookJson in data['books']) {
         books.add(Book.fromJson(bookJson));
@@ -37,3 +41,6 @@ class BookService {
     }
   }
 }
+
+num minPrice = 1;
+num maxPrice = 10000;

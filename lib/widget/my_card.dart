@@ -1,26 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:kitob_ol/color.dart';
-import 'package:kitob_ol/data/data_token.dart';
+import 'package:kitob_ol/home/model/books_modul.dart';
 import 'package:kitob_ol/widget/text_class.dart';
 
 class MyCardBook extends StatelessWidget {
-  final String title;
-  final String image;
-  final String city;
-  final int index;
-  final int price;
+  final Book book;
   final VoidCallback onTap;
-  final bool isFavorite;
-
-  const MyCardBook(
-      {super.key,
-      required this.index,
-      required this.price,
-      required this.onTap,
-      required this.title,
-      required this.city,
-      required this.image,
-      required this.isFavorite});
+  const MyCardBook({super.key, required this.book, required this.onTap});
 
   @override
   Widget build(BuildContext context) {
@@ -42,7 +28,10 @@ class MyCardBook extends StatelessWidget {
               borderRadius: const BorderRadius.only(
                   topLeft: Radius.circular(10), topRight: Radius.circular(10)),
               child: Image.network(
-                image,
+                book.imageUrl,
+                errorBuilder: (context, error, stackTrace) {
+                  return Text("       Image olishda xatolik");
+                },
               ),
             ),
             Padding(
@@ -56,13 +45,13 @@ class MyCardBook extends StatelessWidget {
                       SizedBox(
                         width: MediaQuery.of(context).size.width * .7,
                         child: Text(
-                          title,
+                          book.title,
                           style: TextStyle(
                               fontWeight: FontWeight.bold, fontSize: 18),
                         ),
                       ),
                       Text(
-                        city,
+                        book.cityName,
                         style: TextStyle(fontSize: 11),
                       )
                     ],
@@ -71,11 +60,9 @@ class MyCardBook extends StatelessWidget {
                       style: const ButtonStyle(
                           backgroundColor:
                               WidgetStatePropertyAll<Color>(kGreyContainer)),
-                      onPressed: () async {
-                        print(TokenStorage().getToken().toString());
-                      },
+                      onPressed: () {},
                       icon: Icon(
-                        isFavorite ? Icons.favorite_border : Icons.favorite,
+                        book.isNew ? Icons.favorite_border : Icons.favorite,
                         size: MediaQuery.of(context).size.width * .05,
                         color: Colors.red,
                       ))
@@ -83,7 +70,7 @@ class MyCardBook extends StatelessWidget {
               ),
             ),
             Text(
-              "  ${textClass.formatNumberWithSpaces(price)} So'm",
+              "  ${textClass.formatNumberWithSpaces(book.price)} So'm",
               style: const TextStyle(
                   fontWeight: FontWeight.bold, fontSize: 20, color: Colors.red),
             ),

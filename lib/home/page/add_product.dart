@@ -13,7 +13,6 @@ class _AddProductState extends State<AddProduct> {
   late final TextEditingController categoriya;
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
     bookName = TextEditingController();
     categoriya = TextEditingController();
@@ -21,7 +20,6 @@ class _AddProductState extends State<AddProduct> {
 
   @override
   void dispose() {
-    // TODO: implement dispose
     super.dispose();
     bookName.dispose();
     categoriya.dispose();

@@ -7,13 +7,12 @@ import 'package:kitob_ol/widget/text_class.dart';
 
 class VacanciesCard extends StatelessWidget {
   final Ish ish;
-  const VacanciesCard({
-    super.key,
-    required this.ish,
-  });
+  final VoidCallback onTap;
+  const VacanciesCard({super.key, required this.ish, required this.onTap});
 
   @override
   Widget build(BuildContext context) {
+    print(ish.viewCount);
     return GestureDetector(
       onTap: () {
         Navigator.push(

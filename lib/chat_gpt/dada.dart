@@ -1,6 +1,7 @@
 import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
+import 'package:kitob_ol/color.dart';
 
 class BookDetailsScreen extends StatefulWidget {
   final int bookId;
@@ -65,7 +66,10 @@ class _BookDetailsScreenState extends State<BookDetailsScreen> {
         title: const Text('Book Details'),
       ),
       body: bookDetails == null
-          ? const Center(child: CircularProgressIndicator())
+          ? const Center(
+              child: CircularProgressIndicator(
+              color: kBlack,
+            ))
           : Padding(
               padding: const EdgeInsets.all(16.0),
               child: Column(

@@ -82,13 +82,16 @@ class MyTextFieldFilled extends StatelessWidget {
             controller: controller,
             maxLength: maxLens ? maxLines : null,
             keyboardType: textInputType,
-            textCapitalization: TextCapitalization.sentences,
+            textCapitalization: TextCapitalization.none,
             textInputAction: next,
             cursorColor: kBlack,
             decoration: InputDecoration(
               counterText: "",
               hintText: text,
-              prefixText: hint,
+              icon: Text(
+                hint,
+                style: kTSFW,
+              ),
               enabledBorder: const OutlineInputBorder(
                   borderSide: BorderSide(color: Colors.transparent)),
               filled: true,

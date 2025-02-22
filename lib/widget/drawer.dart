@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:kitob_ol/color.dart';
+import 'package:kitob_ol/home/page/favourit_list.dart';
+import 'package:kitob_ol/home/page/favourites_service.dart';
 import 'package:kitob_ol/home/page/save.dart';
 import 'package:kitob_ol/profile/profile.dart';
 import 'package:kitob_ol/widget/bildirish_noma.dart';
@@ -22,12 +24,6 @@ class CustomDrawer extends StatelessWidget {
                 height: 10,
               ),
               ListTile(
-                title: const Text(
-                  "E'lon berish",
-                  style: TextStyle(color: kWhite),
-                ),
-              ),
-              ListTile(
                 leading: Icon(
                   Icons.bookmark_outline,
                   color: kWhite,
@@ -38,8 +34,8 @@ class CustomDrawer extends StatelessWidget {
                 ),
                 onTap: () {
                   Navigator.pop(context);
-                  Navigator.push(
-                      context, MaterialPageRoute(builder: (context) => Save()));
+                  Navigator.push(context,
+                      MaterialPageRoute(builder: (context) => FavouritList()));
                 },
               ),
               ListTile(
@@ -69,7 +65,10 @@ class CustomDrawer extends StatelessWidget {
                   ],
                 ),
                 onTap: () {
-                  // Handle the action for this item
+                  Navigator.pop(context);
+                  ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
+                    content: Text("Tez orada"),
+                  ));
                 },
               ),
             ],

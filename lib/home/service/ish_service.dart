@@ -14,11 +14,11 @@ class IshService {
       final data = json.decode(response.body);
 
       // Map the JSON response to Book objects
-      List<Ish> books = [];
+      List<Ish> ish = [];
       for (var bookJson in data['vacancies']) {
-        books.add(Ish.fromJson(bookJson));
+        ish.add(Ish.fromJson(bookJson));
       }
-      return books;
+      return ish;
     } else {
       throw Exception('Failed to load books');
     }
