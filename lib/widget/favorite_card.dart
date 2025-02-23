@@ -1,11 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:kitob_ol/color.dart';
-import 'package:kitob_ol/home/model/books_modul.dart';
-import 'package:kitob_ol/home/page/favourites_service.dart';
+import 'package:kitob_ol/home/model/book_model_favorite.dart';
 import 'package:kitob_ol/widget/text_class.dart';
 
 class FavoriteCard extends StatelessWidget {
-  final BookListFavorite book;
+  final BookModelFavorite book;
   final VoidCallback onTap;
   const FavoriteCard({super.key, required this.book, required this.onTap});
 
@@ -21,7 +20,7 @@ class FavoriteCard extends StatelessWidget {
               color: kGrey,
             ),
             borderRadius: BorderRadius.circular(10)),
-        margin: const EdgeInsets.symmetric(vertical: 10),
+        margin: const EdgeInsets.all(10),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
@@ -52,7 +51,7 @@ class FavoriteCard extends StatelessWidget {
                         ),
                       ),
                       Text(
-                        book.cityName ?? "book.cityName",
+                        "book.cityName",
                         style: TextStyle(fontSize: 11),
                       )
                     ],
@@ -63,9 +62,7 @@ class FavoriteCard extends StatelessWidget {
                               WidgetStatePropertyAll<Color>(kGreyContainer)),
                       onPressed: () {},
                       icon: Icon(
-                        book.isNew ?? true
-                            ? Icons.favorite_border
-                            : Icons.favorite,
+                        Icons.favorite,
                         size: MediaQuery.of(context).size.width * .05,
                         color: Colors.red,
                       ))
@@ -73,7 +70,7 @@ class FavoriteCard extends StatelessWidget {
               ),
             ),
             Text(
-              "  ${textClass.formatNumberWithSpaces(book.price ?? 000001)} So'm",
+              "  ${textClass.formatNumberWithSpaces(book.price!)} So'm",
               style: const TextStyle(
                   fontWeight: FontWeight.bold, fontSize: 20, color: Colors.red),
             ),

@@ -3,9 +3,11 @@ import 'package:kitob_ol/provider.dart';
 import 'package:provider/provider.dart';
 import 'package:kitob_ol/get_filter_service.dart';
 import 'package:kitob_ol/kam.dart';
-import 'package:kitob_ol/model.dart';
+import 'package:kitob_ol/home/model/category_model.dart';
 
 class CategoryList extends StatefulWidget {
+  const CategoryList({super.key});
+
   @override
   _CategoryListState createState() => _CategoryListState();
 }

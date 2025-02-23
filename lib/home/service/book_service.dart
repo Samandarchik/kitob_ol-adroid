@@ -1,6 +1,7 @@
 import 'dart:convert';
 import 'package:http/http.dart' as http;
-import 'package:kitob_ol/home/model/books_modul.dart';
+import 'package:kitob_ol/home/model/books_model.dart';
+import 'package:kitob_ol/home/model/book_model_favorite.dart';
 import 'package:kitob_ol/login/service/token.dart';
 
 class BookService {

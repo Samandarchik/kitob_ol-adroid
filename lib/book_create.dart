@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:dio/dio.dart';
-import 'package:kitob_ol/kam.dart';
 
 class BookCreatePage extends StatefulWidget {
   @override
@@ -63,7 +62,6 @@ class _BookCreatePageState extends State<BookCreatePage> {
         options: Options(
           headers: {
             "Authorization": "Bearer $token",
-            "Accept": "application/json",
             "Content-Type": "application/json",
           },
         ),

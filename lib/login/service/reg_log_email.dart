@@ -1,71 +1,72 @@
-import 'package:http/http.dart' as http;
 import 'dart:convert';
 
+import 'package:http/http.dart' as http;
 import 'package:flutter/material.dart';
-import 'package:kitob_ol/login/page/verification_code.dart';
+import 'package:kitob_ol/login/ui/verification_code.dart';
 
-class RegisterApi {
-  String registerUrlEmail =
+class RegisterApiEmail {
+  final String registerUrlEmail =
       "https://auth.axadjonovsardorbek.uz/auth/sms/register/email";
-  String loginUrlEmail =
+  final String loginUrlEmail =
       "https://auth.axadjonovsardorbek.uz/auth/sms/login/email";
 
-  Future<Map<String, dynamic>> loginUserEmail(
-    String email,
-    BuildContext context,
-  ) async {
+  Future<void> loginUserEmail(String email, BuildContext context) async {
     try {
-      Map<String, String> body = {'email': email};
       final response = await http.post(
         Uri.parse(registerUrlEmail),
         headers: {'Content-Type': 'application/json'},
-        body: jsonEncode(body),
+        body: jsonEncode({'email': email}),
       );
 
-      if (response.statusCode == 200) {
-        Navigator.pushAndRemoveUntil(
-          context,
-          MaterialPageRoute(
-              builder: (context) => VerificationCode(
-                    isEmail: true,
-                    email: email,
-                  )),
-          (route) => false, // Orqadagi barcha sahifalarni o‘chirish
-        );
-        ScaffoldMessenger.of(context).showSnackBar(
-            SnackBar(content: Text("$email manzilingizga kod yuborildi")));
+      if (response.statusCode == 200 || response.statusCode == 201) {
+        _navigateToVerification(context, email, true);
+        _showSnackBar(context, "Kod $email ga yuborildi (Register)");
       } else if (response.statusCode == 400) {
-        try {
-          Map<String, String> body = {
-            'email': email,
-          };
-
-          final response = await http.post(
-            Uri.parse(loginUrlEmail),
-            headers: {'Content-Type': 'application/json'},
-            body: jsonEncode(body),
-          );
-
-          if (response.statusCode == 200 || response.statusCode == 201) {
-            Navigator.pushAndRemoveUntil(
-              context,
-              MaterialPageRoute(
-                  builder: (context) => VerificationCode(
-                        isEmail: true,
-                        email: email,
-                      )),
-              (route) => false, // Orqadagi barcha sahifalarni o‘chirish
-            );
-            ScaffoldMessenger.of(context).showSnackBar(
-                SnackBar(content: Text("$email manzilingizga kod yuborildi")));
-          } else {}
-        } catch (e) {
-          print(e);
-        }
-      } else {}
+        await _loginUserEmail(email, context);
+      } else {
+        _showSnackBar(context, "Xatolik yuz berdi: ${response.statusCode}");
+      }
     } catch (e) {
-      print(e);
+      _showSnackBar(context, "Xatolik: $e");
     }
-    return {};
+  }
+
+  Future<void> _loginUserEmail(String email, BuildContext context) async {
+    try {
+      final response = await http.post(
+        Uri.parse(loginUrlEmail),
+        headers: {'Content-Type': 'application/json'},
+        body: jsonEncode({'email': email}),
+      );
+
+      if (response.statusCode == 200 || response.statusCode == 201) {
+        _navigateToVerification(context, email, false);
+        // ignore: use_build_context_synchronously
+        _showSnackBar(context, "Kod $email ga yuborildi (Login)");
+      } else {
+        _showSnackBar(context, "Login xatosi: ${response.statusCode}");
+      }
+    } catch (e) {
+      _showSnackBar(context, "Login xatosi: $e");
+    }
+  }
+
+  void _navigateToVerification(
+      BuildContext context, String email, bool isRegister) {
+    Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder: (context) => VerificationCode(
+          isEmail: true,
+          isRegister: isRegister,
+          email: email,
+        ),
+      ),
+    );
+  }
+
+  void _showSnackBar(BuildContext context, String message) {
+    ScaffoldMessenger.of(context)
+        .showSnackBar(SnackBar(content: Text(message)));
   }
 }

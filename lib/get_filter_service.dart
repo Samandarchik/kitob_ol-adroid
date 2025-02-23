@@ -1,6 +1,6 @@
 import 'dart:convert';
 import 'package:http/http.dart' as http;
-import 'package:kitob_ol/model.dart';
+import 'package:kitob_ol/home/model/category_model.dart';
 
 class ApiService {
   static const String baseUrl = "https://gateway.axadjonovsardorbek.uz";

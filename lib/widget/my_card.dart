@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:kitob_ol/color.dart';
-import 'package:kitob_ol/home/model/books_modul.dart';
+import 'package:kitob_ol/home/model/books_model.dart';
 import 'package:kitob_ol/widget/text_class.dart';
 
 class MyCardBook extends StatelessWidget {
@@ -28,7 +28,7 @@ class MyCardBook extends StatelessWidget {
               borderRadius: const BorderRadius.only(
                   topLeft: Radius.circular(10), topRight: Radius.circular(10)),
               child: Image.network(
-                book.imageUrl,
+                book.imageUrl!,
                 errorBuilder: (context, error, stackTrace) {
                   return Text("       Image olishda xatolik");
                 },
@@ -45,13 +45,13 @@ class MyCardBook extends StatelessWidget {
                       SizedBox(
                         width: MediaQuery.of(context).size.width * .7,
                         child: Text(
-                          book.title,
+                          book.title!,
                           style: TextStyle(
                               fontWeight: FontWeight.bold, fontSize: 18),
                         ),
                       ),
                       Text(
-                        book.cityName,
+                        book.cityName!,
                         style: TextStyle(fontSize: 11),
                       )
                     ],
@@ -62,7 +62,7 @@ class MyCardBook extends StatelessWidget {
                               WidgetStatePropertyAll<Color>(kGreyContainer)),
                       onPressed: () {},
                       icon: Icon(
-                        book.isNew ? Icons.favorite_border : Icons.favorite,
+                        Icons.favorite_border,
                         size: MediaQuery.of(context).size.width * .05,
                         color: Colors.red,
                       ))
@@ -70,7 +70,7 @@ class MyCardBook extends StatelessWidget {
               ),
             ),
             Text(
-              "  ${textClass.formatNumberWithSpaces(book.price)} So'm",
+              "  ${textClass.formatNumberWithSpaces(book.price!)} So'm",
               style: const TextStyle(
                   fontWeight: FontWeight.bold, fontSize: 20, color: Colors.red),
             ),

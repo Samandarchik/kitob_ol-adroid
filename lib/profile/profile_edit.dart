@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:kitob_ol/color.dart';
+import 'package:kitob_ol/home/model/user_info_model.dart';
 import 'package:kitob_ol/profile_service.dart';
 import 'package:kitob_ol/text_style.dart';
 import 'package:kitob_ol/widget/my_botton_text.dart';
@@ -205,7 +206,7 @@ class _MyProfileEditState extends State<MyProfileEdit> {
                                 SizedBox(width: 10),
                                 GestureDetector(
                                     onTap: () async {
-                                      updateProfile();
+                                      // updateProfile();
                                     },
                                     child: const Text("Ha  ")),
                               ],
@@ -257,11 +258,11 @@ class _MyProfileEditState extends State<MyProfileEdit> {
     print(birthday.text);
   }
 
-  Future<void> updateProfile() async {
-    await ProfileService().updateProfile(
-        UserDataModel(name.text, lastName.text, birthday.text, phoneNumber.text,
-            email.text, imageUrl, "user"),
-        context);
-    Navigator.pop(context);
-  }
+  // Future<void> updateProfile() async {
+  //   await ProfileService().updateProfile(
+  //       UserDataModel(name.text, lastName.text, birthday.text, phoneNumber.text,
+  //           email.text, imageUrl, "user"),
+  //       context);
+  //   Navigator.pop(context);
+  // }
 }

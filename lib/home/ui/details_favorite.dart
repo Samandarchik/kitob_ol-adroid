@@ -1,18 +1,18 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
 import 'package:kitob_ol/color.dart';
-import 'package:kitob_ol/home/model/books_modul.dart';
-import 'package:kitob_ol/home/page/description.dart';
-import 'package:kitob_ol/home/page/favourites_service.dart';
+import 'package:kitob_ol/home/model/book_model_favorite.dart';
+import 'package:kitob_ol/home/model/books_model.dart';
+import 'package:kitob_ol/home/ui/description.dart';
 import 'package:kitob_ol/text_style.dart';
 import 'package:kitob_ol/widget/my_botton_text.dart';
 import 'package:kitob_ol/widget/text_class.dart';
 import 'package:url_launcher/url_launcher.dart';
 
-class FavoriteDetail extends StatelessWidget {
-  final BookListFavorite book;
+class DetailsFavorite extends StatelessWidget {
+  final BookModelFavorite book;
 
-  const FavoriteDetail({
+  const DetailsFavorite({
     super.key,
     required this.book,
   });
@@ -20,18 +20,18 @@ class FavoriteDetail extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     Map<String, String> h1 = {
-      "Muallif": book.authorName ?? "authorName",
-      "Tarjimon": book.translatorName ?? "book.translatorName",
-      "Kategoriya": book.categoryName ?? "book.categoryName",
-      "ISBN(ID)": book.shitrixCode ?? "book.shitrixCode",
+      "Muallif": book.authorName!,
+      "Tarjimon": book.translatorName!,
+      "Kategoriya": book.categoryName!,
+      "ISBN(ID)": book.shitrixCode!,
       "Muqova": book.coverType == "soft" ? "Qattiq" : "Yumshoq",
       "Safiha": book.totalPages.toString(),
-      "Holati": book.isNew ?? true ? "Yangi" : "O'qilgan",
-      "Qog’oz formati": book.coverFormat ?? "book.coverFormat",
-      "Tili": book.languageName ?? "book.languageName",
+      "Holati": book.isNew! ? "Yangi" : "O'qilgan",
+      "Qog’oz formati": book.coverFormat!,
+      "Tili": book.languageName!,
       "Yozuvi": book.writingType == "latin" ? "Lotin" : "Ruscha",
-      "Nashriyot": book.publisherName ?? "book.publisherName",
-      "Yili": book.publishedYear ?? "book.publishedYear"
+      "Nashriyot": book.publisherName!,
+      "Yili": book.publishedYear!
     };
 
     Size size = MediaQuery.of(context).size;
@@ -40,7 +40,7 @@ class FavoriteDetail extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(
         title: Text(
-          book.title ?? "book.title",
+          book.title!,
           style: kTSFWB18.copyWith(fontSize: 22),
         ),
       ),
@@ -59,9 +59,8 @@ class FavoriteDetail extends StatelessWidget {
                       height: 200,
                       decoration: BoxDecoration(
                         image: DecorationImage(
-                          image: NetworkImage(index == 0
-                              ? book.imageUrl ?? "book.imgUrl"
-                              : book.imgUrl ?? "book.imgUrl"),
+                          image: NetworkImage(
+                              index == 0 ? book.imageUrl! : book.imgUrl!),
                           fit: BoxFit.contain,
                         ),
                         gradient: const LinearGradient(
@@ -88,7 +87,7 @@ class FavoriteDetail extends StatelessWidget {
                   height: 15,
                 ),
                 Text(
-                  "${textClass.formatNumberWithSpaces(book.price ?? 5555555555)} So'm",
+                  "${textClass.formatNumberWithSpaces(book.price!)} So'm",
                   style: kTSFWB18.copyWith(fontSize: 24),
                 ),
                 const SizedBox(
@@ -127,8 +126,7 @@ class FavoriteDetail extends StatelessWidget {
                         context,
                         MaterialPageRoute(
                             builder: (context) => DescriptionPage(
-                                description:
-                                    book.description ?? "book.description")));
+                                description: book.description!)));
                   },
                 ),
                 // Contact button (bottom sheet)

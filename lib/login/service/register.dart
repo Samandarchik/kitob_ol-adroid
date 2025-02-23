@@ -2,7 +2,7 @@ import 'dart:convert';
 
 import 'package:http/http.dart' as http;
 import 'package:flutter/material.dart';
-import 'package:kitob_ol/login/page/verification_code.dart';
+import 'package:kitob_ol/login/ui/verification_code.dart';
 
 class RegisterApiEmail {
   final String registerUrlEmail =

@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:kitob_ol/color.dart';
-import 'package:kitob_ol/home/model/books_modul.dart';
-import 'package:kitob_ol/home/page/details.dart';
+import 'package:kitob_ol/home/model/books_model.dart';
+import 'package:kitob_ol/home/ui/details.dart';
 import 'package:kitob_ol/home/service/book_service.dart';
 import 'package:kitob_ol/widget/my_card.dart';
 
@@ -59,7 +59,7 @@ class _BookListState extends State<BookList> {
                           builder: (context) => Details(
                                 book: book,
                               )));
-                  await BookService().getBook(book.id);
+                  await BookService().getBook(book.id!);
                 },
               );
             },

@@ -1,11 +1,7 @@
-import 'dart:convert';
-import 'package:http/http.dart' as http;
 import 'package:flutter/material.dart';
 import 'package:kitob_ol/color.dart';
-import 'package:kitob_ol/login/page/verification_code.dart';
+import 'package:kitob_ol/login/service/reg_log_email.dart';
 import 'package:kitob_ol/login/service/reg_log_number.dart';
-import 'package:kitob_ol/login/service/register.dart';
-import 'package:kitob_ol/login/service/register_post.dart';
 import 'package:kitob_ol/text_style.dart';
 import 'package:kitob_ol/widget/app_bar.dart';
 import 'package:kitob_ol/widget/my_botton_text.dart';
@@ -19,64 +15,73 @@ class Register extends StatefulWidget {
   State<Register> createState() => _RegisterState();
 }
 
-class _RegisterState extends State<Register> {
-  final RegisterPost post = RegisterPost();
+class _RegisterState extends State<Register>
+    with SingleTickerProviderStateMixin {
+  late TabController _tabController;
   final TextEditingController number = TextEditingController();
   final TextEditingController email = TextEditingController();
-
   bool isLoading = false;
 
   @override
+  void initState() {
+    super.initState();
+    _tabController = TabController(length: 2, vsync: this);
+  }
+
+  @override
+  void dispose() {
+    _tabController.dispose();
+    super.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
-    return DefaultTabController(
-      length: 2,
-      child: Scaffold(
-        appBar: AppBar(
-          title: const MyAppBar(
-            drawet: false,
-          ),
-          bottom: const TabBar(
-            indicatorColor: imageColor,
-            labelColor: Colors.black,
-            tabs: [
-              Tab(child: Center(child: Text("Telefon raqam"))),
-              Tab(child: Center(child: Text("Email"))),
-            ],
-          ),
+    return Scaffold(
+      appBar: AppBar(
+        title: const MyAppBar(drawet: false),
+        bottom: TabBar(
+          controller: _tabController,
+          indicatorColor: imageColor,
+          labelColor: Colors.black,
+          tabs: const [
+            Tab(child: Center(child: Text("Telefon raqam"))),
+            Tab(child: Center(child: Text("Email"))),
+          ],
         ),
-        body: SafeArea(
-          child: TabBarView(
-            children: [
-              _buildTabContent(
-                context,
-                "Telefon raqamingizni kiriting",
-                "99 123 45 67",
-                "+998 ",
-                "Avtorizatsiya qilish uchun iltimos telefon raqamingini kiriting!",
-                true,
-                TextInputType.number,
-                number,
-                (value) {
-                  setState(() {
-                    number.text = formatPhoneNumber(value);
-                    number.selection =
-                        TextSelection.collapsed(offset: number.text.length);
-                  });
-                },
-              ),
-              _buildTabContent(
-                context,
-                "Email manzilingizni kiriting",
-                "example@gmail.com",
-                "",
-                "Avtorizatsiya qilish uchun iltimos email manzilingizni kiriting!",
-                false,
-                TextInputType.emailAddress,
-                email,
-                (value) {},
-              ),
-            ],
-          ),
+      ),
+      body: SafeArea(
+        child: TabBarView(
+          controller: _tabController,
+          children: [
+            _buildTabContent(
+              context,
+              "Telefon raqamingizni kiriting",
+              "99 123 45 67",
+              "+998 ",
+              "Avtorizatsiya qilish uchun iltimos telefon raqamingini kiriting!",
+              true,
+              TextInputType.number,
+              number,
+              (value) {
+                setState(() {
+                  number.text = formatPhoneNumber(value);
+                  number.selection =
+                      TextSelection.collapsed(offset: number.text.length);
+                });
+              },
+            ),
+            _buildTabContent(
+              context,
+              "Email manzilingizni kiriting",
+              "example@gmail.com",
+              "",
+              "Avtorizatsiya qilish uchun iltimos email manzilingizni kiriting!",
+              false,
+              TextInputType.emailAddress,
+              email,
+              (value) {},
+            ),
+          ],
         ),
       ),
     );
@@ -120,9 +125,7 @@ class _RegisterState extends State<Register> {
 
   Widget _buildButtons(bool isNumber, TextEditingController controller) {
     return isLoading
-        ? const CircularProgressIndicator(
-            color: kBlack,
-          )
+        ? const CircularProgressIndicator(color: kBlack)
         : Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [

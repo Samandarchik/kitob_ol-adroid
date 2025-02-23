@@ -1,13 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:kitob_ol/color.dart';
-import 'package:kitob_ol/home/page/ish.dart';
-import 'package:kitob_ol/home/page/book_list.dart';
+import 'package:kitob_ol/home/ui/ish.dart';
+import 'package:kitob_ol/home/ui/book_list.dart';
 import 'package:kitob_ol/home/service/filter_controller.dart';
+import 'package:kitob_ol/provider_auth.dart';
 import 'package:kitob_ol/text_style.dart';
 import 'package:kitob_ol/widget/app_bar.dart';
 import 'package:kitob_ol/widget/drawer.dart';
 import 'package:kitob_ol/widget/my_botton_text.dart';
 import 'package:kitob_ol/widget/slider.dart';
+import 'package:provider/provider.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({super.key});
@@ -21,6 +23,7 @@ class _HomePageState extends State<HomePage> {
 
   @override
   Widget build(BuildContext context) {
+    print("HomePage ${Provider.of<AuthProvider>(context).token}");
     return Scaffold(
       appBar: AppBar(
         automaticallyImplyLeading: false,

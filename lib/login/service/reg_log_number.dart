@@ -2,7 +2,7 @@ import 'package:http/http.dart' as http;
 import 'dart:convert';
 
 import 'package:flutter/material.dart';
-import 'package:kitob_ol/login/page/verification_code.dart';
+import 'package:kitob_ol/login/ui/verification_code.dart';
 
 class RegisterApiPhone {
   String registerUrlEmail =
@@ -74,7 +74,7 @@ class RegisterApiPhone {
           } else if (response.statusCode == 401) {
             ScaffoldMessenger.of(context).showSnackBar(SnackBar(
                 content: Text(
-                    "Texnik ishlar olib borilmoqda tez orada bartaraf editladi")));
+                    "Texnik ishlar olib borilmoqda tez orada bartaraf editladi Email manzil orqali kiring")));
           } else {}
         } catch (e) {
           print(e);

@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
 import 'package:kitob_ol/color.dart';
-import 'package:kitob_ol/home/model/books_modul.dart';
-import 'package:kitob_ol/home/page/description.dart';
+import 'package:kitob_ol/home/model/books_model.dart';
+import 'package:kitob_ol/home/ui/description.dart';
 import 'package:kitob_ol/text_style.dart';
 import 'package:kitob_ol/widget/my_botton_text.dart';
 import 'package:kitob_ol/widget/text_class.dart';
@@ -19,18 +19,18 @@ class Details extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     Map<String, String> h1 = {
-      "Muallif": book.authorName,
-      "Tarjimon": book.translatorName,
-      "Kategoriya": book.categoryName,
-      "ISBN(ID)": book.shitrixCode,
+      "Muallif": book.authorName!,
+      "Tarjimon": book.translatorName!,
+      "Kategoriya": book.categoryName!,
+      "ISBN(ID)": book.shitrixCode!,
       "Muqova": book.coverType == "soft" ? "Qattiq" : "Yumshoq",
       "Safiha": book.totalPages.toString(),
-      "Holati": book.isNew ? "Yangi" : "O'qilgan",
-      "Qog’oz formati": book.coverFormat,
-      "Tili": book.languageName,
+      "Holati": book.isNew! ? "Yangi" : "O'qilgan",
+      "Qog’oz formati": book.coverFormat!,
+      "Tili": book.languageName!,
       "Yozuvi": book.writingType == "latin" ? "Lotin" : "Ruscha",
-      "Nashriyot": book.publisherName,
-      "Yili": book.publishedYear
+      "Nashriyot": book.publisherName!,
+      "Yili": book.publishedYear!
     };
 
     Size size = MediaQuery.of(context).size;
@@ -39,7 +39,7 @@ class Details extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(
         title: Text(
-          book.title,
+          book.title!,
           style: kTSFWB18.copyWith(fontSize: 22),
         ),
       ),
@@ -59,7 +59,7 @@ class Details extends StatelessWidget {
                       decoration: BoxDecoration(
                         image: DecorationImage(
                           image: NetworkImage(
-                              index == 0 ? book.imageUrl : book.imgUrl),
+                              index == 0 ? book.imageUrl! : book.imgUrl!),
                           fit: BoxFit.contain,
                         ),
                         gradient: const LinearGradient(
@@ -86,7 +86,7 @@ class Details extends StatelessWidget {
                   height: 15,
                 ),
                 Text(
-                  "${textClass.formatNumberWithSpaces(book.price)} So'm",
+                  "${textClass.formatNumberWithSpaces(book.price!)} So'm",
                   style: kTSFWB18.copyWith(fontSize: 24),
                 ),
                 const SizedBox(
@@ -125,7 +125,7 @@ class Details extends StatelessWidget {
                         context,
                         MaterialPageRoute(
                             builder: (context) => DescriptionPage(
-                                description: book.description)));
+                                description: book.description!)));
                   },
                 ),
                 // Contact button (bottom sheet)
