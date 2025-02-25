@@ -3,16 +3,13 @@ import 'package:kitob_ol/provider_auth.dart';
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:flutter/material.dart';
-import 'package:kitob_ol/book_create.dart';
 import 'package:kitob_ol/color.dart';
 import 'package:kitob_ol/home/ui/home.dart';
-import 'package:kitob_ol/login/ui/register.dart';
-import 'package:kitob_ol/login/service/token.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   SharedPreferences prefs = await SharedPreferences.getInstance();
-  final authProvider = AuthProvider();
+  final AuthProvider authProvider = AuthProvider();
   await authProvider.loadToken(); // Tokenni yuklash
   print("main token:${authProvider.token}");
 

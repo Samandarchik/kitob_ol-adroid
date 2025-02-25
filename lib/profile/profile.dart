@@ -28,16 +28,18 @@ class _MyProfileState extends State<MyProfile> {
   }
 
   Future<void> _fetchUserProfile() async {
-    try {
-      final profile = await ProfileService()
-          .fetchProfile(Provider.of<AuthProvider>(context, listen: false));
-      if (mounted) {
-        setState(() {
-          userData = profile;
-        });
+    if (Provider.of<AuthProvider>(context, listen: false).token != null) {
+      try {
+        final profile = await ProfileService()
+            .fetchProfile(Provider.of<AuthProvider>(context, listen: false));
+        if (mounted) {
+          setState(() {
+            userData = profile;
+          });
+        }
+      } catch (e) {
+        print("Xatolik: $e");
       }
-    } catch (e) {
-      print("Xatolik: $e");
     }
   }
 
@@ -47,13 +49,42 @@ class _MyProfileState extends State<MyProfile> {
     bool isRegister = authProvider.token != null;
 
     return Scaffold(
-      appBar: AppBar(
-        centerTitle: true,
-        title: const Text("Mening profilim"),
-      ),
-      body:
-          isRegister ? _buildProfileContent(authProvider) : _buildLoginPrompt(),
-    );
+        appBar: AppBar(
+          centerTitle: true,
+          title: const Text("Mening profilim"),
+          actions: [
+            if (isRegister)
+              IconButton(
+                  icon: Icon(Icons.logout),
+                  onPressed: () {
+                    showDialog(
+                        context: context,
+                        builder: (context) {
+                          return AlertDialog(
+                              backgroundColor: kWhite,
+                              title: const Text("Chiqish"),
+                              content: const Text("Chiqishni tasdiqlaysizmi?"),
+                              actions: [
+                                GestureDetector(
+                                    onTap: () {
+                                      authProvider.removeToken();
+                                      Navigator.pop(context);
+                                    },
+                                    child: const Text("Ha")),
+                                GestureDetector(
+                                    onTap: () => Navigator.pop(context),
+                                    child: const Text("Yo'q"))
+                              ]);
+                        });
+                  })
+          ],
+        ),
+        body: Consumer<AuthProvider>(builder: (context, authProvider, child) {
+          return authProvider.token != null
+              ? _buildProfileContent(authProvider)
+              : _buildLoginPrompt();
+        }) // isRegister ? _buildProfileContent(authProvider) : _buildLoginPrompt(),
+        );
   }
 
   Widget _buildLoginPrompt() {
@@ -184,35 +215,6 @@ class _MyProfileState extends State<MyProfile> {
           ),
         ),
       ],
-    );
-  }
-
-  void _showLogoutDialog(AuthProvider authProvider) {
-    showDialog(
-      context: context,
-      builder: (context) => AlertDialog(
-        title: const Text("Ro'yxatdan chiqish"),
-        content: const Text("Tizimdan chiqishni istaysizmi?"),
-        actions: [
-          TextButton(
-            onPressed: () => Navigator.pop(context),
-            child: const Text("Yo'q"),
-          ),
-          TextButton(
-            onPressed: () async {
-              Navigator.pop(context);
-              await authProvider.removeToken();
-              if (mounted) {
-                Navigator.pushReplacement(
-                  context,
-                  MaterialPageRoute(builder: (context) => const MyProfile()),
-                );
-              }
-            },
-            child: const Text("Ha"),
-          ),
-        ],
-      ),
     );
   }
 }
