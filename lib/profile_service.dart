@@ -3,7 +3,6 @@ import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'package:kitob_ol/home/model/user_info_model.dart';
 import 'package:kitob_ol/provider_auth.dart';
-import 'package:provider/provider.dart';
 
 class ProfileService {
   final String url = "https://auth.axadjonovsardorbek.uz/auth/profile";
@@ -13,58 +12,70 @@ class ProfileService {
       "https://auth.axadjonovsardorbek.uz/auth/user/update";
 
   Future<UserDataModel> fetchProfile(AuthProvider authProvider) async {
-    print("object ${authProvider.token}");
-    String? token = authProvider.token;
+    try {
+      String? token = authProvider.token;
 
-    final response = await http.get(
-      Uri.parse(url),
-      headers: {
-        "Authorization": "Bearer $token",
-        "Content-Type": "application/json",
-      },
-    );
+      final response = await http.get(
+        Uri.parse(url),
+        headers: {
+          "Authorization": "Bearer $token",
+          "Content-Type": "application/json",
+        },
+      );
 
-    if (response.statusCode == 200) {
-      print("Profile data fetched successfully");
-      final Map<String, dynamic> jsonData = json.decode(response.body);
-      return UserDataModel.fromJson(jsonData);
-    }
+      if (response.statusCode == 200) {
+        final Map<String, dynamic> jsonData = json.decode(response.body);
+        return UserDataModel.fromJson(jsonData);
+      }
 
-    if (response.statusCode == 401) {
-      print("Token expired. Refreshing...");
-      final refreshResponse = await http.post(Uri.parse(refreshUrl));
-
-      if (refreshResponse.statusCode == 200) {
-        final Map<String, dynamic> jsonData = json.decode(refreshResponse.body);
-        String newToken = jsonData['access_token'];
-
-        // Yangi tokenni saqlash
-        await authProvider.saveToken(newToken, authProvider.refreshToken ?? '');
-
-        // Qayta so‘rov
-        final retryResponse = await http.get(
-          Uri.parse(url),
+      if (response.statusCode == 401 || response.statusCode == 403) {
+        print("Token expired. Refreshing...");
+        final refreshResponse = await http.post(
+          Uri.parse(refreshUrl),
           headers: {
-            "Authorization": "Bearer $newToken",
             "Content-Type": "application/json",
+            "Accept": "application/json",
           },
+          body: jsonEncode({"refresh_token": authProvider.refreshToken}),
         );
 
-        if (retryResponse.statusCode == 200) {
-          print("Profile data fetched successfully after refresh");
-          final Map<String, dynamic> retryJsonData =
-              json.decode(retryResponse.body);
-          return UserDataModel.fromJson(retryJsonData);
+        if (refreshResponse.statusCode == 200) {
+          final Map<String, dynamic> refreshData =
+              json.decode(refreshResponse.body);
+          String newToken = refreshData['access_token'];
+
+          // Yangi tokenni saqlash
+          await authProvider.saveToken(
+              newToken, authProvider.refreshToken ?? '');
+
+          // Qayta so‘rov
+          final retryResponse = await http.get(
+            Uri.parse(url),
+            headers: {
+              "Authorization": "Bearer $newToken",
+              "Content-Type": "application/json",
+            },
+          );
+
+          if (retryResponse.statusCode == 200) {
+            final Map<String, dynamic> retryJsonData =
+                json.decode(retryResponse.body);
+            return UserDataModel.fromJson(retryJsonData);
+          } else {
+            throw Exception(
+                'Failed to load profile data after refresh: ${retryResponse.statusCode}');
+          }
         } else {
           throw Exception(
-              'Failed to load profile data after refresh: ${retryResponse.statusCode}');
+              'Token refresh failed: ${refreshResponse.statusCode}');
         }
-      } else {
-        throw Exception('Token refresh failed: ${refreshResponse.statusCode}');
       }
-    }
 
-    throw Exception('Failed to load profile data: ${response.statusCode}');
+      throw Exception('Failed to load profile data: ${response.statusCode}');
+    } catch (e) {
+      print("Error fetching profile data: $e");
+      rethrow;
+    }
   }
 
   Future<void> updateProfile(
@@ -72,7 +83,7 @@ class ProfileService {
     final response = await http.put(
       Uri.parse(updateUrl),
       headers: {
-        "Authorization": token != null ? "Bearer $token" : "",
+        "Authorization": token.isNotEmpty ? "Bearer $token" : "",
         "Content-Type": "application/json",
       },
       body: jsonEncode(userUpdate.toJson()),

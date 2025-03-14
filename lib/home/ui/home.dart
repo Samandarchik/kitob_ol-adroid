@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:kitob_ol/color.dart';
+import 'package:kitob_ol/home/model/favourite_model.dart';
+import 'package:kitob_ol/home/service/book_service.dart';
 import 'package:kitob_ol/home/ui/ish.dart';
 import 'package:kitob_ol/home/ui/book_list.dart';
-import 'package:kitob_ol/home/service/filter_controller.dart';
+import 'package:kitob_ol/home/service/filter_widget_ui.dart';
 import 'package:kitob_ol/provider_auth.dart';
 import 'package:kitob_ol/text_style.dart';
 import 'package:kitob_ol/widget/app_bar.dart';
@@ -19,7 +21,30 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
+  List<BookModel> futureBooks = [];
   bool book = true; // Initially, we show books by default
+  bool isLoading = true;
+
+  @override
+  void initState() {
+    super.initState();
+    fetchBooks();
+  }
+
+  Future<void> fetchBooks() async {
+    try {
+      final books = await BookService().fetchBooks();
+      setState(() {
+        futureBooks = books;
+        isLoading = false;
+      });
+    } catch (e) {
+      setState(() {
+        isLoading = false;
+      });
+      print("Error fetching books: $e");
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -79,7 +104,11 @@ class _HomePageState extends State<HomePage> {
                 style: kTSFWB18, // This defines the text style
               ),
               SizedBox(height: 10),
-              book ? const BookList() : const IshList(),
+              isLoading
+                  ? const Center(child: CircularProgressIndicator())
+                  : book
+                      ? BookList(books: futureBooks)
+                      : const IshList(),
               const SizedBox(height: 60),
             ],
           ),

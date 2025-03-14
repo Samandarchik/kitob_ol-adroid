@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:kitob_ol/color.dart';
-import 'package:kitob_ol/home/model/books_model.dart';
+import 'package:kitob_ol/home/model/favourite_model.dart';
 import 'package:kitob_ol/widget/text_class.dart';
 
 class MyCardBook extends StatelessWidget {
-  final Book book;
+  final BookModel book;
   final VoidCallback onTap;
   const MyCardBook({super.key, required this.book, required this.onTap});
 
@@ -27,11 +27,14 @@ class MyCardBook extends StatelessWidget {
             ClipRRect(
               borderRadius: const BorderRadius.only(
                   topLeft: Radius.circular(10), topRight: Radius.circular(10)),
-              child: Image.network(
-                book.imageUrl!,
-                errorBuilder: (context, error, stackTrace) {
-                  return Text("       Image olishda xatolik");
-                },
+              child: Hero(
+                tag: book.id!,
+                child: Image.network(
+                  book.imageUrl!,
+                  errorBuilder: (context, error, stackTrace) {
+                    return Text("       Image olishda xatolik");
+                  },
+                ),
               ),
             ),
             Padding(
@@ -51,7 +54,7 @@ class MyCardBook extends StatelessWidget {
                         ),
                       ),
                       Text(
-                        book.cityName!,
+                        book.cityName!['uz'] ?? "",
                         style: TextStyle(fontSize: 11),
                       )
                     ],

@@ -69,6 +69,9 @@ class _MyProfileState extends State<MyProfile> {
                                     onTap: () {
                                       authProvider.removeToken();
                                       Navigator.pop(context);
+                                      setState(() {
+                                        isRegister = false;
+                                      });
                                     },
                                     child: const Text("Ha")),
                                 GestureDetector(

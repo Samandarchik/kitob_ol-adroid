@@ -1,53 +1,59 @@
 import 'dart:convert';
 import 'package:http/http.dart' as http;
+import 'package:kitob_ol/home/model/favourite_model.dart';
 
-class GetFilter extends FilerData {
-  Future<void> fetchFilteredBooks({
-    String? categoryId,
-    String? translatorId,
-    String? languageId,
-    int? priceFrom,
-    int? priceTo,
-  }) async {
+class GetFilter extends FilterModel {
+  Future<List<BookModel>?> fetchFilteredBooks(
+    FilterModel filterModel,
+  ) async {
     final Uri uri = Uri.https(
       "gateway.axadjonovsardorbek.uz",
       "/books/list",
       {
-        if (categoryId != null) "category_id": categoryId,
-        if (translatorId != null) "translator_id": translatorId,
-        if (languageId != null) "language_id": languageId,
-        if (priceFrom != null) "price_from": priceFrom.toString(),
-        if (priceTo != null) "price_to": priceTo.toString(),
+        if (filterModel.categoryId != null)
+          "category_id": filterModel.categoryId,
+        if (filterModel.translatorId != null)
+          "translator_id": filterModel.translatorId,
+        if (filterModel.languageId != null)
+          "language_id": filterModel.languageId,
+        if (filterModel.priceFrom != null)
+          "price_from": filterModel.priceFrom.toString(),
+        if (filterModel.priceTo != null)
+          "price_to": filterModel.priceTo.toString(),
         "status": "active",
       },
     );
 
     try {
+      print(
+          "Filter: priceTo ${filterModel.priceTo}, priceFrom ${filterModel.priceFrom}");
+      print("Request URI: $uri");
+
       final response = await http.get(uri);
+      print("Status code: ${response.statusCode}");
 
       if (response.statusCode == 200) {
-        print(uri);
-        var data = json.decode(response.body);
-        print("Natija: $data");
+        final data = json.decode(response.body);
+
+        if (data['books'] != null &&
+            data['books'] is List &&
+            data['books'].isNotEmpty) {
+          List<dynamic> books = data['books'];
+          return books.map((book) => BookModel.fromJson(book)).toList();
+        } else {
+          print("Ma'lumotlar topilmadi");
+          return [];
+        }
       } else {
-        print("Xatolik: ${response.statusCode}");
+        throw Exception("Server xatosi: ${response.statusCode}");
       }
     } catch (e) {
-      print("Xatolik yuz berdi: $e");
+      throw Exception("Tizimda xatolik yuz berdi: $e");
     }
   }
-
-// Chaqarish usuli:
-// fetchFilteredBooks(
-//   categoryId: "6ada6127-42c7-4fde-8f84-6d5e52a4b43c",
-//   translatorId: "d4b591c9-d0dc-4d2f-93f9-c2e2002daa6a",
-//   languageId: "500ca009-6f32-44d6-8aca-5f5a993ed5be",
-//   priceFrom: 75000,
-//   priceTo: 900000,
-// );
 }
 
-class FilerData {
+class FilterModel {
   String? categoryId;
   String? translatorId;
   String? languageId;
@@ -57,4 +63,16 @@ class FilerData {
   String? selectedLanguage;
   String? selectedCategory;
   String? selectedAuthor;
+
+  FilterModel({
+    this.categoryId,
+    this.translatorId,
+    this.languageId,
+    this.priceFrom,
+    this.priceTo,
+    this.selectedPublisher,
+    this.selectedLanguage,
+    this.selectedCategory,
+    this.selectedAuthor,
+  });
 }

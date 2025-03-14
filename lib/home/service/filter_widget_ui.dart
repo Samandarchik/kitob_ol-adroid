@@ -2,12 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:kitob_ol/category_list.dart';
 import 'package:kitob_ol/color.dart';
 import 'package:kitob_ol/home/service/book_service.dart';
+import 'package:kitob_ol/home/service/filter_ui.dart';
 import 'package:kitob_ol/home/service/get_filter.dart';
-import 'package:kitob_ol/kam.dart';
 import 'package:kitob_ol/provider.dart';
-import 'package:kitob_ol/widget/dropdown.dart';
 import 'package:kitob_ol/widget/my_botton_text.dart';
-import 'package:kitob_ol/widget/my_text_field.dart';
 import 'package:kitob_ol/widget/text_class.dart';
 import 'package:provider/provider.dart';
 
@@ -41,7 +39,7 @@ class _FilterPageState extends State<FilterPage> {
     });
   }
 
-  final FilerData filerData = FilerData();
+  final FilterModel filter = FilterModel();
 
   @override
   Widget build(BuildContext context) {
@@ -102,23 +100,18 @@ class _FilterPageState extends State<FilterPage> {
                 MyBottonText(
                     top: 10,
                     textColor: kWhite,
-                    onTap: () {
-                      // GetFilter().fetchFilteredBooks(
-                      //     languageId: filterProvider.selectedLanguage,
-                      //     translatorId: filterProvider.selectedAuthor,
-                      //     categoryId: filterProvider.selectedCategory,
-                      //     priceFrom: _currentRangeValues.start.toInt(),
-                      //     priceTo: _currentRangeValues.end.toInt());
-
-                      print('''
-                      //     languageId: ${filterProvider.selectedLanguage},
-                      //     translatorId: ${filterProvider.selectedAuthor},
-                      //     categoryId: ${filterProvider.selectedCategory},
-                      //     is_new: ${filterProvider.selectedBookStatus},
-                      //     priceFrom: ${_currentRangeValues.start.toInt()}
-                      //     priceTo: ${_currentRangeValues.end}
-''');
-                    },
+                    onTap: () => Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                            builder: (context) => FilterUi(
+                                filterModel: FilterModel(
+                                    languageId: filterProvider.selectedLanguage,
+                                    translatorId: filterProvider.selectedAuthor,
+                                    categoryId: filterProvider.selectedCategory,
+                                    priceFrom:
+                                        _currentRangeValues.start.toInt(),
+                                    priceTo:
+                                        _currentRangeValues.end.toInt())))),
                     text: "Qidirish",
                     boxColor: imageColor),
               ],

@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
 import 'package:kitob_ol/color.dart';
-import 'package:kitob_ol/home/model/books_model.dart';
+import 'package:kitob_ol/home/model/favourite_model.dart';
 import 'package:kitob_ol/home/ui/description.dart';
 import 'package:kitob_ol/text_style.dart';
 import 'package:kitob_ol/widget/my_botton_text.dart';
@@ -9,7 +9,7 @@ import 'package:kitob_ol/widget/text_class.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 class Details extends StatelessWidget {
-  final Book book;
+  final BookModel book;
 
   const Details({
     super.key,
@@ -18,16 +18,18 @@ class Details extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    print(book.isFavorite == "true");
+    ;
     Map<String, String> h1 = {
       "Muallif": book.authorName!,
       "Tarjimon": book.translatorName!,
-      "Kategoriya": book.categoryName!,
+      "Kategoriya": book.categoryName?['uz'] ?? "",
       "ISBN(ID)": book.shitrixCode!,
       "Muqova": book.coverType == "soft" ? "Qattiq" : "Yumshoq",
       "Safiha": book.totalPages.toString(),
       "Holati": book.isNew! ? "Yangi" : "O'qilgan",
       "Qog’oz formati": book.coverFormat!,
-      "Tili": book.languageName!,
+      "Tili": book.languageName?['uz'] ?? "",
       "Yozuvi": book.writingType == "latin" ? "Lotin" : "Ruscha",
       "Nashriyot": book.publisherName!,
       "Yili": book.publishedYear!
@@ -54,25 +56,28 @@ class Details extends StatelessWidget {
                   height: size.height * .28,
                   child: PageView.builder(
                     itemCount: 2,
-                    itemBuilder: (context, index) => Container(
-                      height: 200,
-                      decoration: BoxDecoration(
-                        image: DecorationImage(
-                          image: NetworkImage(
-                              index == 0 ? book.imageUrl! : book.imgUrl!),
-                          fit: BoxFit.contain,
+                    itemBuilder: (context, index) => Hero(
+                      tag: book.id!,
+                      child: Container(
+                        height: 200,
+                        decoration: BoxDecoration(
+                          image: DecorationImage(
+                            image: NetworkImage(
+                                index == 0 ? book.imageUrl! : book.imgUrl!),
+                            fit: BoxFit.contain,
+                          ),
+                          gradient: const LinearGradient(
+                            colors: [kImagesBackStart, kImagesBackEnd],
+                            begin: Alignment.topLeft,
+                            end: Alignment.bottomRight,
+                          ),
                         ),
-                        gradient: const LinearGradient(
-                          colors: [kImagesBackStart, kImagesBackEnd],
-                          begin: Alignment.topLeft,
-                          end: Alignment.bottomRight,
-                        ),
-                      ),
-                      child: Padding(
-                        padding: EdgeInsets.only(
-                            right: size.width * .5, left: size.width * .05),
-                        child: const FittedBox(
-                          fit: BoxFit.contain,
+                        child: Padding(
+                          padding: EdgeInsets.only(
+                              right: size.width * .5, left: size.width * .05),
+                          child: const FittedBox(
+                            fit: BoxFit.contain,
+                          ),
                         ),
                       ),
                     ),

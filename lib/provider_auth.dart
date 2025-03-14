@@ -1,5 +1,8 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:http/http.dart' as http;
 
 class AuthProvider with ChangeNotifier {
   String? _token;
@@ -31,5 +34,35 @@ class AuthProvider with ChangeNotifier {
     _token = null;
     _refreshToken = null;
     notifyListeners();
+  }
+
+  Future<String> updateToken() async {
+    String updateTokenURL =
+        "https://gateway.axadjonovsardorbek.uz/auth/refresh";
+
+    try {
+      final response = await http.post(
+        Uri.parse(updateTokenURL),
+        headers: {'Authorization': 'Bearer $_token'},
+      );
+
+      if (response.statusCode == 200) {
+        final jsonData = jsonDecode(response.body);
+        String newToken = jsonData['access_token'];
+        String newRefreshToken = jsonData['refresh_token'];
+
+        await saveToken(newToken, newRefreshToken);
+        return newToken; // Yangi token qaytariladi
+      } else {
+        throw Exception('Token yangilanmadi! Status: ${response.statusCode}');
+      }
+    } catch (e) {
+      throw Exception('Xatolik yuz berdi: $e');
+    }
+  }
+
+  Future<String> getToken() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    return prefs.getString('access_token') ?? '';
   }
 }

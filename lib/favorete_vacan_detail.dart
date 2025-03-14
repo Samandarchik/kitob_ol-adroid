@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:kitob_ol/color.dart';
 import 'package:kitob_ol/home/model/job_model.dart';
 import 'package:kitob_ol/text_style.dart';
-import 'package:kitob_ol/vacancies/ui/vacancies_details.dart';
 import 'package:kitob_ol/vacansiya_favorite.dart';
 import 'package:kitob_ol/widget/text_class.dart';
 

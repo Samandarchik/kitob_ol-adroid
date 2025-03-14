@@ -3,7 +3,6 @@ import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'package:kitob_ol/home/model/book_model_favorite.dart';
 import 'package:kitob_ol/home/model/job_model.dart';
-import 'package:kitob_ol/main.dart';
 import 'package:kitob_ol/provider_auth.dart';
 import 'package:provider/provider.dart';
 
@@ -11,14 +10,15 @@ class ApiServiceFavorites {
   static const String url =
       "https://gateway.axadjonovsardorbek.uz/favourites/list";
   Future<Map<String, dynamic>> fetchData(BuildContext context) async {
-    print("token: ${Provider.of<AuthProvider>(context).token} favourites/list");
     final response = await http.get(Uri.parse(url), headers: {
       "Accept": "application/json",
       "Authorization": "Bearer ${Provider.of<AuthProvider>(context).token}"
     });
-
+    print(response.statusCode);
     if (response.statusCode == 200) {
       final data = json.decode(response.body);
+      print(data);
+
       List<BookModelFavorite> books = [];
       List<JobModel> jobs = [];
 
