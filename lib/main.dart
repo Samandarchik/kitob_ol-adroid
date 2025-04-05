@@ -1,30 +1,31 @@
+import 'package:easy_localization/easy_localization.dart';
+import 'package:kitob_ol/core/di/di.dart';
 import 'package:kitob_ol/provider.dart';
-import 'package:kitob_ol/provider_auth.dart';
 import 'package:provider/provider.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 import 'package:flutter/material.dart';
 import 'package:kitob_ol/color.dart';
 import 'package:kitob_ol/home/ui/home.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  SharedPreferences prefs = await SharedPreferences.getInstance();
-  final AuthProvider authProvider = AuthProvider();
-  await authProvider.loadToken(); // Tokenni yuklash
-  print("main token:${authProvider.token}");
-
+  await EasyLocalization.ensureInitialized(); //
+  setupInit();
   runApp(
-    MultiProvider(
-      //ProfileProvider
-      providers: [
-        ChangeNotifierProvider(create: (_) => FilterProvider()),
-        ChangeNotifierProvider(create: (_) {
-          AuthProvider authProvider = AuthProvider();
-          authProvider.loadToken(); // Tokenni yuklash
-          return authProvider;
-        }),
+    EasyLocalization(
+      supportedLocales: [
+        Locale('en', 'US'),
+        Locale('uz', 'UZ'),
+        Locale('ru', 'RU')
       ],
-      child: const MyApp(),
+      startLocale: Locale("en", "US"),
+      path: 'assets/translations',
+      fallbackLocale: Locale('en', 'US'),
+      child: MultiProvider(
+        providers: [
+          ChangeNotifierProvider(create: (_) => FilterProvider()),
+        ],
+        child: const MyApp(),
+      ),
     ),
   );
 }
@@ -41,6 +42,9 @@ class MyApp extends StatelessWidget {
               AppBarTheme(backgroundColor: kWhite, surfaceTintColor: kWhite)),
       home: HomePage(),
       debugShowCheckedModeBanner: false,
+      locale: context.locale,
+      supportedLocales: context.supportedLocales,
+      localizationsDelegates: context.localizationDelegates,
     );
   }
 }

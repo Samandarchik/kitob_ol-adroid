@@ -1,68 +1,81 @@
-import 'dart:convert';
-
-import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:http/http.dart' as http;
 
-class AuthProvider with ChangeNotifier {
+class AuthService {
+  static final AuthService _instance = AuthService._internal();
+
+  factory AuthService() => _instance;
+
+  AuthService._internal();
+
   String? _token;
   String? _refreshToken;
-
-  String? get token => _token;
-  String? get refreshToken => _refreshToken;
-
-  Future<void> loadToken() async {
-    SharedPreferences prefs = await SharedPreferences.getInstance();
-    _token = prefs.getString('access_token');
-    _refreshToken = prefs.getString('refresh_token');
-    notifyListeners(); // UI yangilanishi uchun
-  }
-
-  Future<void> saveToken(String newToken, String newRefreshToken) async {
-    SharedPreferences prefs = await SharedPreferences.getInstance();
-    await prefs.setString('access_token', newToken);
-    await prefs.setString('refresh_token', newRefreshToken);
-    _token = newToken;
-    _refreshToken = newRefreshToken;
-    notifyListeners();
-  }
-
-  Future<void> removeToken() async {
-    SharedPreferences prefs = await SharedPreferences.getInstance();
-    await prefs.remove('access_token');
-    await prefs.remove('refresh_token');
-    _token = null;
-    _refreshToken = null;
-    notifyListeners();
-  }
-
-  Future<String> updateToken() async {
-    String updateTokenURL =
-        "https://gateway.axadjonovsardorbek.uz/auth/refresh";
-
+  bool get isRegister => _token != null;
+  Future<void> loadTokens() async {
     try {
-      final response = await http.post(
-        Uri.parse(updateTokenURL),
-        headers: {'Authorization': 'Bearer $_token'},
-      );
-
-      if (response.statusCode == 200) {
-        final jsonData = jsonDecode(response.body);
-        String newToken = jsonData['access_token'];
-        String newRefreshToken = jsonData['refresh_token'];
-
-        await saveToken(newToken, newRefreshToken);
-        return newToken; // Yangi token qaytariladi
-      } else {
-        throw Exception('Token yangilanmadi! Status: ${response.statusCode}');
-      }
+      SharedPreferences prefs = await SharedPreferences.getInstance();
+      _token = prefs.getString('access_token');
+      _refreshToken = prefs.getString('refresh_token');
     } catch (e) {
-      throw Exception('Xatolik yuz berdi: $e');
+      print('Token yuklashda xatolik: $e');
     }
   }
 
-  Future<String> getToken() async {
-    SharedPreferences prefs = await SharedPreferences.getInstance();
-    return prefs.getString('access_token') ?? '';
+  Future<void> saveTokens(
+      String newToken, String newRefreshToken, String role) async {
+    try {
+      SharedPreferences prefs = await SharedPreferences.getInstance();
+      await prefs.setString('access_token', newToken);
+      await prefs.setString('refresh_token', newRefreshToken);
+      await prefs.setString("role", role);
+      _token = newToken;
+      _refreshToken = newRefreshToken;
+    } catch (e) {
+      print('Token saqlashda xatolik: $e');
+    }
+  }
+
+  Future<void> clearTokens() async {
+    try {
+      SharedPreferences prefs = await SharedPreferences.getInstance();
+      await prefs.remove('access_token');
+      await prefs.remove('refresh_token');
+      _token = null;
+      _refreshToken = null;
+    } catch (e) {
+      print('Token o‘chirishda xatolik: $e');
+    }
+  }
+
+  Future<void> refreshAccessToken() async {
+    try {
+      if (_refreshToken == null) {
+        throw Exception('Refresh token mavjud emas!');
+      }
+      String newToken = 'newAccessTokenFromApi';
+      SharedPreferences prefs = await SharedPreferences.getInstance();
+      await prefs.setString('access_token', newToken);
+      _token = newToken;
+    } catch (e) {
+      print('Token yangilashda xatolik: $e');
+    }
+  }
+
+  Future<String?> getToken() async {
+    if (_token == null) await loadTokens();
+    return _token;
+  }
+
+  Future<String?> getRefreshToken() async {
+    if (_refreshToken == null) await loadTokens();
+    return _refreshToken;
+  }
+
+  Future<String?> getValidToken() async {
+    String? token = await getToken();
+    if (token == null) {
+      await refreshAccessToken();
+      token = _token;
+    }
+    return token;
   }
 }

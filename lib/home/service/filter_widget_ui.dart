@@ -1,13 +1,18 @@
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:kitob_ol/category_list.dart';
 import 'package:kitob_ol/color.dart';
 import 'package:kitob_ol/home/service/book_service.dart';
 import 'package:kitob_ol/home/service/filter_ui.dart';
 import 'package:kitob_ol/home/service/get_filter.dart';
+import 'package:kitob_ol/login/service/token.dart';
 import 'package:kitob_ol/provider.dart';
 import 'package:kitob_ol/widget/my_botton_text.dart';
 import 'package:kitob_ol/widget/text_class.dart';
 import 'package:provider/provider.dart';
+
+double minPrice = 1;
+double maxPrice = 100000;
 
 class FilterPage extends StatefulWidget {
   const FilterPage({super.key});
@@ -18,10 +23,9 @@ class FilterPage extends StatefulWidget {
 
 class _FilterPageState extends State<FilterPage> {
   TextClass textClass = TextClass();
-  double minPriceGet = 0; // Default qiymat
-  double maxPriceGet = 10000; // Default qiymat
+  TokenStorage tokenStorage = TokenStorage();
   TextEditingController controller = TextEditingController();
-  RangeValues _currentRangeValues = RangeValues(0, 10000);
+  RangeValues _currentRangeValues = RangeValues(minPrice, maxPrice);
 
   @override
   void initState() {
@@ -32,10 +36,11 @@ class _FilterPageState extends State<FilterPage> {
   Future<void> fetchPriceRange() async {
     await BookService()
         .fetchBooks(); // fetchBooks ichida minPrice va maxPrice yangilanadi
+    await tokenStorage.getPrice();
+
     setState(() {
-      minPriceGet = minPrice.toDouble();
-      maxPriceGet = maxPrice.toDouble();
-      _currentRangeValues = RangeValues(minPriceGet, maxPriceGet);
+      _currentRangeValues = RangeValues(minPrice, maxPrice);
+      print("minPrice: $minPrice, maxPrice: $maxPrice");
     });
   }
 
@@ -48,7 +53,7 @@ class _FilterPageState extends State<FilterPage> {
     Size size = MediaQuery.of(context).size;
     return Scaffold(
         appBar: AppBar(
-          title: Text("Filter"),
+          title: Text("filter".tr()),
         ),
         body: SingleChildScrollView(
           child: Padding(
@@ -59,8 +64,8 @@ class _FilterPageState extends State<FilterPage> {
                 CategoryList(),
 
                 SizedBox(height: 10),
-                const Text(
-                  'Narx',
+                Text(
+                  'price'.tr(),
                   style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
                 ),
                 const SizedBox(height: 10),
@@ -68,9 +73,9 @@ class _FilterPageState extends State<FilterPage> {
                 // Price Range Slider
                 RangeSlider(
                   values: _currentRangeValues,
-                  min: minPriceGet,
-                  max: maxPriceGet,
-                  divisions: (maxPrice - minPrice) ~/ 1000,
+                  min: minPrice ?? 0,
+                  max: maxPrice ?? 10000,
+                  divisions: (maxPrice! - minPrice!) ~/ 1000,
                   activeColor: const Color(0xff2C3033),
                   inactiveColor: const Color(0xffE0E0E0),
                   onChanged: (RangeValues values) {
@@ -112,7 +117,7 @@ class _FilterPageState extends State<FilterPage> {
                                         _currentRangeValues.start.toInt(),
                                     priceTo:
                                         _currentRangeValues.end.toInt())))),
-                    text: "Qidirish",
+                    text: "search".tr(),
                     boxColor: imageColor),
               ],
             ),
@@ -129,7 +134,7 @@ class _FilterPageState extends State<FilterPage> {
       ),
       child: Center(
         child: Text(
-          '${textClass.formatNumberWithSpaces(price)} uzs',
+          '${textClass.formatNumberWithSpaces(price)} ${"sum".tr()}',
           style: const TextStyle(
             fontSize: 16,
             color: Colors.black,

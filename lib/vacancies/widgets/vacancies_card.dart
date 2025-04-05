@@ -12,7 +12,6 @@ class VacanciesCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    print(ish.viewCount);
     return GestureDetector(
       onTap: () {
         Navigator.push(

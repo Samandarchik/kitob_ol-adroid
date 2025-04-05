@@ -1,11 +1,7 @@
+import 'package:kitob_ol/home/service/filter_widget_ui.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class TokenStorage {
-  double? minPrice;
-  double? maxPrice;
-  String? token;
-  String? refreshToken;
-
   // Tokenni saqlash
   Future<void> saveToken(String newToken, String newRefreshToken) async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
@@ -15,10 +11,14 @@ class TokenStorage {
   }
 
   // Tokenni olish va global o'zgaruvchilarga tenglash
-  Future<void> getToken() async {
+  Future<String?> getToken() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
-    token = prefs.getString('access_token');
-    refreshToken = prefs.getString('refresh_token');
+    return prefs.getString('access_token');
+  }
+
+  Future<String?> getRefreshToken() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    return prefs.getString('refresh_token');
   }
 
   // Tokenni o‘chirish
@@ -26,22 +26,19 @@ class TokenStorage {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     await prefs.remove('access_token');
     await prefs.remove('refresh_token');
-    token = null;
-    refreshToken = null;
   }
 
   // Narxni saqlash
   Future<void> savePrice(String min, String max) async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     await prefs.setStringList("price", [min, max]);
-    await getPrice();
   }
 
   // Narxni olish
   Future<void> getPrice() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
-    final getPrice = prefs.getStringList("price");
-    minPrice = double.tryParse(getPrice?[0] ?? "0");
-    maxPrice = double.tryParse(getPrice?[1] ?? "500000");
+    List<String>? price = prefs.getStringList("price");
+    minPrice = double.parse(price![0]);
+    maxPrice = double.parse(price[1]);
   }
 }

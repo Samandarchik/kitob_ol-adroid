@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:kitob_ol/login/service/ver_code.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -71,11 +72,11 @@ class _VerificationCodeState extends State<VerificationCode> {
     startTimer(); // Timer boshlash
   }
 
-  // SMS yuborilgan vaqtni saqlash
-  Future<void> _saveSmsTimestamp() async {
-    final prefs = await SharedPreferences.getInstance();
-    await prefs.setInt('sms_sent_time', DateTime.now().millisecondsSinceEpoch);
-  }
+  // // SMS yuborilgan vaqtni saqlash
+  // Future<void> _saveSmsTimestamp() async {
+  //   final prefs = await SharedPreferences.getInstance();
+  //   await prefs.setInt('sms_sent_time', DateTime.now().millisecondsSinceEpoch);
+  // }
 
   // Saqlangan vaqtni yuklash va hisoblash
   Future<void> _loadRemainingTime() async {
@@ -113,13 +114,13 @@ class _VerificationCodeState extends State<VerificationCode> {
   }
 
   // Kod yuborilganida vaqtni saqlash
-  void _sendSms() {
-    setState(() {
-      _remainingTime = smsTimeout;
-    });
-    _saveSmsTimestamp();
-    _startTimer();
-  }
+  // void _sendSms() {
+  //   setState(() {
+  //     _remainingTime = smsTimeout;
+  //   });
+  //   _saveSmsTimestamp();
+  //   _startTimer();
+  // }
 
   @override
   Widget build(BuildContext context) {
@@ -128,7 +129,10 @@ class _VerificationCodeState extends State<VerificationCode> {
 
     return Scaffold(
       appBar: AppBar(
-        title: const Text("Verification Code"),
+        title: Text(
+          "verificationCode".tr(),
+          style: kTSFWB18,
+        ),
       ),
       body: SafeArea(
         child: Padding(
@@ -139,13 +143,14 @@ class _VerificationCodeState extends State<VerificationCode> {
                 children: [
                   Text(
                     widget.isEmail
-                        ? "Bu ${widget.email} sizga tegishli bo'lmasa agar bekor qilish tugmasini bosing\n"
+                        ? tr("poseEmail", args: [widget.email])
                         : "Siz kiritgan telefon raqamiga +998 ${textClass.formatPhoneNumber(widget.number)} kod yuborildi. Iltimos kodni kiriting!\n",
                     style: kTSFWB18,
                   ),
+                  SizedBox(height: 10),
                   if (sentTime != null)
                     Text(
-                      "Qolgan vaqt: ${remainingSeconds ~/ 60}:${(remainingSeconds % 60).toString().padLeft(2, '0')}",
+                      "${"time".tr()} ${remainingSeconds ~/ 60}:${(remainingSeconds % 60).toString().padLeft(2, '0')}",
                       style: TextStyle(
                           fontSize: 16,
                           fontWeight: FontWeight.bold,
@@ -156,16 +161,6 @@ class _VerificationCodeState extends State<VerificationCode> {
               const SizedBox(height: 20),
               code(textcode),
               const Spacer(),
-              if (_remainingTime >
-                  0) // Agar vaqt tugamagan bo'lsa, vaqtni ko'rsatish
-                Text(
-                  "Kod muddati tugashiga: $_remainingTime sekund",
-                  style: const TextStyle(
-                      fontSize: 18,
-                      fontWeight: FontWeight.bold,
-                      color: Colors.red),
-                ),
-              const SizedBox(height: 10),
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
@@ -174,11 +169,11 @@ class _VerificationCodeState extends State<VerificationCode> {
                     onTap: () {
                       Navigator.pop(context);
                     },
-                    text: 'Orqaga',
+                    text: 'exit'.tr(),
                   ),
                   MyBottonText(
                     width: size.width * .42,
-                    text: "Keyingisi",
+                    text: "pasNext".tr(),
                     boxColor: imageColor,
                     textColor: kWhite,
                     onTap: () {

@@ -29,7 +29,7 @@ class BookModel {
   final String? shitrixCode;
   final bool? isNew;
   final String? createdAt;
-  final String? isFavorite;
+  bool? isFavorite;
 
   BookModel({
     this.id,

@@ -13,8 +13,6 @@ class BookList extends StatefulWidget {
 }
 
 class _BookListState extends State<BookList> {
-// futureBooks = BookService().fetchBooks();
-
   @override
   Widget build(BuildContext context) {
     return ListView.builder(

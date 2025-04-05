@@ -1,17 +1,16 @@
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:kitob_ol/color.dart';
 import 'package:kitob_ol/home/model/favourite_model.dart';
 import 'package:kitob_ol/home/service/book_service.dart';
+import 'package:kitob_ol/home/service/filter_widget_ui.dart';
 import 'package:kitob_ol/home/ui/ish.dart';
 import 'package:kitob_ol/home/ui/book_list.dart';
-import 'package:kitob_ol/home/service/filter_widget_ui.dart';
-import 'package:kitob_ol/provider_auth.dart';
 import 'package:kitob_ol/text_style.dart';
 import 'package:kitob_ol/widget/app_bar.dart';
 import 'package:kitob_ol/widget/drawer.dart';
 import 'package:kitob_ol/widget/my_botton_text.dart';
 import 'package:kitob_ol/widget/slider.dart';
-import 'package:provider/provider.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({super.key});
@@ -23,7 +22,6 @@ class HomePage extends StatefulWidget {
 class _HomePageState extends State<HomePage> {
   List<BookModel> futureBooks = [];
   bool book = true; // Initially, we show books by default
-  bool isLoading = true;
 
   @override
   void initState() {
@@ -36,19 +34,14 @@ class _HomePageState extends State<HomePage> {
       final books = await BookService().fetchBooks();
       setState(() {
         futureBooks = books;
-        isLoading = false;
       });
     } catch (e) {
-      setState(() {
-        isLoading = false;
-      });
       print("Error fetching books: $e");
     }
   }
 
   @override
   Widget build(BuildContext context) {
-    print("HomePage ${Provider.of<AuthProvider>(context).token}");
     return Scaffold(
       appBar: AppBar(
         automaticallyImplyLeading: false,
@@ -70,7 +63,7 @@ class _HomePageState extends State<HomePage> {
                     MaterialPageRoute(builder: (context) => FilterPage()),
                   );
                 },
-                text: "Filter",
+                text: "filter".tr(),
               ),
 
               const SizedBox(height: 10),
@@ -83,7 +76,7 @@ class _HomePageState extends State<HomePage> {
                     book = true; // Switch to show books
                   });
                 },
-                text: "Kitoblar",
+                text: "books".tr(),
                 boxColor: book ? imageColor : kGrey,
               ),
               // Job button
@@ -95,20 +88,19 @@ class _HomePageState extends State<HomePage> {
                     book = false; // Switch to show jobs
                   });
                 },
-                text: "Ish",
+                text: "vacancy".tr(),
                 boxColor: book ? kGrey : imageColor,
               ),
               const SizedBox(height: 18),
               Text(
-                book ? "Kitoblar ro'yxati" : "Ishlar ro'yxati",
+                book ? "bookList".tr() : "vacancyList".tr(),
                 style: kTSFWB18, // This defines the text style
               ),
               SizedBox(height: 10),
-              isLoading
-                  ? const Center(child: CircularProgressIndicator())
-                  : book
-                      ? BookList(books: futureBooks)
-                      : const IshList(),
+              IndexedStack(index: book ? 0 : 1, children: [
+                BookList(books: futureBooks),
+                IshList(),
+              ]),
               const SizedBox(height: 60),
             ],
           ),

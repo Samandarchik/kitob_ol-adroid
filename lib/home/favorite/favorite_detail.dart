@@ -1,17 +1,17 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
 import 'package:kitob_ol/color.dart';
-import 'package:kitob_ol/home/model/book_model_favorite.dart';
+import 'package:kitob_ol/home/favorite/favourites_service.dart';
 import 'package:kitob_ol/home/ui/description.dart';
 import 'package:kitob_ol/text_style.dart';
 import 'package:kitob_ol/widget/my_botton_text.dart';
 import 'package:kitob_ol/widget/text_class.dart';
 import 'package:url_launcher/url_launcher.dart';
 
-class DetailsFavorite extends StatelessWidget {
-  final BookModelFavorite book;
+class FavoriteDetail extends StatelessWidget {
+  final BookListFavorite book;
 
-  const DetailsFavorite({
+  const FavoriteDetail({
     super.key,
     required this.book,
   });
@@ -19,18 +19,18 @@ class DetailsFavorite extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     Map<String, String> h1 = {
-      "Muallif": book.authorName!,
-      "Tarjimon": book.translatorName!,
-      "Kategoriya": book.categoryName!,
-      "ISBN(ID)": book.shitrixCode!,
+      "Muallif": book.authorName ?? "authorName",
+      "Tarjimon": book.translatorName ?? "book.translatorName",
+      "Kategoriya": book.categoryName ?? "book.categoryName",
+      "ISBN(ID)": book.shitrixCode ?? "book.shitrixCode",
       "Muqova": book.coverType == "soft" ? "Qattiq" : "Yumshoq",
       "Safiha": book.totalPages.toString(),
-      "Holati": book.isNew! ? "Yangi" : "O'qilgan",
-      "Qog’oz formati": book.coverFormat!,
-      "Tili": book.languageName!,
+      "Holati": book.isNew ?? true ? "Yangi" : "O'qilgan",
+      "Qog’oz formati": book.coverFormat ?? "book.coverFormat",
+      "Tili": book.languageName ?? "book.languageName",
       "Yozuvi": book.writingType == "latin" ? "Lotin" : "Ruscha",
-      "Nashriyot": book.publisherName!,
-      "Yili": book.publishedYear!
+      "Nashriyot": book.publisherName ?? "book.publisherName",
+      "Yili": book.publishedYear ?? "book.publishedYear"
     };
 
     Size size = MediaQuery.of(context).size;
@@ -39,7 +39,7 @@ class DetailsFavorite extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(
         title: Text(
-          book.title!,
+          book.title ?? "book.title",
           style: kTSFWB18.copyWith(fontSize: 22),
         ),
       ),
@@ -58,8 +58,9 @@ class DetailsFavorite extends StatelessWidget {
                       height: 200,
                       decoration: BoxDecoration(
                         image: DecorationImage(
-                          image: NetworkImage(
-                              index == 0 ? book.imageUrl! : book.imgUrl!),
+                          image: NetworkImage(index == 0
+                              ? book.imageUrl ?? "book.imgUrl"
+                              : book.imgUrl ?? "book.imgUrl"),
                           fit: BoxFit.contain,
                         ),
                         gradient: const LinearGradient(
@@ -86,7 +87,7 @@ class DetailsFavorite extends StatelessWidget {
                   height: 15,
                 ),
                 Text(
-                  "${textClass.formatNumberWithSpaces(book.price!)} So'm",
+                  "${textClass.formatNumberWithSpaces(book.price ?? 5555555555)} So'm",
                   style: kTSFWB18.copyWith(fontSize: 24),
                 ),
                 const SizedBox(
@@ -125,7 +126,8 @@ class DetailsFavorite extends StatelessWidget {
                         context,
                         MaterialPageRoute(
                             builder: (context) => DescriptionPage(
-                                description: book.description!)));
+                                description:
+                                    book.description ?? "book.description")));
                   },
                 ),
                 // Contact button (bottom sheet)

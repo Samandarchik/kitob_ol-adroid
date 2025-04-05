@@ -1,3 +1,4 @@
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
 import 'package:kitob_ol/color.dart';
@@ -18,21 +19,19 @@ class Details extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    print(book.isFavorite == "true");
-    ;
     Map<String, String> h1 = {
-      "Muallif": book.authorName!,
-      "Tarjimon": book.translatorName!,
-      "Kategoriya": book.categoryName?['uz'] ?? "",
-      "ISBN(ID)": book.shitrixCode!,
-      "Muqova": book.coverType == "soft" ? "Qattiq" : "Yumshoq",
-      "Safiha": book.totalPages.toString(),
-      "Holati": book.isNew! ? "Yangi" : "O'qilgan",
-      "Qog’oz formati": book.coverFormat!,
-      "Tili": book.languageName?['uz'] ?? "",
-      "Yozuvi": book.writingType == "latin" ? "Lotin" : "Ruscha",
-      "Nashriyot": book.publisherName!,
-      "Yili": book.publishedYear!
+      "author".tr(): book.authorName!,
+      "translator".tr(): book.translatorName!,
+      "categorie".tr(): book.categoryName?['uz'] ?? "",
+      "id".tr(): book.shitrixCode!,
+      "cover".tr(): book.coverType == "soft" ? "Qattiq" : "Yumshoq",
+      "page".tr(): book.totalPages.toString(),
+      "status".tr(): book.isNew! ? "Yangi" : "O'qilgan",
+      "paperFormat".tr(): book.coverFormat!,
+      "language".tr(): book.languageName?['uz'] ?? "",
+      "writing".tr(): book.writingType == "latin" ? "Lotin" : "Ruscha",
+      "publisher".tr(): book.publisherName!,
+      "year".tr(): book.publishedYear!
     };
 
     Size size = MediaQuery.of(context).size;
@@ -86,12 +85,12 @@ class Details extends StatelessWidget {
                 const SizedBox(
                   height: 20,
                 ),
-                const Text("Narx"),
+                Text("price".tr()),
                 const SizedBox(
                   height: 15,
                 ),
                 Text(
-                  "${textClass.formatNumberWithSpaces(book.price!)} So'm",
+                  "${textClass.formatNumberWithSpaces(book.price!)} ${"sum".tr()}",
                   style: kTSFWB18.copyWith(fontSize: 24),
                 ),
                 const SizedBox(
@@ -115,14 +114,14 @@ class Details extends StatelessWidget {
                 Align(
                   alignment: Alignment.topRight,
                   child: Text(
-                    "Ko'rishlar soni: ${book.viewCount}    ",
+                    "${"viewsNumber".tr()}: ${book.viewCount}    ",
                     style: kTSFW,
                   ),
                 ),
                 SizedBox(height: 15),
                 // Additional info button
                 MyBottonText(
-                  text: "Qo'shimcha malumot",
+                  text: "detail".tr(),
                   boxColor: kGrey,
                   textColor: imageColor,
                   onTap: () {
@@ -136,7 +135,7 @@ class Details extends StatelessWidget {
                 // Contact button (bottom sheet)
                 MyBottonText(
                     top: 10,
-                    text: "Telefon qilish",
+                    text: "call".tr(),
                     boxColor: imageColor,
                     textColor: kWhite,
                     onTap: () async {

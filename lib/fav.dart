@@ -4,7 +4,6 @@ import 'package:kitob_ol/home/model/book_model_favorite.dart';
 import 'package:kitob_ol/home/service/book_job__favorite_service.dart';
 import 'package:kitob_ol/home/ui/details_favorite.dart';
 import 'package:kitob_ol/home/model/job_model.dart';
-import 'package:kitob_ol/main.dart';
 import 'package:kitob_ol/provider_auth.dart';
 import 'package:kitob_ol/widget/favorite_card.dart';
 import 'package:provider/provider.dart';
@@ -18,8 +17,7 @@ class _FavoriteGetState extends State<FavoriteGet> {
   final ApiServiceFavorites apiService = ApiServiceFavorites();
   @override
   Widget build(BuildContext context) {
-    bool isRegister =
-        Provider.of<AuthProvider>(context, listen: false).token != null;
+    bool isRegister = AuthService().getToken() != null;
     return Scaffold(
       appBar: AppBar(title: Text('Kitoblar va Ishlar')),
       body: isRegister

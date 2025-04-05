@@ -1,3 +1,4 @@
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:kitob_ol/color.dart';
 import 'package:kitob_ol/home/service/ish.dart';
@@ -29,32 +30,39 @@ class VacanciesDetails extends StatelessWidget {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Text(
-                  "Ish haqida",
+                  "vacancyDetail".tr(),
+                ),
+                const SizedBox(
+                  height: 20,
+                ),
+                Text(
+                  vacancies.description,
                   style: kTSFWB18,
                 ),
                 SizedBox(
                   height: 20,
                 ),
                 Text(
-                  "Maosh",
+                  "vacancyPrice".tr(),
                 ),
                 SizedBox(
                   height: 10,
                 ),
                 Text(
-                  "${TextClass().formatNumberWithSpaces(vacancies.salaryFrom)} ~ ${TextClass().formatNumberWithSpaces(vacancies.salaryTo)} So'm",
+                  "${TextClass().formatNumberWithSpaces(vacancies.salaryFrom)} ~ ${TextClass().formatNumberWithSpaces(vacancies.salaryTo)} ${"sum".tr()}",
                   style: kTSFWB18,
                 ),
                 myText(
-                    "Ish vaqti",
+                    "vacancyTime".tr(),
                     vacancies.workingTypes == "part_time"
                         ? "Doimiy"
                         : "Ma'lum soatlarda"),
-                myText("Ish turi", vacancies.description),
+                myText("vacancyType".tr(), vacancies.description),
                 SizedBox(height: 10),
                 Align(
                     alignment: Alignment.topRight,
-                    child: Text("Ko'rilgan: ${vacancies.viewCount}")),
+                    child:
+                        Text("${"viewsNumber".tr()} ${vacancies.viewCount}")),
               ],
             ),
           ),
@@ -62,7 +70,7 @@ class VacanciesDetails extends StatelessWidget {
             padding: const EdgeInsets.symmetric(horizontal: 8.0),
             child: MyBottonText(
                 bottom: 20,
-                text: "Telefon qilish",
+                text: "call".tr(),
                 boxColor: imageColor,
                 textColor: kWhite,
                 onTap: () async {

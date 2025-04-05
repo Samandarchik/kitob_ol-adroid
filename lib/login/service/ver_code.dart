@@ -2,9 +2,7 @@ import 'dart:convert';
 import 'package:http/http.dart' as http;
 import 'package:flutter/material.dart';
 import 'package:kitob_ol/home/ui/home.dart';
-import 'package:kitob_ol/login/service/token.dart';
 import 'package:kitob_ol/provider_auth.dart';
-import 'package:provider/provider.dart';
 
 class VerificationCodeApi {
   String verLoginCode =
@@ -21,10 +19,14 @@ class VerificationCodeApi {
           ),
           headers: {'Content-Type': 'application/json'},
           body: jsonEncode(body));
+      print(response.statusCode);
       if (response.statusCode == 201 || response.statusCode == 200) {
+        print(response.body);
         final responseData = jsonDecode(response.body);
-        loginUser(context, responseData['access_token'],
-            responseData['refresh_token']);
+        final token = responseData['access_token'];
+        final refreshToken = responseData['refresh_token'];
+        final role = responseData['role'];
+        await AuthService().saveTokens(token, refreshToken, role);
         Navigator.pushAndRemoveUntil(
             context,
             MaterialPageRoute(builder: (context) => HomePage()),
@@ -39,14 +41,4 @@ class VerificationCodeApi {
     } catch (e) {}
     return {};
   }
-}
-
-void loginUser(
-    BuildContext context, String newToken, String newRefreshToken) async {
-  final authProvider = Provider.of<AuthProvider>(context, listen: false);
-  await authProvider.saveToken(newToken, newRefreshToken);
-
-  // Login muvaffaqiyatli bo‘lsa, asosiy sahifaga o'tish
-  Navigator.pushAndRemoveUntil(context,
-      MaterialPageRoute(builder: (context) => HomePage()), (route) => false);
 }

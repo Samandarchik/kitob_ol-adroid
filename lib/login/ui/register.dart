@@ -1,3 +1,4 @@
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:kitob_ol/color.dart';
 import 'package:kitob_ol/login/service/reg_log_email.dart';
@@ -43,9 +44,9 @@ class _RegisterState extends State<Register>
           controller: _tabController,
           indicatorColor: imageColor,
           labelColor: Colors.black,
-          tabs: const [
-            Tab(child: Center(child: Text("Telefon raqam"))),
-            Tab(child: Center(child: Text("Email"))),
+          tabs: [
+            Tab(child: Center(child: Text("phoneNumber".tr()))),
+            Tab(child: Center(child: Text("email".tr()))),
           ],
         ),
       ),
@@ -55,10 +56,10 @@ class _RegisterState extends State<Register>
           children: [
             _buildTabContent(
               context,
-              "Telefon raqamingizni kiriting",
+              "pasNumber".tr(),
               "99 123 45 67",
               "+998 ",
-              "Avtorizatsiya qilish uchun iltimos telefon raqamingini kiriting!",
+              "authNumber".tr(),
               true,
               TextInputType.number,
               number,
@@ -72,10 +73,10 @@ class _RegisterState extends State<Register>
             ),
             _buildTabContent(
               context,
-              "Email manzilingizni kiriting",
+              "pasEmail".tr(),
               "example@gmail.com",
               "",
-              "Avtorizatsiya qilish uchun iltimos email manzilingizni kiriting!",
+              "authEmail".tr(),
               false,
               TextInputType.emailAddress,
               email,
@@ -132,7 +133,7 @@ class _RegisterState extends State<Register>
               MyElevedButtonBorder(
                 width: MediaQuery.of(context).size.width * .45,
                 onTap: () {},
-                text: "Bekor qilish",
+                text: "pascancel".tr(),
               ),
               MyBottonText(
                 width: MediaQuery.of(context).size.width * .45,
@@ -157,10 +158,10 @@ class _RegisterState extends State<Register>
                               .loginUserEmail(email.text, context);
                           setState(() => isLoading = false);
                         } else {
-                          _showSnackBar("Email manzilingizni kiriting");
+                          _showSnackBar("email");
                         }
                       },
-                text: "Keyingisi",
+                text: "pasNext".tr(),
                 boxColor: imageColor,
               ),
             ],

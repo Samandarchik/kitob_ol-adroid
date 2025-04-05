@@ -29,6 +29,7 @@ class BookModelFavorite {
   final String? shitrixCode;
   final bool? isNew;
   final String? createdAt;
+  final bool? isFavorite;
 
   BookModelFavorite({
     this.id,
@@ -59,6 +60,7 @@ class BookModelFavorite {
     this.shitrixCode,
     this.isNew,
     this.createdAt,
+    this.isFavorite,
   });
 
   factory BookModelFavorite.fromJson(Map<String, dynamic> json) {
@@ -91,6 +93,7 @@ class BookModelFavorite {
       shitrixCode: json['shitrix_code'] ?? "",
       isNew: json['is_new'] ?? false,
       createdAt: json['created_at'] ?? "",
+      isFavorite: json['is_favorite'] ?? false,
     );
   }
 

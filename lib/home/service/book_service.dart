@@ -1,6 +1,7 @@
 import 'dart:convert';
 
 import 'package:kitob_ol/home/model/favourite_model.dart';
+import 'package:kitob_ol/login/service/token.dart';
 import 'package:kitob_ol/provider_auth.dart';
 import 'package:http/http.dart' as http;
 
@@ -9,20 +10,20 @@ class BookService {
       "https://gateway.axadjonovsardorbek.uz/books/list?status=active";
 
   Future<List<BookModel>> fetchBooks() async {
-    String token = await AuthProvider().getToken();
+    String? token = await AuthService().getToken();
 
     try {
-      final response = await _sendRequestWithToken(apiUrl, token);
+      final response = await _sendRequestWithToken(apiUrl, token ?? "");
 
       if (response.statusCode == 200) {
         final data = json.decode(response.body);
-        minPrice = data["min_price"];
-        maxPrice = data["max_price"];
-
+        TokenStorage().savePrice(
+            data['min_price'].toString(), data['max_price'].toString());
         List<BookModel> books = [];
         for (var bookJson in data['books']) {
           books.add(BookModel.fromJson(bookJson));
         }
+
         return books;
       } else {
         throw Exception('Kitoblar yuklanmadi!');
@@ -33,12 +34,12 @@ class BookService {
   }
 
   Future<String> getBook(String id) async {
-    String token = await AuthProvider().getToken();
+    String? token = await AuthService().getToken(); //{AuthService().getToken();
     final String url =
         "https://gateway.axadjonovsardorbek.uz/books/get/full?book_id=$id";
 
     try {
-      final response = await _sendRequestWithToken(url, token);
+      final response = await _sendRequestWithToken(url, token ?? "");
 
       if (response.statusCode == 200) {
         final Map<String, dynamic> data = jsonDecode(response.body);
@@ -61,10 +62,10 @@ class BookService {
 
     // Agar token eskirgan bo'lsa, yangi token olib qayta so'rov yuboramiz
     if (response.statusCode == 401) {
-      final newToken = await AuthProvider().updateToken();
+      // final newToken = await AuthProvider().updateToken();
       return http.get(
         Uri.parse(url),
-        headers: {'Authorization': 'Bearer $newToken'},
+        // headers: {'Authorization': 'Bearer $newToken'},
       );
     }
 
@@ -72,5 +73,5 @@ class BookService {
   }
 }
 
-num minPrice = 1;
-num maxPrice = 10000;
+// double minPrice = 1;
+// double maxPrice = 10000;

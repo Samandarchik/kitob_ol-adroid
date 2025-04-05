@@ -1,10 +1,57 @@
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
+import 'package:kitob_ol/book_create.dart';
 import 'package:kitob_ol/color.dart';
 import 'package:kitob_ol/fav.dart';
+import 'package:kitob_ol/home/favorite/favourit_list.dart';
 import 'package:kitob_ol/profile/profile.dart';
 
 class CustomDrawer extends StatelessWidget {
   const CustomDrawer({Key? key}) : super(key: key);
+
+  void _showLanguageSelection(BuildContext context) {
+    showModalBottomSheet(
+      context: context,
+      backgroundColor: Color(0xff2C3033),
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
+      ),
+      builder: (context) => Container(
+        padding: EdgeInsets.all(16),
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            ListTile(
+              leading: Icon(Icons.language, color: kWhite),
+              title: Text('O‘zbekcha', style: TextStyle(color: kWhite)),
+              onTap: () {
+                Navigator.pop(context);
+                context.setLocale(const Locale('uz', "UZ"));
+                // Tilni o‘zbekchaga o‘zgartirish kodi
+              },
+            ),
+            ListTile(
+              leading: Icon(Icons.language, color: kWhite),
+              title: Text('English', style: TextStyle(color: kWhite)),
+              onTap: () {
+                Navigator.pop(context);
+                // Tilni inglizchaga o‘zgartirish kodi
+                context.setLocale(const Locale('en', "US"));
+              },
+            ),
+            ListTile(
+              leading: Icon(Icons.language, color: kWhite),
+              title: Text('Русский', style: TextStyle(color: kWhite)),
+              onTap: () {
+                Navigator.pop(context);
+                context.setLocale(const Locale('ru', "RU"));
+              },
+            ),
+          ],
+        ),
+      ),
+    );
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -17,34 +64,27 @@ class CustomDrawer extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Image.asset("assets/image/kiton_logo.png"),
-              SizedBox(
-                height: 10,
-              ),
+              SizedBox(height: 10),
               ListTile(
-                leading: Icon(
-                  Icons.bookmark_outline,
-                  color: kWhite,
-                ),
-                title: const Text(
-                  'Saqlanganlar',
-                  style: TextStyle(color: kWhite),
-                ),
+                leading: Icon(Icons.bookmark_outline, color: kWhite),
+                title: Text('save'.tr(), style: TextStyle(color: kWhite)),
                 onTap: () {
                   Navigator.pop(context);
-                  Navigator.push(context,
-                      MaterialPageRoute(builder: (context) => FavoriteGet()));
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(builder: (context) => Scaffold()),
+                  );
                 },
               ),
               ListTile(
                 leading: const Icon(Icons.person_outline, color: kWhite),
-                title: const Text(
-                  'Mening profilim',
-                  style: TextStyle(color: kWhite),
-                ),
+                title: Text('profile'.tr(), style: TextStyle(color: kWhite)),
                 onTap: () {
                   Navigator.pop(context);
-                  Navigator.push(context,
-                      MaterialPageRoute(builder: (context) => MyProfile()));
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(builder: (context) => MyProfile()),
+                  );
                 },
               ),
               ListTile(
@@ -52,18 +92,21 @@ class CustomDrawer extends StatelessWidget {
                 title: Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
-                    const Text(
-                      'Til',
-                      style: TextStyle(color: kWhite),
-                    ),
+                    Text('language'.tr(), style: TextStyle(color: kWhite)),
                     const Icon(Icons.arrow_drop_down, color: kWhite),
                   ],
                 ),
+                onTap: () => _showLanguageSelection(context),
+              ),
+              ListTile(
+                leading: const Icon(Icons.book, color: kWhite),
+                title: Text('addBook'.tr(), style: TextStyle(color: kWhite)),
                 onTap: () {
                   Navigator.pop(context);
-                  ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
-                    content: Text("Tez orada"),
-                  ));
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(builder: (context) => BookCreatePage()),
+                  );
                 },
               ),
             ],

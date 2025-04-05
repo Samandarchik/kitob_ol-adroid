@@ -1,7 +1,10 @@
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:kitob_ol/color.dart';
 import 'package:kitob_ol/home/model/user_info_model.dart';
+import 'package:kitob_ol/home/ui/home.dart';
+import 'package:kitob_ol/login/service/token.dart';
 import 'package:kitob_ol/login/ui/register.dart';
 import 'package:kitob_ol/profile/profile_edit.dart';
 import 'package:kitob_ol/profile_service.dart';
@@ -9,7 +12,6 @@ import 'package:kitob_ol/provider_auth.dart';
 import 'package:kitob_ol/text_style.dart';
 import 'package:kitob_ol/widget/my_botton_text.dart';
 import 'package:kitob_ol/widget/text_class.dart';
-import 'package:provider/provider.dart';
 
 class MyProfile extends StatefulWidget {
   const MyProfile({super.key});
@@ -19,19 +21,24 @@ class MyProfile extends StatefulWidget {
 }
 
 class _MyProfileState extends State<MyProfile> {
+  String? token = "";
   UserDataModel? userData;
+  final AuthService _authService = AuthService();
 
   @override
   void initState() {
     super.initState();
-    _fetchUserProfile();
+    _authService.loadTokens().then((_) {
+      _fetchUserProfile();
+    });
   }
 
   Future<void> _fetchUserProfile() async {
-    if (Provider.of<AuthProvider>(context, listen: false).token != null) {
+    token = await _authService.getValidToken();
+
+    if (token != null) {
       try {
-        final profile = await ProfileService()
-            .fetchProfile(Provider.of<AuthProvider>(context, listen: false));
+        final profile = await ProfileService().fetchProfile(token!);
         if (mounted) {
           setState(() {
             userData = profile;
@@ -45,49 +52,51 @@ class _MyProfileState extends State<MyProfile> {
 
   @override
   Widget build(BuildContext context) {
-    final authProvider = Provider.of<AuthProvider>(context, listen: false);
-    bool isRegister = authProvider.token != null;
-
     return Scaffold(
         appBar: AppBar(
           centerTitle: true,
-          title: const Text("Mening profilim"),
-          actions: [
-            if (isRegister)
-              IconButton(
-                  icon: Icon(Icons.logout),
-                  onPressed: () {
-                    showDialog(
-                        context: context,
-                        builder: (context) {
-                          return AlertDialog(
-                              backgroundColor: kWhite,
-                              title: const Text("Chiqish"),
-                              content: const Text("Chiqishni tasdiqlaysizmi?"),
-                              actions: [
-                                GestureDetector(
-                                    onTap: () {
-                                      authProvider.removeToken();
-                                      Navigator.pop(context);
-                                      setState(() {
-                                        isRegister = false;
-                                      });
-                                    },
-                                    child: const Text("Ha")),
-                                GestureDetector(
-                                    onTap: () => Navigator.pop(context),
-                                    child: const Text("Yo'q"))
-                              ]);
-                        });
-                  })
-          ],
+          title: Text("profile".tr(), style: kTSB),
+          actions: userData != null
+              ? [
+                  IconButton(
+                      icon: Icon(Icons.logout),
+                      onPressed: () {
+                        showDialog(
+                            context: context,
+                            builder: (context) {
+                              return AlertDialog(
+                                  backgroundColor: kWhite,
+                                  title: Text("exit".tr()),
+                                  content:
+                                      const Text("Chiqishni tasdiqlaysizmi?"),
+                                  actions: [
+                                    GestureDetector(
+                                        onTap: () {
+                                          _authService.clearTokens();
+                                          Navigator.pop(context);
+                                          setState(() {
+                                            print("");
+                                            userData = null;
+                                            TokenStorage().removeToken();
+                                            Navigator.pushAndRemoveUntil(
+                                                context,
+                                                MaterialPageRoute(
+                                                    builder: (context) =>
+                                                        const HomePage()),
+                                                (route) => false);
+                                          });
+                                        },
+                                        child: Text("yes".tr())),
+                                    GestureDetector(
+                                        onTap: () => Navigator.pop(context),
+                                        child: Text("no".tr()))
+                                  ]);
+                            });
+                      })
+                ]
+              : null,
         ),
-        body: Consumer<AuthProvider>(builder: (context, authProvider, child) {
-          return authProvider.token != null
-              ? _buildProfileContent(authProvider)
-              : _buildLoginPrompt();
-        }) // isRegister ? _buildProfileContent(authProvider) : _buildLoginPrompt(),
-        );
+        body: token != null ? _buildProfileContent() : _buildLoginPrompt());
   }
 
   Widget _buildLoginPrompt() {
@@ -95,9 +104,9 @@ class _MyProfileState extends State<MyProfile> {
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
-          Text("Tizimga kirish", style: kTSFWB18),
+          Text("login".tr(), style: kTSFWB18),
           Text(
-            "Mening profilim faqatgina login qilgan foydalanuvchilar uchun",
+            "loginText".tr(),
             style: kTSFS16,
             textAlign: TextAlign.center,
           ),
@@ -106,7 +115,7 @@ class _MyProfileState extends State<MyProfile> {
             boxColor: imageColor,
             textColor: kWhite,
             width: MediaQuery.of(context).size.width * 0.6,
-            text: "Ro'yxatdan o'tish",
+            text: "createAkaunt".tr(),
             onTap: () {
               Navigator.push(
                 context,
@@ -119,7 +128,7 @@ class _MyProfileState extends State<MyProfile> {
     );
   }
 
-  Widget _buildProfileContent(AuthProvider authProvider) {
+  Widget _buildProfileContent() {
     return userData == null
         ? const Center(child: CircularProgressIndicator())
         : SingleChildScrollView(

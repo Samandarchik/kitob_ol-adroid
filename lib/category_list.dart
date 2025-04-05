@@ -1,3 +1,4 @@
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:kitob_ol/provider.dart';
 import 'package:provider/provider.dart';
@@ -13,17 +14,17 @@ class CategoryList extends StatefulWidget {
 }
 
 class _CategoryListState extends State<CategoryList> {
-  bool isNew = false;
-  List<Language> languages = [];
-  List<Author> authors = [];
-  List<Category> categories = [];
-  List<Publisher> publishers = [];
-
   final TextEditingController languageController = TextEditingController();
   final TextEditingController authorController = TextEditingController();
   final TextEditingController categoryController = TextEditingController();
   final TextEditingController publisherController = TextEditingController();
   final TextEditingController controller = TextEditingController();
+
+  bool isNew = false;
+  List<Language> languages = [];
+  List<Author> authors = [];
+  List<Category> categories = [];
+  List<Publisher> publishers = [];
 
   @override
   void initState() {
@@ -50,7 +51,7 @@ class _CategoryListState extends State<CategoryList> {
     return Column(
       children: [
         CustomDropdown(
-          label: "Tilni tanlang",
+          label: "selectLang".tr(),
           items: languages
               .map((e) => {
                     "id": e.id,
@@ -68,7 +69,7 @@ class _CategoryListState extends State<CategoryList> {
           },
         ),
         CustomDropdown(
-          label: "Muallifni tanlang",
+          label: "selectAuthor".tr(),
           items: authors
               .map((e) => {"id": e.id, "name": "${e.name} ${e.surname}"})
               .toList(),
@@ -82,7 +83,7 @@ class _CategoryListState extends State<CategoryList> {
           },
         ),
         CustomDropdown(
-          label: "Kategoriya tanlang",
+          label: "selectCategory".tr(),
           items: categories
               .map((e) => {
                     "id": e.id,
@@ -100,7 +101,7 @@ class _CategoryListState extends State<CategoryList> {
           },
         ),
         CustomDropdown(
-          label: "Nashriyotni tanlang",
+          label: "selectPublisher".tr(),
           items: publishers.map((e) => {"id": e.id, "name": e.name}).toList(),
           controller: publisherController,
           onChanged: (value) {
@@ -112,11 +113,11 @@ class _CategoryListState extends State<CategoryList> {
           },
         ),
         CustomDropdown(
-          label: "Kitob holatini tanlang",
+          label: "selectBookStatus".tr(),
           items: [
-            {"id": null, "name": "Hammasi"},
-            {"id": "true", "name": "Yangi"},
-            {"id": "false", "name": "Eski"},
+            {"id": null, "name": "all".tr()},
+            {"id": "true", "name": "new".tr()},
+            {"id": "false", "name": "old".tr()},
           ],
           controller: controller,
           onChanged: (value) {

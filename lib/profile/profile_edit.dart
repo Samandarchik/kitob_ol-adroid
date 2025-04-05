@@ -1,8 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:kitob_ol/color.dart';
-import 'package:kitob_ol/home/model/user_info_model.dart';
-import 'package:kitob_ol/profile_service.dart';
 import 'package:kitob_ol/text_style.dart';
 import 'package:kitob_ol/widget/my_botton_text.dart';
 import 'package:kitob_ol/widget/my_text_field.dart';

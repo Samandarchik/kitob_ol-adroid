@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:kitob_ol/home/model/favourite_model.dart';
 import 'package:kitob_ol/home/service/filter_book_res.dart';
 import 'package:kitob_ol/home/service/get_filter.dart';
-import 'package:kitob_ol/home/ui/book_list.dart';
 import 'package:kitob_ol/text_style.dart';
 
 class FilterUi extends StatefulWidget {

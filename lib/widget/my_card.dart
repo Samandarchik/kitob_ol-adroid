@@ -1,18 +1,47 @@
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:kitob_ol/color.dart';
 import 'package:kitob_ol/home/model/favourite_model.dart';
+import 'package:kitob_ol/login/ui/register.dart';
+import 'package:kitob_ol/widget/add_remove.dart';
 import 'package:kitob_ol/widget/text_class.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
-class MyCardBook extends StatelessWidget {
+class MyCardBook extends StatefulWidget {
   final BookModel book;
   final VoidCallback onTap;
   const MyCardBook({super.key, required this.book, required this.onTap});
 
   @override
+  State<MyCardBook> createState() => _MyCardBookState();
+}
+
+class _MyCardBookState extends State<MyCardBook> {
+  TextClass textClass = TextClass();
+  bool isRegistered = false;
+
+  Future<bool> isRegister() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    return prefs.getString('access_token') != null;
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    checkToken();
+  }
+
+  void checkToken() async {
+    bool result = await isRegister();
+    setState(() {
+      isRegistered = result;
+    });
+  }
+
+  @override
   Widget build(BuildContext context) {
-    TextClass textClass = TextClass();
     return GestureDetector(
-      onTap: onTap,
+      onTap: widget.onTap,
       child: Container(
         decoration: BoxDecoration(
             color: kWhite,
@@ -28,9 +57,9 @@ class MyCardBook extends StatelessWidget {
               borderRadius: const BorderRadius.only(
                   topLeft: Radius.circular(10), topRight: Radius.circular(10)),
               child: Hero(
-                tag: book.id!,
+                tag: widget.book.id!,
                 child: Image.network(
-                  book.imageUrl!,
+                  widget.book.imageUrl!,
                   errorBuilder: (context, error, stackTrace) {
                     return Text("       Image olishda xatolik");
                   },
@@ -48,13 +77,13 @@ class MyCardBook extends StatelessWidget {
                       SizedBox(
                         width: MediaQuery.of(context).size.width * .7,
                         child: Text(
-                          book.title!,
+                          widget.book.title!,
                           style: TextStyle(
                               fontWeight: FontWeight.bold, fontSize: 18),
                         ),
                       ),
                       Text(
-                        book.cityName!['uz'] ?? "",
+                        widget.book.cityName!['uz'] ?? "",
                         style: TextStyle(fontSize: 11),
                       )
                     ],
@@ -63,9 +92,27 @@ class MyCardBook extends StatelessWidget {
                       style: const ButtonStyle(
                           backgroundColor:
                               WidgetStatePropertyAll<Color>(kGreyContainer)),
-                      onPressed: () {},
+                      onPressed: () {
+                        if (isRegistered) {
+                          addRemove(widget.book.id!,
+                              widget.book.isFavorite ?? false, true);
+
+                          setState(() {
+                            widget.book.isFavorite = !widget.book.isFavorite!;
+                          });
+                        } else {
+                          ScaffoldMessenger.of(context).showSnackBar(
+                              SnackBar(content: Text("login".tr())));
+                          Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                  builder: (context) => const Register()));
+                        }
+                      },
                       icon: Icon(
-                        Icons.favorite_border,
+                        widget.book.isFavorite!
+                            ? Icons.favorite
+                            : Icons.favorite_border,
                         size: MediaQuery.of(context).size.width * .05,
                         color: Colors.red,
                       ))
@@ -73,7 +120,7 @@ class MyCardBook extends StatelessWidget {
               ),
             ),
             Text(
-              "  ${textClass.formatNumberWithSpaces(book.price!)} So'm",
+              "  ${textClass.formatNumberWithSpaces(widget.book.price!)} ${"sum".tr()}",
               style: const TextStyle(
                   fontWeight: FontWeight.bold, fontSize: 20, color: Colors.red),
             ),
