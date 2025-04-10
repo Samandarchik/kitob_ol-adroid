@@ -13,6 +13,7 @@ class BookList extends StatefulWidget {
 }
 
 class _BookListState extends State<BookList> {
+  BookService bookService = BookService();
   @override
   Widget build(BuildContext context) {
     return ListView.builder(
@@ -31,7 +32,7 @@ class _BookListState extends State<BookList> {
                     builder: (context) => Details(
                           book: book,
                         )));
-            await BookService().getBook(book.id!);
+            await bookService.getBook(book.id);
           },
         );
       },

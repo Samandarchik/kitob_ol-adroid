@@ -1,28 +1,20 @@
+import 'dart:io';
+
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_svg/svg.dart';
+import 'package:image_picker/image_picker.dart';
 import 'package:kitob_ol/color.dart';
+import 'package:kitob_ol/home/model/user_info_model.dart';
+import 'package:kitob_ol/profile/edit_profile_service.dart';
 import 'package:kitob_ol/text_style.dart';
 import 'package:kitob_ol/widget/my_botton_text.dart';
 import 'package:kitob_ol/widget/my_text_field.dart';
 
 class MyProfileEdit extends StatefulWidget {
-  final String name;
-  final String lastName;
-  final String birthday;
-  final String number;
-  final String email;
-  final String imageUrl;
-  final String role;
-
+  final UserDataModel user;
   const MyProfileEdit({
     super.key,
-    required this.name,
-    required this.lastName,
-    required this.birthday,
-    required this.number,
-    required this.email,
-    required this.imageUrl,
-    required this.role,
+    required this.user,
   });
 
   @override
@@ -35,16 +27,17 @@ class _MyProfileEditState extends State<MyProfileEdit> {
   late final TextEditingController birthday;
   late final TextEditingController phoneNumber;
   late final TextEditingController email;
-  String? imageUrl;
+  final EditProfileService editProfileService = EditProfileService();
+  File? pickedImage;
 
   @override
   void initState() {
     super.initState();
-    name = TextEditingController(text: widget.name);
-    lastName = TextEditingController(text: widget.lastName);
-    birthday = TextEditingController(text: widget.birthday);
-    phoneNumber = TextEditingController(text: widget.number);
-    email = TextEditingController(text: widget.email);
+    name = TextEditingController(text: widget.user.name);
+    lastName = TextEditingController(text: widget.user.lastName);
+    birthday = TextEditingController(text: widget.user.birthday);
+    phoneNumber = TextEditingController(text: widget.user.number);
+    email = TextEditingController(text: widget.user.email);
   }
 
   @override
@@ -54,6 +47,7 @@ class _MyProfileEditState extends State<MyProfileEdit> {
     birthday.dispose();
     phoneNumber.dispose();
     email.dispose();
+    pickedImage = null;
     super.dispose();
   }
 
@@ -73,7 +67,7 @@ class _MyProfileEditState extends State<MyProfileEdit> {
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
                         Text(
-                          "Mening profilim",
+                          "profile".tr(),
                           style: TextStyle(
                             fontWeight: FontWeight.bold,
                             fontSize: MediaQuery.of(context).size.width * .072,
@@ -91,51 +85,52 @@ class _MyProfileEditState extends State<MyProfileEdit> {
                     ),
                     Divider(),
                     SizedBox(height: 20),
-                    Stack(
-                      children: [
-                        Container(
-                          height: 200,
-                          width: 200,
-                          decoration: const BoxDecoration(
-                            shape: BoxShape.circle,
-                            image: DecorationImage(
-                              fit: BoxFit.cover,
-                              image: AssetImage("assets/image/image.png"),
+                    Center(
+                      child: Stack(
+                        children: [
+                          SizedBox(
+                            height: size.height * 0.25,
+                            width: size.height * 0.25,
+                            child: CircleAvatar(
+                              radius: 60,
+                              backgroundImage: pickedImage != null
+                                  ? FileImage(pickedImage!)
+                                  : NetworkImage(widget.user.imageUrl ??
+                                          'https://i.pinimg.com/736x/03/eb/d6/03ebd625cc0b9d636256ecc44c0ea324.jpg')
+                                      as ImageProvider,
+                              backgroundColor: Colors.grey[200],
                             ),
                           ),
-                        ),
-                        Positioned(
-                          bottom: 0,
-                          right: 10,
-                          child: GestureDetector(
-                            onTap: () => _selectDate(context),
-                            child: Container(
-                              padding: EdgeInsets.all(10),
-                              decoration: BoxDecoration(
-                                border:
-                                    Border.all(width: 3, color: Colors.white),
-                                color: Colors.black,
-                                shape: BoxShape.circle,
-                              ),
-                              child: SvgPicture.asset(
-                                height: 25,
-                                width: 25,
-                                "assets/icon/Gallery Edit.svg",
+                          Positioned(
+                            bottom: 10,
+                            right: 10,
+                            child: GestureDetector(
+                              onTap: _pickImage,
+                              child: Container(
+                                padding: EdgeInsets.all(10),
+                                decoration: BoxDecoration(
+                                  shape: BoxShape.circle,
+                                  border:
+                                      Border.all(color: Colors.white, width: 3),
+                                  color: Colors.black,
+                                ),
+                                child: Icon(Icons.edit,
+                                    color: Colors.white, size: 20),
                               ),
                             ),
                           ),
-                        ),
-                      ],
+                        ],
+                      ),
                     ),
                     SizedBox(height: 20),
                     MyTextField(
                       controller: name,
-                      label: "Ism",
+                      label: "name".tr(),
                       textInputType: TextInputType.text,
                     ),
                     MyTextField(
                       controller: lastName,
-                      label: "Familiya",
+                      label: "surname".tr(),
                       textInputType: TextInputType.text,
                     ),
                     SizedBox(height: 15),
@@ -152,19 +147,19 @@ class _MyProfileEditState extends State<MyProfileEdit> {
                         ),
                         border: OutlineInputBorder(),
                         contentPadding: EdgeInsets.all(8),
-                        labelText: "Tug'gilgan Kun",
+                        labelText: "birthday".tr(),
                         hintText: "1950-12-31",
                         labelStyle: kTSFS16,
                       ),
                     ),
                     MyTextField(
                       controller: phoneNumber,
-                      label: "Telefon raqam",
+                      label: "phoneNumber".tr(),
                       textInputType: TextInputType.phone,
                     ),
                     MyTextField(
                       controller: email,
-                      label: "Email",
+                      label: "email".tr(),
                       textInputType: TextInputType.emailAddress,
                     ),
                     SizedBox(height: 20),
@@ -182,35 +177,14 @@ class _MyProfileEditState extends State<MyProfileEdit> {
                     onTap: () {
                       Navigator.pop(context);
                     },
-                    text: "Bekor qilish",
+                    text: "pascancel".tr(),
                   ),
                   MyBottonText(
                     width: size.width * .45,
-                    text: "Saqlash",
+                    text: "paseSave".tr(),
                     boxColor: imageColor,
                     textColor: kWhite,
-                    onTap: () {
-                      showDialog(
-                          context: context,
-                          builder: (context) {
-                            return AlertDialog(
-                              title: const Text("Malumotlarni yangilash"),
-                              content:
-                                  const Text("Malumotlarni yangilansinmi?"),
-                              actions: [
-                                GestureDetector(
-                                    onTap: () => Navigator.pop(context),
-                                    child: const Text("Yo'q  ")),
-                                SizedBox(width: 10),
-                                GestureDetector(
-                                    onTap: () async {
-                                      // updateProfile();
-                                    },
-                                    child: const Text("Ha  ")),
-                              ],
-                            );
-                          });
-                    },
+                    onTap: () => showDia(),
                   ),
                 ],
               ),
@@ -256,11 +230,50 @@ class _MyProfileEditState extends State<MyProfileEdit> {
     print(birthday.text);
   }
 
-  // Future<void> updateProfile() async {
-  //   await ProfileService().updateProfile(
-  //       UserDataModel(name.text, lastName.text, birthday.text, phoneNumber.text,
-  //           email.text, imageUrl, "user"),
-  //       context);
-  //   Navigator.pop(context);
-  // }
+  Future<void> _pickImage() async {
+    final pickedFile =
+        await ImagePicker().pickImage(source: ImageSource.gallery);
+    if (pickedFile != null) {
+      setState(() {
+        pickedImage = File(pickedFile.path);
+      });
+    }
+  }
+
+  void showDia() => showDialog(
+      context: context,
+      builder: (context) {
+        return AlertDialog(
+          title: Text("onTapEdit".tr()),
+          actions: [
+            GestureDetector(
+                onTap: () => Navigator.pop(context),
+                child: Text("${"no".tr()}  ")),
+            SizedBox(width: 10),
+            GestureDetector(
+                onTap: () async {
+                  if (pickedImage != null) {
+                    String? imageUrl1 =
+                        await editProfileService.uploadImage(pickedImage!);
+                    if (imageUrl1 != null) {
+                      final UserDataModel? result =
+                          await editProfileService.editProfile(UserDataModel(
+                              name.text,
+                              lastName.text,
+                              birthday.text,
+                              phoneNumber.text,
+                              email.text,
+                              imageUrl1,
+                              "user"));
+                      if (result != null) {
+                        Navigator.pop(context);
+                        Navigator.pop(context, result);
+                      }
+                    }
+                  }
+                },
+                child: Text("${"yes".tr()}  ")),
+          ],
+        );
+      });
 }

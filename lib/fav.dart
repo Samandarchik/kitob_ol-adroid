@@ -1,4 +1,7 @@
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
+import 'package:kitob_ol/core/data/local/token_storage.dart';
+import 'package:kitob_ol/core/di/di.dart';
 import 'package:kitob_ol/favorete_vacan_detail.dart';
 import 'package:kitob_ol/home/model/book_model_favorite.dart';
 import 'package:kitob_ol/home/service/book_job__favorite_service.dart';
@@ -6,7 +9,6 @@ import 'package:kitob_ol/home/ui/details_favorite.dart';
 import 'package:kitob_ol/home/model/job_model.dart';
 import 'package:kitob_ol/provider_auth.dart';
 import 'package:kitob_ol/widget/favorite_card.dart';
-import 'package:provider/provider.dart';
 
 class FavoriteGet extends StatefulWidget {
   @override
@@ -14,12 +16,23 @@ class FavoriteGet extends StatefulWidget {
 }
 
 class _FavoriteGetState extends State<FavoriteGet> {
+  TokenStorage tokenStorage = sl<TokenStorage>();
+  bool isRegister = true;
   final ApiServiceFavorites apiService = ApiServiceFavorites();
   @override
+  void initState() {
+    checkToken();
+    super.initState();
+  }
+
+  void checkToken() {
+    isRegister = tokenStorage.getToken().isEmpty ? false : true;
+  }
+
+  @override
   Widget build(BuildContext context) {
-    bool isRegister = AuthService().getToken() != null;
     return Scaffold(
-      appBar: AppBar(title: Text('Kitoblar va Ishlar')),
+      appBar: AppBar(title: Text('save'.tr())),
       body: isRegister
           ? FutureBuilder<Map<String, dynamic>>(
               future: apiService.fetchData(context),

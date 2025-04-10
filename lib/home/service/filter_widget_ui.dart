@@ -2,10 +2,11 @@ import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:kitob_ol/category_list.dart';
 import 'package:kitob_ol/color.dart';
+import 'package:kitob_ol/core/data/local/token_storage.dart';
+import 'package:kitob_ol/core/di/di.dart';
 import 'package:kitob_ol/home/service/book_service.dart';
 import 'package:kitob_ol/home/service/filter_ui.dart';
 import 'package:kitob_ol/home/service/get_filter.dart';
-import 'package:kitob_ol/login/service/token.dart';
 import 'package:kitob_ol/provider.dart';
 import 'package:kitob_ol/widget/my_botton_text.dart';
 import 'package:kitob_ol/widget/text_class.dart';
@@ -23,7 +24,7 @@ class FilterPage extends StatefulWidget {
 
 class _FilterPageState extends State<FilterPage> {
   TextClass textClass = TextClass();
-  TokenStorage tokenStorage = TokenStorage();
+  TokenStorage tokenStorage = sl<TokenStorage>();
   TextEditingController controller = TextEditingController();
   RangeValues _currentRangeValues = RangeValues(minPrice, maxPrice);
 
@@ -73,9 +74,9 @@ class _FilterPageState extends State<FilterPage> {
                 // Price Range Slider
                 RangeSlider(
                   values: _currentRangeValues,
-                  min: minPrice ?? 0,
-                  max: maxPrice ?? 10000,
-                  divisions: (maxPrice! - minPrice!) ~/ 1000,
+                  min: minPrice,
+                  max: maxPrice,
+                  divisions: (maxPrice - minPrice) ~/ 1000,
                   activeColor: const Color(0xff2C3033),
                   inactiveColor: const Color(0xffE0E0E0),
                   onChanged: (RangeValues values) {

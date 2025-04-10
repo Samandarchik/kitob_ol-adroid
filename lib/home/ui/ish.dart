@@ -3,8 +3,7 @@ import 'package:kitob_ol/color.dart';
 import 'package:kitob_ol/home/service/book_service.dart';
 import 'package:kitob_ol/home/service/ish.dart';
 import 'package:kitob_ol/home/service/ish_service.dart';
-import 'package:kitob_ol/provider_auth.dart';
-import 'package:kitob_ol/vacancies/ui/vacancies_details.dart';
+
 import 'package:kitob_ol/vacancies/widgets/vacancies_card.dart';
 
 class IshList extends StatefulWidget {
@@ -15,6 +14,7 @@ class IshList extends StatefulWidget {
 }
 
 class _IshListState extends State<IshList> {
+  BookService bookService = BookService();
   late Future<List<Ish>> futureBooks;
 
   @override
@@ -33,7 +33,6 @@ class _IshListState extends State<IshList> {
             child: Container(
               width: double.infinity,
               margin: EdgeInsets.all(20),
-              height: 200,
               decoration: BoxDecoration(
                 color: kGreyContainer,
               ),
@@ -52,15 +51,6 @@ class _IshListState extends State<IshList> {
             itemBuilder: (context, index) {
               Ish ish = ishs[index];
               return VacanciesCard(
-                onTap: () async {
-                  Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                          builder: (context) =>
-                              VacanciesDetails(vacancies: ish)));
-                  // await BookService().getBook(ish.id);
-// TODO: View countni o'zgartirish
-                },
                 ish: ish,
               );
             },
@@ -70,24 +60,3 @@ class _IshListState extends State<IshList> {
     );
   }
 }
-
-
-
-  // Future<String> getBook(String id) async {
-  //   String token = await AuthProvider().getToken();
-  //   final String url =
-  //       "https://gateway.axadjonovsardorbek.uz/books/get/full?book_id=$id";
-
-  //   try {
-  //     final response = await _sendRequestWithToken(url, token);
-
-  //     if (response.statusCode == 200) {
-  //       final Map<String, dynamic> data = jsonDecode(response.body);
-  //       return data['view_count'].toString();
-  //     } else {
-  //       throw Exception('Kitob yuklanmadi!');
-  //     }
-  //   } catch (e) {
-  //     throw Exception('Xatolik yuz berdi: $e');
-  //   }
-  // }

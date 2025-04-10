@@ -1,5 +1,8 @@
 import 'dart:convert';
 
+import 'package:easy_localization/easy_localization.dart';
+import 'package:flutter/material.dart';
+
 class BookModelFavorite {
   final String? id;
   final String? sellerName;
@@ -63,7 +66,8 @@ class BookModelFavorite {
     this.isFavorite,
   });
 
-  factory BookModelFavorite.fromJson(Map<String, dynamic> json) {
+  factory BookModelFavorite.fromJson(
+      Map<String, dynamic> json, BuildContext contex) {
     return BookModelFavorite(
       id: json['id'] ?? "",
       sellerName: json['seller_name'] ?? "",
@@ -71,12 +75,12 @@ class BookModelFavorite {
       sellerPhoneNumber: json['seller_phone_number'] ?? "",
       sellerImg: json['seller_img'] ?? "",
       publisherName: json['publisher_name'] ?? "",
-      categoryName: _parseJsonField(json, 'category_name'),
+      categoryName: _parseJsonField(json, 'category_name', contex),
       translatorName: json['translator_name'] ?? "",
       authorName: json['author_name'] ?? "",
       authorSurname: json['author_surname'] ?? "",
-      languageName: _parseJsonField(json, 'language_name'),
-      title: _parseJsonField(json, 'title'),
+      languageName: _parseJsonField(json, 'language_name', contex),
+      title: _parseJsonField(json, 'title', contex),
       description: json['description'] ?? "",
       publishedYear: json['published_year'] ?? "",
       totalPages: int.tryParse(json['total_pages'].toString()) ?? 0,
@@ -86,7 +90,7 @@ class BookModelFavorite {
       imgUrl: json['img_url'] ?? "",
       writingType: json['writing_type'] ?? "",
       viewCount: int.tryParse(json['view_count'].toString()) ?? 0,
-      cityName: _parseJsonField(json, 'city_name'),
+      cityName: _parseJsonField(json, 'city_name', contex),
       districtName: json['district_name'] ?? "",
       coverType: json['cover_type'] ?? "",
       coverFormat: json['cover_format'] ?? "",
@@ -98,9 +102,12 @@ class BookModelFavorite {
   }
 
   /// JSON ichidagi string bo'lgan obyektlarni mapga o‘girish
-  static String _parseJsonField(Map<String, dynamic> json, String key) {
+  static String _parseJsonField(
+      Map<String, dynamic> json, String key, BuildContext contex) {
     try {
-      return json.containsKey(key) ? jsonDecode(json[key])['en'] ?? "" : "";
+      return json.containsKey(key)
+          ? jsonDecode(json[key])[contex.locale.languageCode] ?? ""
+          : "";
     } catch (e) {
       return "";
     }

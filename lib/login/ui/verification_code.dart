@@ -1,6 +1,8 @@
 import 'dart:async';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
+import 'package:kitob_ol/core/data/local/token_storage.dart';
+import 'package:kitob_ol/core/di/di.dart';
 import 'package:kitob_ol/login/service/ver_code.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:kitob_ol/color.dart';
@@ -57,7 +59,7 @@ class _VerificationCodeState extends State<VerificationCode> {
     });
   }
 
-  TokenStorage tokenStorage = TokenStorage();
+  TokenStorage tokenStorage = sl<TokenStorage>();
   TextEditingController textcode = TextEditingController();
   Timer? _timer;
   int _remainingTime = 0;

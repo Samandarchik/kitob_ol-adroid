@@ -9,6 +9,7 @@ class MyBottonText extends StatelessWidget {
   final void Function()? onTap;
   final double width;
   final double top;
+  final void Function()? onLongPress;
 
   const MyBottonText(
       {super.key,
@@ -18,6 +19,7 @@ class MyBottonText extends StatelessWidget {
       required this.onTap,
       this.top = 0,
       this.width = double.infinity,
+      this.onLongPress,
       this.bottom = 0});
 
   @override
@@ -26,18 +28,21 @@ class MyBottonText extends StatelessWidget {
       padding: EdgeInsets.only(bottom: bottom),
       child: Padding(
         padding: EdgeInsets.only(top: top),
-        child: ElevatedButton(
-          onPressed: onTap,
-          style: ElevatedButton.styleFrom(
-            backgroundColor: boxColor,
-            shape:
-                BeveledRectangleBorder(borderRadius: BorderRadius.circular(2)),
-            minimumSize: Size(width, 50),
-          ),
-          child: Text(
-            text,
-            style: TextStyle(
-                color: textColor, fontWeight: FontWeight.bold, fontSize: 16),
+        child: GestureDetector(
+          onLongPress: onLongPress,
+          child: ElevatedButton(
+            onPressed: onTap,
+            style: ElevatedButton.styleFrom(
+              backgroundColor: boxColor,
+              shape: BeveledRectangleBorder(
+                  borderRadius: BorderRadius.circular(2)),
+              minimumSize: Size(width, 50),
+            ),
+            child: Text(
+              text,
+              style: TextStyle(
+                  color: textColor, fontWeight: FontWeight.bold, fontSize: 16),
+            ),
           ),
         ),
       ),

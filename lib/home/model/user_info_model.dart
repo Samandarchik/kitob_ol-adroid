@@ -28,15 +28,14 @@ class UserDataModel {
       json["role"] ?? "null",
     );
   }
-  Map<String, dynamic> toJson() {
+  Map<String, dynamic> toJson(String imageUrl) {
     return {
       "first_name": name,
       "last_name": lastName,
       "date_of_birth": birthday,
       "phone_number": number,
       "email": email,
-      "image_url":
-          "https://i.pinimg.com/736x/c3/d4/33/c3d4337e24e7988870b12218f58af19c.jpg",
+      "image_url": imageUrl,
     };
   }
 }

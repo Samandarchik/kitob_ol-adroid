@@ -1,3 +1,4 @@
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:kitob_ol/color.dart';
 import 'package:kitob_ol/home/model/book_model_favorite.dart';
@@ -45,7 +46,7 @@ class FavoriteCard extends StatelessWidget {
                       SizedBox(
                         width: MediaQuery.of(context).size.width * .7,
                         child: Text(
-                          book.title ?? "book.title",
+                          book.title ?? "",
                           style: TextStyle(
                               fontWeight: FontWeight.bold, fontSize: 18),
                         ),

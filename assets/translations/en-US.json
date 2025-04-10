@@ -65,5 +65,15 @@
     "new":"New",
     "old":"Old",
     "addBook":"Add Book",
-    "loding":"Loading..."
+    "loding":"Loading...",
+    "offline":"Offline",
+    "paseSave":"Save",
+    
+    "online":"Online",
+    "part_time":"Part-time",
+    "full_time":"Full-time",
+    "lotin":"Latin",
+    "rus":"Русский",
+    "birthday":"Date of Birth"
+
 }

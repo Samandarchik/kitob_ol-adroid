@@ -1,6 +1,8 @@
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:kitob_ol/color.dart';
+import 'package:kitob_ol/core/data/local/token_storage.dart';
+import 'package:kitob_ol/core/di/di.dart';
 import 'package:kitob_ol/home/model/favourite_model.dart';
 import 'package:kitob_ol/home/service/book_service.dart';
 import 'package:kitob_ol/home/service/filter_widget_ui.dart';
@@ -20,6 +22,7 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
+  BookService bookService = BookService();
   List<BookModel> futureBooks = [];
   bool book = true; // Initially, we show books by default
 
@@ -30,14 +33,11 @@ class _HomePageState extends State<HomePage> {
   }
 
   Future<void> fetchBooks() async {
-    try {
-      final books = await BookService().fetchBooks();
-      setState(() {
-        futureBooks = books;
-      });
-    } catch (e) {
-      print("Error fetching books: $e");
-    }
+    // tokenstorage.getToken();
+    final books = await bookService.fetchBooks();
+    setState(() {
+      futureBooks = books;
+    });
   }
 
   @override
@@ -101,7 +101,6 @@ class _HomePageState extends State<HomePage> {
                 BookList(books: futureBooks),
                 IshList(),
               ]),
-              const SizedBox(height: 60),
             ],
           ),
         ),

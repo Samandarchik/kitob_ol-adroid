@@ -1,14 +1,15 @@
 import 'package:dio/dio.dart';
+import 'package:kitob_ol/core/data/local/token_storage.dart';
 import 'package:kitob_ol/core/di/di.dart';
 
 class FavouritesService {
   final Dio _dio = sl<Dio>(); // Dio ni dependency injection orqali olish
 
   // Sevimlilar ro'yxatini olish metodi
-  Future<List<BookListFavorite>> fetchFavorite(String token) async {
+  Future<List<BookListFavorite>> fetchFavorite() async {
+    print("dio favorite");
     try {
-      print("Token Get: $token");
-
+      final token = sl<TokenStorage>().getToken();
       final response = await _dio.get(
         'https://auth.axadjonovsardorbek.uz/auth/profile',
         options: Options(
@@ -18,8 +19,6 @@ class FavouritesService {
           },
         ),
       );
-
-      print("Status code: ${response.statusCode}");
 
       if (response.statusCode == 200) {
         // JSON massivi kelgan deb taxmin qilib, uni listga aylantiramiz

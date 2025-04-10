@@ -20,7 +20,7 @@ Future<void> refreshToken() async {
     print(response.statusCode);
     print("rrrrrrrrrrr ${response.data}");
     print(response.statusCode);
-    if (response.statusCode == 200) {
+    if (response.statusCode == 200 || response.statusCode == 201) {
       final data = response.data;
       prefs.setString('access_token', data['access_token']);
       prefs.setString('refresh_token', data['refresh_token']);

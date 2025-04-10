@@ -1,3 +1,4 @@
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
 import 'package:kitob_ol/color.dart';
@@ -19,18 +20,18 @@ class DetailsFavorite extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     Map<String, String> h1 = {
-      "Muallif": book.authorName!,
-      "Tarjimon": book.translatorName!,
-      "Kategoriya": book.categoryName!,
-      "ISBN(ID)": book.shitrixCode!,
+      "Muallif": book.authorName ?? "",
+      "Tarjimon": book.translatorName ?? "",
+      "Kategoriya": book.categoryName ?? "",
+      "ISBN(ID)": book.shitrixCode ?? "",
       "Muqova": book.coverType == "soft" ? "Qattiq" : "Yumshoq",
       "Safiha": book.totalPages.toString(),
       "Holati": book.isNew! ? "Yangi" : "O'qilgan",
       "Qog’oz formati": book.coverFormat!,
       "Tili": book.languageName!,
-      "Yozuvi": book.writingType == "latin" ? "Lotin" : "Ruscha",
-      "Nashriyot": book.publisherName!,
-      "Yili": book.publishedYear!
+      "Yozuvi": book.writingType == "latin" ? "lotin".tr() : "rus".tr(),
+      "Nashriyot": book.publisherName ?? "",
+      "Yili": book.publishedYear ?? ""
     };
 
     Size size = MediaQuery.of(context).size;
@@ -39,7 +40,7 @@ class DetailsFavorite extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(
         title: Text(
-          book.title!,
+          book.title ?? "",
           style: kTSFWB18.copyWith(fontSize: 22),
         ),
       ),

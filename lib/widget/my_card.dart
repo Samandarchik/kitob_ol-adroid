@@ -82,10 +82,11 @@ class _MyCardBookState extends State<MyCardBook> {
                               fontWeight: FontWeight.bold, fontSize: 18),
                         ),
                       ),
-                      Text(
-                        widget.book.cityName!['uz'] ?? "",
-                        style: TextStyle(fontSize: 11),
-                      )
+                      // Text(
+                      //   widget.book.cityName!['uz'] ?? "",
+                      //   style: TextStyle(fontSize: 11),
+                      // )
+                      // TODO
                     ],
                   ),
                   IconButton(
@@ -94,11 +95,10 @@ class _MyCardBookState extends State<MyCardBook> {
                               WidgetStatePropertyAll<Color>(kGreyContainer)),
                       onPressed: () {
                         if (isRegistered) {
-                          addRemove(widget.book.id!,
-                              widget.book.isFavorite ?? false, true);
+                          addRemove(widget.book.id, widget.book.isFavourite);
 
                           setState(() {
-                            widget.book.isFavorite = !widget.book.isFavorite!;
+                            widget.book.isFavourite = !widget.book.isFavourite;
                           });
                         } else {
                           ScaffoldMessenger.of(context).showSnackBar(
@@ -110,7 +110,7 @@ class _MyCardBookState extends State<MyCardBook> {
                         }
                       },
                       icon: Icon(
-                        widget.book.isFavorite!
+                        widget.book.isFavourite!
                             ? Icons.favorite
                             : Icons.favorite_border,
                         size: MediaQuery.of(context).size.width * .05,

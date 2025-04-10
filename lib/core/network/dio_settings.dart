@@ -48,6 +48,8 @@ class AppInterceptors extends QueuedInterceptorsWrapper {
   void onRequest(
       RequestOptions options, RequestInterceptorHandler handler) async {
     try {
+      print(
+          " ${tokenStorage.getToken().isNotEmpty ? "Token bor" : "Token yo'q"}");
       final token = await tokenStorage.getToken();
       if (token.isNotEmpty) {
         options.headers['Authorization'] = 'Bearer $token';

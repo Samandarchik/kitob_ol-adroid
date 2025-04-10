@@ -1,7 +1,9 @@
+import 'package:kitob_ol/home/service/filter_widget_ui.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'base_storage.dart';
 
 final class TokenStorage {
-  static const String _token = 'auth_token';
+  static const String _token = 'access_token';
   static const String _refreshToken = 'refresh_token';
 
   final BaseStorage _baseStorage;
@@ -30,5 +32,22 @@ final class TokenStorage {
 
   Future<void> removeRefreshToken() async {
     await _baseStorage.remove(key: _refreshToken);
+  }
+
+  Future<void> savePrice(String min, String max) async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    await prefs.setStringList("price", [min, max]);
+  }
+
+  // Narxni olish
+  Future<void> getPrice() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    List<String>? price = prefs.getStringList("price");
+    minPrice = double.parse(price![0]);
+    maxPrice = double.parse(price[1]);
+  }
+
+  Future<void> putRole(String role) async {
+    await _baseStorage.putString(key: "role", value: role);
   }
 }

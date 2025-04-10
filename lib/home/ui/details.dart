@@ -21,17 +21,17 @@ class Details extends StatelessWidget {
   Widget build(BuildContext context) {
     Map<String, String> h1 = {
       "author".tr(): book.authorName!,
-      "translator".tr(): book.translatorName!,
-      "categorie".tr(): book.categoryName?['uz'] ?? "",
+      "translator".tr(): book.translatorName,
+      // "categorie".tr(): book.categoryName?['uz'] ?? "",
       "id".tr(): book.shitrixCode!,
       "cover".tr(): book.coverType == "soft" ? "Qattiq" : "Yumshoq",
       "page".tr(): book.totalPages.toString(),
       "status".tr(): book.isNew! ? "Yangi" : "O'qilgan",
       "paperFormat".tr(): book.coverFormat!,
-      "language".tr(): book.languageName?['uz'] ?? "",
+      "language".tr(): book.languageName.uz,
       "writing".tr(): book.writingType == "latin" ? "Lotin" : "Ruscha",
-      "publisher".tr(): book.publisherName!,
-      "year".tr(): book.publishedYear!
+      "publisher".tr(): book.publisherName,
+      "year".tr(): book.publishedYear.toString()
     };
 
     Size size = MediaQuery.of(context).size;
@@ -62,7 +62,7 @@ class Details extends StatelessWidget {
                         decoration: BoxDecoration(
                           image: DecorationImage(
                             image: NetworkImage(
-                                index == 0 ? book.imageUrl! : book.imgUrl!),
+                                index == 0 ? book.imageUrl : book.imgUrl),
                             fit: BoxFit.contain,
                           ),
                           gradient: const LinearGradient(

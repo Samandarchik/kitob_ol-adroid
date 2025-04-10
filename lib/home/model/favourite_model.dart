@@ -1,68 +1,64 @@
-// Book
 class BookModel {
-  final String? id;
+  final String id;
   final String? sellerName;
   final String? sellerEmail;
   final String? sellerPhoneNumber;
   final String? sellerImg;
-  final String? publisherName;
-  final Map<String, String>? categoryName;
-  final String? translatorName;
-  final String? translatorSurname;
-  final String? authorName;
-  final String? authorSurname;
-  final Map<String, String>? languageName;
-  final String? title;
-  final String? description;
-  final String? publishedYear;
-  final int? totalPages;
-  final int? price;
-  final int? stock;
-  final String? imageUrl;
-  final String? imgUrl;
-  final String? writingType;
-  final int? viewCount;
-  final Map<String, String>? cityName;
-  final Map<String, String>? districtName;
-  final String? coverType;
-  final String? coverFormat;
-  final String? shitrixCode;
-  final bool? isNew;
-  final String? createdAt;
-  bool? isFavorite;
+  final String publisherName;
+  final CategoryName categoryName;
+  final String translatorName;
+  final String translatorSurname;
+  final String authorName;
+  final String authorSurname;
+  final LanguageName languageName;
+  final String title;
+  final String description;
+  final String publishedYear;
+  final int totalPages;
+  final int price;
+  final int stock;
+  final String imageUrl;
+  final DistrictName districtName;
+  final String imgUrl;
+  final String writingType;
+  final int viewCount;
+  final CityName location;
+  final String shitrixCode;
+  final String coverType;
+  final bool isNew;
+  final String coverFormat;
+  bool isFavourite;
 
-  BookModel({
-    this.id,
-    this.sellerName,
-    this.sellerEmail,
-    this.sellerPhoneNumber,
-    this.sellerImg,
-    this.publisherName,
-    this.categoryName,
-    this.translatorName,
-    this.translatorSurname,
-    this.authorName,
-    this.authorSurname,
-    this.languageName,
-    this.title,
-    this.description,
-    this.publishedYear,
-    this.totalPages,
-    this.price,
-    this.stock,
-    this.imageUrl,
-    this.imgUrl,
-    this.writingType,
-    this.viewCount,
-    this.cityName,
-    this.districtName,
-    this.coverType,
-    this.coverFormat,
-    this.shitrixCode,
-    this.isNew,
-    this.createdAt,
-    this.isFavorite,
-  });
+  BookModel(
+      {required this.id,
+      this.sellerName,
+      this.sellerEmail,
+      this.sellerPhoneNumber,
+      this.sellerImg,
+      required this.imgUrl,
+      required this.imageUrl,
+      required this.publisherName,
+      required this.categoryName,
+      required this.translatorName,
+      required this.translatorSurname,
+      required this.authorName,
+      required this.authorSurname,
+      required this.languageName,
+      required this.title,
+      required this.description,
+      required this.shitrixCode,
+      required this.coverType,
+      required this.totalPages,
+      required this.isNew,
+      required this.coverFormat,
+      required this.writingType,
+      required this.publishedYear,
+      required this.price,
+      required this.stock,
+      required this.viewCount,
+      required this.location,
+      required this.districtName,
+      this.isFavourite = false});
 
   factory BookModel.fromJson(Map<String, dynamic> json) {
     return BookModel(
@@ -72,38 +68,117 @@ class BookModel {
       sellerPhoneNumber: json['seller_phone_number'] ?? '',
       sellerImg: json['seller_img'] ?? '',
       publisherName: json['publisher_name'] ?? '',
-      categoryName: json['category_name'] != null
-          ? Map<String, String>.from(json['category_name'])
-          : {},
+      categoryName: CategoryName.fromJson(json['category_name']),
       translatorName: json['translator_name'] ?? '',
       translatorSurname: json['translator_surname'] ?? '',
       authorName: json['author_name'] ?? '',
       authorSurname: json['author_surname'] ?? '',
-      languageName: json['language_name'] != null
-          ? Map<String, String>.from(json['language_name'])
-          : {},
+      languageName: LanguageName.fromJson(json['language_name']),
       title: json['title'] ?? '',
       description: json['description'] ?? '',
-      publishedYear: json['published_year'] ?? '',
+      shitrixCode: json['shitrix_code'] ?? '',
+      coverType: json['coverType'] ?? '',
       totalPages: json['total_pages'] ?? 0,
+      isNew: json['isNew'] ?? false,
+      coverFormat: json['cover_format'] ?? '',
+      writingType: json['writing_type'] ?? '',
+      publishedYear: json['published_year'] ?? "0",
       price: json['price'] ?? 0,
       stock: json['stock'] ?? 0,
-      imageUrl: json['image_url'] ?? '',
-      imgUrl: json['img_url'] ?? '',
-      writingType: json['writing_type'] ?? '',
       viewCount: json['view_count'] ?? 0,
-      cityName: json['city_name'] != null
-          ? Map<String, String>.from(json['city_name'])
-          : {},
-      districtName: json['district_name'] != null
-          ? Map<String, String>.from(json['district_name'])
-          : {},
-      coverType: json['cover_type'] ?? '',
-      coverFormat: json['cover_format'] ?? '',
-      shitrixCode: json['shitrix_code'] ?? '',
-      isNew: json['is_new'] ?? false,
-      createdAt: json['created_at'] ?? '',
-      isFavorite: json['is_favorite'] ?? '',
+      location: CityName.fromJson(json['city_name']),
+      imgUrl: json['img_url'] ?? '',
+      imageUrl: json['image_url'] ?? '',
+      isFavourite: json['is_favorite'] ?? false,
+      districtName: DistrictName.fromJson(json['district_name']),
+    );
+  }
+}
+
+class CategoryName {
+  final String en;
+  final String ru;
+  final String uz;
+
+  CategoryName({
+    required this.en,
+    required this.ru,
+    required this.uz,
+  });
+
+  factory CategoryName.fromJson(Map<String, dynamic> json) {
+    return CategoryName(
+      en: json['en'] ?? '',
+      ru: json['ru'] ?? '',
+      uz: json['uz'] ?? '',
+    );
+  }
+
+  Map<String, dynamic> toJson() {
+    return {
+      'en': en,
+      'ru': ru,
+      'uz': uz,
+    };
+  }
+}
+
+class LanguageName {
+  final String en;
+  final String ru;
+  final String uz;
+
+  LanguageName({
+    required this.en,
+    required this.ru,
+    required this.uz,
+  });
+
+  factory LanguageName.fromJson(Map<String, dynamic> json) {
+    return LanguageName(
+      en: json['en'] ?? '',
+      ru: json['ru'] ?? '',
+      uz: json['uz'] ?? '',
+    );
+  }
+}
+
+class CityName {
+  final String en;
+  final String ru;
+  final String uz;
+
+  CityName({
+    required this.en,
+    required this.ru,
+    required this.uz,
+  });
+
+  factory CityName.fromJson(Map<String, dynamic> json) {
+    return CityName(
+      en: json['en'] ?? '',
+      ru: json['ru'] ?? '',
+      uz: json['uz'] ?? '',
+    );
+  }
+}
+
+class DistrictName {
+  final String en;
+  final String ru;
+  final String uz;
+
+  DistrictName({
+    required this.en,
+    required this.ru,
+    required this.uz,
+  });
+
+  factory DistrictName.fromJson(Map<String, dynamic> json) {
+    return DistrictName(
+      en: json['en'] ?? '',
+      ru: json['ru'] ?? '',
+      uz: json['uz'] ?? '',
     );
   }
 }

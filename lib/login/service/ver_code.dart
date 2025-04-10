@@ -1,10 +1,12 @@
 import 'dart:convert';
 import 'package:http/http.dart' as http;
 import 'package:flutter/material.dart';
+import 'package:kitob_ol/core/data/local/token_storage.dart';
+import 'package:kitob_ol/core/di/di.dart';
 import 'package:kitob_ol/home/ui/home.dart';
-import 'package:kitob_ol/provider_auth.dart';
 
 class VerificationCodeApi {
+  TokenStorage tokenStorage = sl<TokenStorage>();
   String verLoginCode =
       "https://auth.axadjonovsardorbek.uz/auth/user/email/login";
   String verRegisCode =
@@ -19,14 +21,19 @@ class VerificationCodeApi {
           ),
           headers: {'Content-Type': 'application/json'},
           body: jsonEncode(body));
-      print(response.statusCode);
       if (response.statusCode == 201 || response.statusCode == 200) {
         print(response.body);
         final responseData = jsonDecode(response.body);
         final token = responseData['access_token'];
         final refreshToken = responseData['refresh_token'];
         final role = responseData['role'];
-        await AuthService().saveTokens(token, refreshToken, role);
+        await tokenStorage.putToken(
+          token,
+        );
+        await tokenStorage.putRefreshToken(
+          refreshToken,
+        );
+        await tokenStorage.putRole(role);
         Navigator.pushAndRemoveUntil(
             context,
             MaterialPageRoute(builder: (context) => HomePage()),

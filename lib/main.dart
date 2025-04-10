@@ -1,4 +1,5 @@
 import 'package:easy_localization/easy_localization.dart';
+import 'package:kitob_ol/core/data/local/token_storage.dart';
 import 'package:kitob_ol/core/di/di.dart';
 import 'package:kitob_ol/provider.dart';
 import 'package:provider/provider.dart';
@@ -9,7 +10,7 @@ import 'package:kitob_ol/home/ui/home.dart';
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await EasyLocalization.ensureInitialized(); //
-  setupInit();
+  await setupInit();
   runApp(
     EasyLocalization(
       supportedLocales: [

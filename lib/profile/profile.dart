@@ -1,14 +1,13 @@
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_svg/svg.dart';
 import 'package:kitob_ol/color.dart';
+import 'package:kitob_ol/core/data/local/token_storage.dart';
+import 'package:kitob_ol/core/di/di.dart';
 import 'package:kitob_ol/home/model/user_info_model.dart';
 import 'package:kitob_ol/home/ui/home.dart';
-import 'package:kitob_ol/login/service/token.dart';
 import 'package:kitob_ol/login/ui/register.dart';
 import 'package:kitob_ol/profile/profile_edit.dart';
 import 'package:kitob_ol/profile_service.dart';
-import 'package:kitob_ol/provider_auth.dart';
 import 'package:kitob_ol/text_style.dart';
 import 'package:kitob_ol/widget/my_botton_text.dart';
 import 'package:kitob_ol/widget/text_class.dart';
@@ -21,24 +20,21 @@ class MyProfile extends StatefulWidget {
 }
 
 class _MyProfileState extends State<MyProfile> {
-  String? token = "";
+  String token = sl<TokenStorage>().getToken();
   UserDataModel? userData;
-  final AuthService _authService = AuthService();
+  final TokenStorage _authService = sl<TokenStorage>();
 
   @override
   void initState() {
     super.initState();
-    _authService.loadTokens().then((_) {
-      _fetchUserProfile();
-    });
+
+    _fetchUserProfile();
   }
 
   Future<void> _fetchUserProfile() async {
-    token = await _authService.getValidToken();
-
-    if (token != null) {
+    if (token.isNotEmpty) {
       try {
-        final profile = await ProfileService().fetchProfile(token!);
+        final profile = await ProfileService().fetchProfile();
         if (mounted) {
           setState(() {
             userData = profile;
@@ -61,42 +57,12 @@ class _MyProfileState extends State<MyProfile> {
                   IconButton(
                       icon: Icon(Icons.logout),
                       onPressed: () {
-                        showDialog(
-                            context: context,
-                            builder: (context) {
-                              return AlertDialog(
-                                  backgroundColor: kWhite,
-                                  title: Text("exit".tr()),
-                                  content:
-                                      const Text("Chiqishni tasdiqlaysizmi?"),
-                                  actions: [
-                                    GestureDetector(
-                                        onTap: () {
-                                          _authService.clearTokens();
-                                          Navigator.pop(context);
-                                          setState(() {
-                                            print("");
-                                            userData = null;
-                                            TokenStorage().removeToken();
-                                            Navigator.pushAndRemoveUntil(
-                                                context,
-                                                MaterialPageRoute(
-                                                    builder: (context) =>
-                                                        const HomePage()),
-                                                (route) => false);
-                                          });
-                                        },
-                                        child: Text("yes".tr())),
-                                    GestureDetector(
-                                        onTap: () => Navigator.pop(context),
-                                        child: Text("no".tr()))
-                                  ]);
-                            });
+                        showDialo();
                       })
                 ]
               : null,
         ),
-        body: token != null ? _buildProfileContent() : _buildLoginPrompt());
+        body: token.isNotEmpty ? _buildProfileContent() : _buildLoginPrompt());
   }
 
   Widget _buildLoginPrompt() {
@@ -129,78 +95,72 @@ class _MyProfileState extends State<MyProfile> {
   }
 
   Widget _buildProfileContent() {
-    return userData == null
-        ? const Center(child: CircularProgressIndicator())
-        : SingleChildScrollView(
-            padding: const EdgeInsets.symmetric(horizontal: 10),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                const Divider(),
-                _buildProfileImage(),
-                myText("Ism", userData!.name),
-                myText("Familiya", userData!.lastName),
-                myText("Tug‘ilgan sana", userData!.birthday),
-                myText(
-                  "Telefon raqam",
-                  TextClass().formatPhoneNumber(userData!.number),
-                ),
-                myText("Email manzil", userData!.email),
-                const SizedBox(height: 10),
-                MyElevedButtonBorder(
-                  onTap: () {
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                        builder: (context) => MyProfileEdit(
-                          name: userData!.name,
-                          lastName: userData!.lastName,
-                          birthday: userData!.birthday,
-                          number: userData!.number,
-                          email: userData!.email,
-                          imageUrl: userData?.imageUrl ?? "",
-                          role: userData!.role,
-                        ),
-                      ),
-                    );
-                  },
-                  text: "Tahrirlash",
-                ),
-                const SizedBox(height: 30),
-              ],
+    if (userData == null) {
+      return Padding(
+        padding: const EdgeInsets.symmetric(horizontal: 10),
+        child: Column(
+          children: [
+            const Divider(),
+            Center(
+              child: Container(
+                height: MediaQuery.of(context).size.height * 0.25,
+                width: MediaQuery.of(context).size.height * 0.25,
+                decoration: BoxDecoration(shape: BoxShape.circle, color: kGrey),
+              ),
             ),
-          );
+            myText("name".tr(), ""),
+            myText("surname".tr(), ""),
+            myText("birthday".tr(), ""),
+            myText("phoneNumber".tr(), ""),
+            myText("email".tr(), ""),
+          ],
+        ),
+      );
+    } else {
+      return SingleChildScrollView(
+        padding: const EdgeInsets.symmetric(horizontal: 10),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            const Divider(),
+            _buildProfileImage(),
+            myText("name".tr(), userData!.name),
+            myText("surname".tr(), userData!.lastName),
+            myText("birthday".tr(), userData!.birthday),
+            myText(
+              "phoneNumber".tr(),
+              TextClass().formatPhoneNumber(userData!.number),
+            ),
+            myText("email".tr(), userData!.email),
+            const SizedBox(height: 10),
+            MyElevedButtonBorder(
+              onTap: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => MyProfileEdit(
+                      user: userData!,
+                    ),
+                  ),
+                );
+              },
+              text: "Tahrirlash",
+            ),
+            const SizedBox(height: 30),
+          ],
+        ),
+      );
+    }
   }
 
   Widget _buildProfileImage() {
     return Center(
-      child: Stack(
-        children: [
-          CircleAvatar(
-            radius: 100,
-            backgroundImage: userData!.imageUrl != "null" &&
-                    userData!.imageUrl != "/assets/annoymouse_user-hkEn8bkU.jpg"
-                ? NetworkImage(userData!.imageUrl ?? "")
-                : const AssetImage("assets/image/image.png") as ImageProvider,
-          ),
-          Positioned(
-            bottom: 0,
-            right: 10,
-            child: Container(
-              padding: const EdgeInsets.all(8),
-              decoration: BoxDecoration(
-                border: Border.all(width: 3, color: Colors.white),
-                color: Colors.black,
-                shape: BoxShape.circle,
-              ),
-              child: SvgPicture.asset(
-                "assets/icon/Gallery Edit.svg",
-                height: 25,
-                width: 25,
-              ),
-            ),
-          ),
-        ],
+      child: CircleAvatar(
+        radius: 100,
+        backgroundImage: userData!.imageUrl != "null" &&
+                userData!.imageUrl != "/assets/annoymouse_user-hkEn8bkU.jpg"
+            ? NetworkImage(userData!.imageUrl ?? "")
+            : const AssetImage("assets/image/image.png") as ImageProvider,
       ),
     );
   }
@@ -229,4 +189,33 @@ class _MyProfileState extends State<MyProfile> {
       ],
     );
   }
+
+  void showDialo() => showDialog(
+      context: context,
+      builder: (context) {
+        return AlertDialog(
+            backgroundColor: kWhite,
+            title: Text("exit".tr()),
+            content: const Text("Chiqishni tasdiqlaysizmi?"),
+            actions: [
+              GestureDetector(
+                  onTap: () {
+                    _authService.removeToken();
+                    Navigator.pop(context);
+                    setState(() {
+                      _authService.removeToken();
+                      _authService.removeRefreshToken();
+
+                      Navigator.pushAndRemoveUntil(
+                          context,
+                          MaterialPageRoute(
+                              builder: (context) => const HomePage()),
+                          (route) => false);
+                    });
+                  },
+                  child: Text("yes".tr())),
+              GestureDetector(
+                  onTap: () => Navigator.pop(context), child: Text("no".tr()))
+            ]);
+      });
 }

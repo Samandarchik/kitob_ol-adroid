@@ -1,24 +1,21 @@
-import 'dart:convert';
-
+import 'package:dio/dio.dart';
+import 'package:kitob_ol/core/data/local/token_storage.dart';
+import 'package:kitob_ol/core/di/di.dart';
 import 'package:kitob_ol/home/model/favourite_model.dart';
-import 'package:kitob_ol/login/service/token.dart';
-import 'package:kitob_ol/provider_auth.dart';
-import 'package:http/http.dart' as http;
 
 class BookService {
+  final TokenStorage tokenStorage = sl<TokenStorage>();
+  final Dio dio = sl<Dio>();
   final String apiUrl =
       "https://gateway.axadjonovsardorbek.uz/books/list?status=active";
 
   Future<List<BookModel>> fetchBooks() async {
-    String? token = await AuthService().getToken();
-
     try {
-      final response = await _sendRequestWithToken(apiUrl, token ?? "");
+      final response = await dio.get(apiUrl);
 
       if (response.statusCode == 200) {
-        final data = json.decode(response.body);
-        TokenStorage().savePrice(
-            data['min_price'].toString(), data['max_price'].toString());
+        final data = response.data;
+
         List<BookModel> books = [];
         for (var bookJson in data['books']) {
           books.add(BookModel.fromJson(bookJson));
@@ -33,43 +30,26 @@ class BookService {
     }
   }
 
-  Future<String> getBook(String id) async {
-    String? token = await AuthService().getToken(); //{AuthService().getToken();
+  Future<void> getBook(String id) async {
     final String url =
         "https://gateway.axadjonovsardorbek.uz/books/get/full?book_id=$id";
 
     try {
-      final response = await _sendRequestWithToken(url, token ?? "");
-
-      if (response.statusCode == 200) {
-        final Map<String, dynamic> data = jsonDecode(response.body);
-        return data['view_count'].toString();
-      } else {
-        throw Exception('Kitob yuklanmadi!');
-      }
-    } catch (e) {
-      throw Exception('Xatolik yuz berdi: $e');
-    }
+      await dio.get(
+        url,
+      );
+    } catch (e) {}
   }
 
-  // Tokenni avtomatik yangilab so‘rov yuborish funksiyasi
+  Future<void> getVacancy(String id) async {
+    final String url =
+        "https://gateway.axadjonovsardorbek.uz/vacancies/get?id=$id";
 
-  Future<http.Response> _sendRequestWithToken(String url, String token) async {
-    final response = await http.get(
-      Uri.parse(url),
-      headers: {'Authorization': 'Bearer $token'},
-    );
-
-    // Agar token eskirgan bo'lsa, yangi token olib qayta so'rov yuboramiz
-    if (response.statusCode == 401) {
-      // final newToken = await AuthProvider().updateToken();
-      return http.get(
-        Uri.parse(url),
-        // headers: {'Authorization': 'Bearer $newToken'},
+    try {
+      await dio.get(
+        url,
       );
-    }
-
-    return response;
+    } catch (e) {}
   }
 }
 

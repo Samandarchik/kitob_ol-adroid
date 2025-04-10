@@ -1,23 +1,37 @@
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:kitob_ol/color.dart';
+import 'package:kitob_ol/home/service/book_service.dart';
 import 'package:kitob_ol/home/service/ish.dart';
 import 'package:kitob_ol/text_style.dart';
 import 'package:kitob_ol/vacancies/ui/vacancies_details.dart';
+import 'package:kitob_ol/widget/add_remove.dart';
 import 'package:kitob_ol/widget/text_class.dart';
 
-class VacanciesCard extends StatelessWidget {
+class VacanciesCard extends StatefulWidget {
   final Ish ish;
-  final VoidCallback onTap;
-  const VacanciesCard({super.key, required this.ish, required this.onTap});
 
+  const VacanciesCard({
+    super.key,
+    required this.ish,
+  });
+
+  @override
+  State<VacanciesCard> createState() => _VacanciesCardState();
+}
+
+class _VacanciesCardState extends State<VacanciesCard> {
+  final TextClass textClass = TextClass();
+  final BookService bookService = BookService();
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
-      onTap: () {
+      onTap: () async {
         Navigator.push(
             context,
             MaterialPageRoute(
-                builder: (context) => VacanciesDetails(vacancies: ish)));
+                builder: (context) => VacanciesDetails(vacancies: widget.ish)));
+        await bookService.getVacancy(widget.ish.id);
       },
       child: Container(
         padding: EdgeInsets.all(15),
@@ -37,12 +51,12 @@ class VacanciesCard extends StatelessWidget {
                     SizedBox(
                       width: MediaQuery.of(context).size.width * .67,
                       child: Text(
-                        ish.title,
+                        widget.ish.title,
                         style: kTSFWB18.copyWith(fontSize: 20),
                       ),
                     ),
                     Text(
-                      ish.cityName["uz"]!,
+                      widget.ish.cityName[context.locale.languageCode]!,
                       style: TextStyle(fontSize: 14),
                     ),
                   ],
@@ -52,9 +66,33 @@ class VacanciesCard extends StatelessWidget {
                       borderRadius: BorderRadius.circular(6),
                       color: Color(0xffeeeeee)),
                   child: IconButton(
-                      onPressed: () {},
+                      onPressed: () async {
+                        if (widget.ish.isFavorite) {
+                          print("Add");
+
+                          final bool isAdded = await addRemoveVac(
+                              widget.ish.id, widget.ish.isFavorite);
+                          setState(() {
+                            isAdded
+                                ? widget.ish.isFavorite = !widget.ish.isFavorite
+                                : null;
+                          });
+                          print(
+                              "Vacancy id: ${widget.ish.id} Is ${widget.ish.isFavorite}");
+                        } else {
+                          print("Remove");
+                          addRemoveVac(widget.ish.id, widget.ish.isFavorite);
+                          setState(() {
+                            widget.ish.isFavorite = !widget.ish.isFavorite;
+                          });
+                          print(
+                              "Vacancy id: ${widget.ish.id} Is ${widget.ish.isFavorite}");
+                        }
+                      },
                       icon: Icon(
-                        Icons.favorite_outline,
+                        widget.ish.isFavorite
+                            ? Icons.favorite
+                            : Icons.favorite_outline,
                         color: kred,
                       )),
                 )
@@ -62,14 +100,14 @@ class VacanciesCard extends StatelessWidget {
             ),
             SizedBox(height: 10),
             Text(
-                "• ${ish.workingStyles == "offline" ? "Masofaviy" : 'Ofisda'}"),
+                "• ${widget.ish.workingStyles == "offline" ? "online".tr() : 'offline'.tr()}"),
             Text(
-                "• ${ish.workingTypes == "full_time" ? "To'liq ish kuni" : "Malum soatlarda"}"),
+                "• ${widget.ish.workingTypes == "full_time" ? "full_time".tr() : "part_time".tr()}"),
             SizedBox(
               height: 20,
             ),
             Text(
-              "${TextClass().formatNumberWithSpaces(ish.salaryFrom)} ~ ${TextClass().formatNumberWithSpaces(ish.salaryTo)} So'm",
+              "${textClass.formatNumberWithSpaces(widget.ish.salaryFrom)} ~ ${textClass.formatNumberWithSpaces(widget.ish.salaryTo)} So'm",
               style: TextStyle(
                   color: kred, fontWeight: FontWeight.bold, fontSize: 19),
             ),

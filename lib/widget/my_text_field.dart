@@ -13,7 +13,7 @@ class MyTextField extends StatelessWidget {
       required this.controller,
       required this.label,
       this.textInputType = TextInputType.text,
-      this.prefixText = ""});
+      this.prefixText = "+998 "});
 
   @override
   Widget build(BuildContext context) {
@@ -26,7 +26,6 @@ class MyTextField extends StatelessWidget {
         textInputAction: TextInputAction.next,
         cursorColor: kBlack,
         decoration: InputDecoration(
-            prefixText: prefixText,
             focusedBorder:
                 const OutlineInputBorder(borderSide: BorderSide(color: kBlack)),
             border: const OutlineInputBorder(),
@@ -58,7 +57,7 @@ class MyTextFieldFilled extends StatelessWidget {
       required this.textInputType,
       this.hint = "",
       this.next = TextInputAction.next,
-      this.maxLines = null,
+      this.maxLines = 12,
       this.border = true,
       this.maxLens = false,
       this.text = ""});

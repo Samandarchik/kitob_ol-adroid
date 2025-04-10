@@ -16,6 +16,7 @@
     "languageSelection":"Til",
     "profile":"Mening profilim",
     "save":"Saqlashganlar",
+    "paseSave":"Saqlash",
     "filter":"Filter",
     "books":"Kitoblar",
     "vacancy":"Ishlar",
@@ -65,5 +66,13 @@
     "new":"Yangi",
     "old":"Eski",
     "addBook":"Kitob qo'shish",
-    "loding":"Yuklanmoqda"
+    "loding":"Yuklanmoqda",
+    "offline":"Offline",
+    "online":"Masofaviy",
+    "part_time":"Malum vaqtda",
+    "full_time":"To'liq kun",
+    "lotin":"Lotin",
+    "rus":"Русский",
+    "birthday":"Tug'ilgan kun"
+
 }
