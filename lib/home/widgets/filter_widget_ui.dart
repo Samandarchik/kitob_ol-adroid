@@ -1,16 +1,14 @@
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
-import 'package:kitob_ol/category_list.dart';
 import 'package:kitob_ol/color.dart';
 import 'package:kitob_ol/core/data/local/token_storage.dart';
 import 'package:kitob_ol/core/di/di.dart';
+import 'package:kitob_ol/home/widgets/real_time_search.dart';
 import 'package:kitob_ol/home/service/book_service.dart';
-import 'package:kitob_ol/home/service/filter_ui.dart';
-import 'package:kitob_ol/home/service/get_filter.dart';
-import 'package:kitob_ol/provider.dart';
+import 'package:kitob_ol/home/model/filter_model.dart';
+import 'package:kitob_ol/home/widgets/filter/ui/filter_get_ui.dart';
 import 'package:kitob_ol/widget/my_botton_text.dart';
 import 'package:kitob_ol/widget/text_class.dart';
-import 'package:provider/provider.dart';
 
 double minPrice = 1;
 double maxPrice = 100000;
@@ -25,8 +23,16 @@ class FilterPage extends StatefulWidget {
 class _FilterPageState extends State<FilterPage> {
   TextClass textClass = TextClass();
   TokenStorage tokenStorage = sl<TokenStorage>();
-  TextEditingController controller = TextEditingController();
   RangeValues _currentRangeValues = RangeValues(minPrice, maxPrice);
+  String? selectedLanguage;
+  String? selectedAuthor;
+  String? selectedCategory;
+  String? selectedPublisher;
+  String? selectedCountry;
+  String? selectedCity;
+  String? selectedYear;
+  String? selectedTranslation;
+  bool? isNew;
 
   @override
   void initState() {
@@ -45,12 +51,13 @@ class _FilterPageState extends State<FilterPage> {
     });
   }
 
-  final FilterModel filter = FilterModel();
+  @override
+  void dispose() {
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
-    final filterProvider = Provider.of<FilterProvider>(context, listen: false);
-
     Size size = MediaQuery.of(context).size;
     return Scaffold(
         appBar: AppBar(
@@ -62,7 +69,38 @@ class _FilterPageState extends State<FilterPage> {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                CategoryList(),
+                FilterWidget(
+                  selectedLanguageId: selectedLanguage,
+                  selectedAuthorId: selectedAuthor,
+                  selectedCategoryId: selectedCategory,
+                  selectedPublisherId: selectedPublisher,
+                  isNew: isNew,
+                  onLanguageChanged: (String? id) {
+                    setState(() {
+                      selectedLanguage = id;
+                    });
+                  },
+                  onAuthorChanged: (String? id) {
+                    setState(() {
+                      selectedAuthor = id;
+                    });
+                  },
+                  onCategoryChanged: (String? id) {
+                    setState(() {
+                      selectedCategory = id;
+                    });
+                  },
+                  onPublisherChanged: (String? id) {
+                    setState(() {
+                      selectedPublisher = id;
+                    });
+                  },
+                  onNewStatusChanged: (bool? value) {
+                    setState(() {
+                      isNew = value;
+                    });
+                  },
+                ),
 
                 SizedBox(height: 10),
                 Text(
@@ -106,18 +144,22 @@ class _FilterPageState extends State<FilterPage> {
                 MyBottonText(
                     top: 10,
                     textColor: kWhite,
-                    onTap: () => Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                            builder: (context) => FilterUi(
-                                filterModel: FilterModel(
-                                    languageId: filterProvider.selectedLanguage,
-                                    translatorId: filterProvider.selectedAuthor,
-                                    categoryId: filterProvider.selectedCategory,
-                                    priceFrom:
-                                        _currentRangeValues.start.toInt(),
-                                    priceTo:
-                                        _currentRangeValues.end.toInt())))),
+                    onTap: () {
+                      print(
+                          "selectedLanguage: $selectedLanguage, selectedCategory: $selectedCategory, selectedTranslation: $selectedTranslation selectedLanguage: $selectedLanguage ");
+                      Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                              builder: (context) => FilterGetUi(
+                                  filterModel: FilterModel(
+                                      categoryId: selectedCategory,
+                                      translatorId: selectedTranslation,
+                                      languageId: selectedLanguage,
+                                      priceFrom:
+                                          _currentRangeValues.start.toInt(),
+                                      priceTo:
+                                          _currentRangeValues.end.toInt()))));
+                    },
                     text: "search".tr(),
                     boxColor: imageColor),
               ],

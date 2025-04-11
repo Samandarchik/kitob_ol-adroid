@@ -74,6 +74,8 @@
     "full_time":"Full-time",
     "lotin":"Latin",
     "rus":"Русский",
-    "birthday":"Date of Birth"
+    "birthday":"Date of Birth",
+    "notBook":"Book is not found",
+    "notVacancy":"Vacancy is not found"
 
 }

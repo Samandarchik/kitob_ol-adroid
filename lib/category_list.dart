@@ -1,7 +1,5 @@
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
-import 'package:kitob_ol/provider.dart';
-import 'package:provider/provider.dart';
 import 'package:kitob_ol/get_filter_service.dart';
 import 'package:kitob_ol/kam.dart';
 import 'package:kitob_ol/home/model/category_model.dart';
@@ -14,11 +12,11 @@ class CategoryList extends StatefulWidget {
 }
 
 class _CategoryListState extends State<CategoryList> {
-  final TextEditingController languageController = TextEditingController();
-  final TextEditingController authorController = TextEditingController();
-  final TextEditingController categoryController = TextEditingController();
-  final TextEditingController publisherController = TextEditingController();
-  final TextEditingController controller = TextEditingController();
+  late final SearchController languageController;
+  late final TextEditingController authorController;
+  late final TextEditingController categoryController;
+  late final TextEditingController publisherController;
+  late final TextEditingController controller;
 
   bool isNew = false;
   List<Language> languages = [];
@@ -29,6 +27,11 @@ class _CategoryListState extends State<CategoryList> {
   @override
   void initState() {
     super.initState();
+    languageController = SearchController();
+    authorController = TextEditingController();
+    categoryController = TextEditingController();
+    publisherController = TextEditingController();
+    controller = TextEditingController();
     _fetchData();
   }
 
@@ -45,29 +48,19 @@ class _CategoryListState extends State<CategoryList> {
   }
 
   @override
-  Widget build(BuildContext context) {
-    var filterProvider = Provider.of<FilterProvider>(context);
+  void dispose() {
+    super.dispose();
+    languageController.dispose();
+    authorController.dispose();
+    categoryController.dispose();
+    publisherController.dispose();
+    controller.dispose();
+  }
 
+  @override
+  Widget build(BuildContext context) {
     return Column(
       children: [
-        CustomDropdown(
-          label: "selectLang".tr(),
-          items: languages
-              .map((e) => {
-                    "id": e.id,
-                    "name": e.name['uz'] ?? e.name['en'] ?? "Unknown"
-                  })
-              .toList(),
-          controller: languageController,
-          onChanged: (value) {
-            setState(() {
-              languageController.text =
-                  languages.firstWhere((e) => e.id == value).name['uz'] ??
-                      "Unknown";
-            });
-            filterProvider.setLanguage(value!);
-          },
-        ),
         CustomDropdown(
           label: "selectAuthor".tr(),
           items: authors
@@ -76,10 +69,12 @@ class _CategoryListState extends State<CategoryList> {
           controller: authorController,
           onChanged: (value) {
             setState(() {
-              authorController.text =
-                  authors.firstWhere((e) => e.id == value).name;
+              languages = languages
+                  .where((lang) => lang.name[context.locale.languageCode]!
+                      .toLowerCase()
+                      .contains(value!.toLowerCase()))
+                  .toList();
             });
-            filterProvider.setAuthor(value!);
           },
         ),
         CustomDropdown(
@@ -87,17 +82,19 @@ class _CategoryListState extends State<CategoryList> {
           items: categories
               .map((e) => {
                     "id": e.id,
-                    "name": e.name['uz'] ?? e.name['en'] ?? "Unknown"
+                    "name": e.name[context.locale.languageCode] ??
+                        e.name['en'] ??
+                        "Unknown"
                   })
               .toList(),
           controller: categoryController,
           onChanged: (value) {
             setState(() {
-              categoryController.text =
-                  categories.firstWhere((e) => e.id == value).name['uz'] ??
-                      "Unknown";
+              categoryController.text = categories
+                      .firstWhere((e) => e.id == value)
+                      .name[context.locale.languageCode] ??
+                  "Unknown";
             });
-            filterProvider.setCategory(value!);
           },
         ),
         CustomDropdown(
@@ -109,7 +106,6 @@ class _CategoryListState extends State<CategoryList> {
               publisherController.text =
                   publishers.firstWhere((e) => e.id == value).name;
             });
-            filterProvider.setPublisher(value!);
           },
         ),
         CustomDropdown(
@@ -120,9 +116,7 @@ class _CategoryListState extends State<CategoryList> {
             {"id": "false", "name": "old".tr()},
           ],
           controller: controller,
-          onChanged: (value) {
-            filterProvider.setBookStatus(value);
-          },
+          onChanged: (value) {},
         ),
       ],
     );

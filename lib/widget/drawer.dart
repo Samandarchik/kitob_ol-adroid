@@ -2,9 +2,7 @@ import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:kitob_ol/book_create.dart';
 import 'package:kitob_ol/color.dart';
-import 'package:kitob_ol/core/data/local/token_storage.dart';
-import 'package:kitob_ol/core/di/di.dart';
-import 'package:kitob_ol/fav.dart';
+import 'package:kitob_ol/favorite.dart';
 import 'package:kitob_ol/profile/profile.dart';
 
 class CustomDrawer extends StatelessWidget {
@@ -36,10 +34,7 @@ class CustomDrawer extends StatelessWidget {
                 leading: const Icon(Icons.person_outline, color: kWhite),
                 title: Text('profile'.tr(), style: TextStyle(color: kWhite)),
                 onTap: () async {
-                  bool? token =
-                      sl<TokenStorage>().getToken() == null ? false : true;
                   Navigator.pop(context);
-                  print("token: $token");
                   Navigator.push(
                     context,
                     MaterialPageRoute(builder: (context) => MyProfile()),

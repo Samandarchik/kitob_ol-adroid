@@ -73,6 +73,8 @@
     "full_time":"To'liq kun",
     "lotin":"Lotin",
     "rus":"Русский",
-    "birthday":"Tug'ilgan kun"
+    "birthday":"Tug'ilgan kun",
+    "notBook":"Kitoblar mavjud emas",
+    "notVacancy":"Ishlar mavjud emas"
 
 }

@@ -1,8 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:kitob_ol/category_list.dart';
-import 'package:kitob_ol/provider.dart';
-import 'package:provider/provider.dart';
 
 class BookCreatePage extends StatefulWidget {
   @override
@@ -36,8 +34,6 @@ class _BookCreatePageState extends State<BookCreatePage> {
 
   @override
   Widget build(BuildContext context) {
-    final filterProvider = Provider.of<FilterProvider>(context, listen: false);
-
     return Scaffold(
       appBar: AppBar(title: Text("E'lon qo'shish")),
       body: SingleChildScrollView(

@@ -2,7 +2,7 @@ import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
 import 'package:kitob_ol/color.dart';
-import 'package:kitob_ol/home/model/favourite_model.dart';
+import 'package:kitob_ol/home/model/book_model.dart';
 import 'package:kitob_ol/home/ui/description.dart';
 import 'package:kitob_ol/text_style.dart';
 import 'package:kitob_ol/widget/my_botton_text.dart';
@@ -20,15 +20,15 @@ class Details extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     Map<String, String> h1 = {
-      "author".tr(): book.authorName!,
+      "author".tr(): book.authorName,
       "translator".tr(): book.translatorName,
-      // "categorie".tr(): book.categoryName?['uz'] ?? "",
-      "id".tr(): book.shitrixCode!,
+      "categorie".tr(): book.categoryName[context.locale.languageCode]!,
+      "id".tr(): book.shitrixCode,
       "cover".tr(): book.coverType == "soft" ? "Qattiq" : "Yumshoq",
       "page".tr(): book.totalPages.toString(),
-      "status".tr(): book.isNew! ? "Yangi" : "O'qilgan",
-      "paperFormat".tr(): book.coverFormat!,
-      "language".tr(): book.languageName.uz,
+      "status".tr(): book.isNew ? "Yangi" : "O'qilgan",
+      "paperFormat".tr(): book.coverFormat,
+      "language".tr(): book.languageName[context.locale.languageCode]!,
       "writing".tr(): book.writingType == "latin" ? "Lotin" : "Ruscha",
       "publisher".tr(): book.publisherName,
       "year".tr(): book.publishedYear.toString()
@@ -40,7 +40,7 @@ class Details extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(
         title: Text(
-          book.title!,
+          book.title,
           style: kTSFWB18.copyWith(fontSize: 22),
         ),
       ),
@@ -56,7 +56,7 @@ class Details extends StatelessWidget {
                   child: PageView.builder(
                     itemCount: 2,
                     itemBuilder: (context, index) => Hero(
-                      tag: book.id!,
+                      tag: book.id,
                       child: Container(
                         height: 200,
                         decoration: BoxDecoration(
@@ -90,7 +90,7 @@ class Details extends StatelessWidget {
                   height: 15,
                 ),
                 Text(
-                  "${textClass.formatNumberWithSpaces(book.price!)} ${"sum".tr()}",
+                  "${textClass.formatNumberWithSpaces(book.price)} ${"sum".tr()}",
                   style: kTSFWB18.copyWith(fontSize: 24),
                 ),
                 const SizedBox(
@@ -129,7 +129,7 @@ class Details extends StatelessWidget {
                         context,
                         MaterialPageRoute(
                             builder: (context) => DescriptionPage(
-                                description: book.description!)));
+                                description: book.description)));
                   },
                 ),
                 // Contact button (bottom sheet)

@@ -1,7 +1,7 @@
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:kitob_ol/color.dart';
-import 'package:kitob_ol/home/model/favourite_model.dart';
+import 'package:kitob_ol/home/model/book_model.dart';
 import 'package:kitob_ol/login/ui/register.dart';
 import 'package:kitob_ol/widget/add_remove.dart';
 import 'package:kitob_ol/widget/text_class.dart';

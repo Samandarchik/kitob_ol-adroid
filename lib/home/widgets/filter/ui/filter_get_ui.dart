@@ -1,18 +1,19 @@
 import 'package:flutter/material.dart';
-import 'package:kitob_ol/home/model/favourite_model.dart';
-import 'package:kitob_ol/home/service/filter_book_res.dart';
+import 'package:kitob_ol/home/model/book_model.dart';
+import 'package:kitob_ol/home/model/filter_model.dart';
 import 'package:kitob_ol/home/service/get_filter.dart';
+import 'package:kitob_ol/home/widgets/filter/widgets/filter_book_res.dart';
 import 'package:kitob_ol/text_style.dart';
 
-class FilterUi extends StatefulWidget {
+class FilterGetUi extends StatefulWidget {
   final FilterModel filterModel;
-  const FilterUi({super.key, required this.filterModel});
+  const FilterGetUi({super.key, required this.filterModel});
 
   @override
-  State<FilterUi> createState() => _FilterUiState();
+  State<FilterGetUi> createState() => _FilterGetUiState();
 }
 
-class _FilterUiState extends State<FilterUi> {
+class _FilterGetUiState extends State<FilterGetUi> {
   List<BookModel> books = [];
   @override
   void initState() {
@@ -38,7 +39,7 @@ class _FilterUiState extends State<FilterUi> {
             style: kTSB,
           ),
         ),
-        body: FilterBookRes(
+        body: FilterBookResponse(
           books: books,
         ));
   }

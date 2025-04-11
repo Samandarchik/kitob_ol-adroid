@@ -17,6 +17,30 @@ class ApiService {
     }
   }
 
+  static Future<List<Cities>> fetchCities() async {
+    final response = await http.get(Uri.parse("$baseUrl/cities/list"));
+    if (response.statusCode == 200) {
+      final data = json.decode(response.body);
+      return (data["Cities"]["cities"] as List)
+          .map((json) => Cities.fromJson(json))
+          .toList();
+    } else {
+      throw Exception("Cities yuklab bo'lmadi!");
+    }
+  }
+
+  static Future<List<Districts>> fetchDistricts() async {
+    final response = await http.get(Uri.parse("$baseUrl/districts/list"));
+    if (response.statusCode == 200) {
+      final data = json.decode(response.body);
+      return (data["Districts"]["districts"] as List)
+          .map((json) => Districts.fromJson(json))
+          .toList();
+    } else {
+      throw Exception("Cities yuklab bo'lmadi!");
+    }
+  }
+
   static Future<List<Author>> fetchAuthors() async {
     final response = await http.get(Uri.parse("$baseUrl/authors/list"));
     if (response.statusCode == 200) {

@@ -1,7 +1,7 @@
 import 'package:dio/dio.dart';
 import 'package:kitob_ol/core/data/local/token_storage.dart';
 import 'package:kitob_ol/core/di/di.dart';
-import 'package:kitob_ol/home/model/favourite_model.dart';
+import 'package:kitob_ol/home/model/book_model.dart';
 
 class BookService {
   final TokenStorage tokenStorage = sl<TokenStorage>();

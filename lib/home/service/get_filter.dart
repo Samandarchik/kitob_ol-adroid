@@ -1,6 +1,7 @@
 import 'dart:convert';
 import 'package:http/http.dart' as http;
-import 'package:kitob_ol/home/model/favourite_model.dart';
+import 'package:kitob_ol/home/model/book_model.dart';
+import 'package:kitob_ol/home/model/filter_model.dart';
 
 class GetFilter extends FilterModel {
   Future<List<BookModel>?> fetchFilteredBooks(
@@ -51,28 +52,4 @@ class GetFilter extends FilterModel {
       throw Exception("Tizimda xatolik yuz berdi: $e");
     }
   }
-}
-
-class FilterModel {
-  String? categoryId;
-  String? translatorId;
-  String? languageId;
-  int? priceFrom;
-  int? priceTo;
-  String? selectedPublisher;
-  String? selectedLanguage;
-  String? selectedCategory;
-  String? selectedAuthor;
-
-  FilterModel({
-    this.categoryId,
-    this.translatorId,
-    this.languageId,
-    this.priceFrom,
-    this.priceTo,
-    this.selectedPublisher,
-    this.selectedLanguage,
-    this.selectedCategory,
-    this.selectedAuthor,
-  });
 }

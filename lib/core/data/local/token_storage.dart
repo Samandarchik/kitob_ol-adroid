@@ -1,4 +1,4 @@
-import 'package:kitob_ol/home/service/filter_widget_ui.dart';
+import 'package:kitob_ol/home/widgets/filter_widget_ui.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'base_storage.dart';
 

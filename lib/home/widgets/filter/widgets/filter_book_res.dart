@@ -1,25 +1,28 @@
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
-import 'package:kitob_ol/home/model/favourite_model.dart';
+import 'package:kitob_ol/home/model/book_model.dart';
 import 'package:kitob_ol/home/ui/details.dart';
 import 'package:kitob_ol/home/service/book_service.dart';
+import 'package:kitob_ol/text_style.dart';
 import 'package:kitob_ol/widget/my_card.dart';
 
-class FilterBookRes extends StatefulWidget {
+class FilterBookResponse extends StatefulWidget {
   final List<BookModel> books;
-  const FilterBookRes({super.key, required this.books});
+  const FilterBookResponse({super.key, required this.books});
 
   @override
-  _FilterBookResState createState() => _FilterBookResState();
+  _FilterBookResponseState createState() => _FilterBookResponseState();
 }
 
-class _FilterBookResState extends State<FilterBookRes> {
+class _FilterBookResponseState extends State<FilterBookResponse> {
+  BookService bookService = BookService();
   @override
   Widget build(BuildContext context) {
     return widget.books.isEmpty
         ? Center(
             child: Text(
-              "Kitoblar topilmadi",
-              style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+              "notBook".tr(),
+              style: kTSFWB18,
             ),
           )
         : Padding(
@@ -39,7 +42,7 @@ class _FilterBookResState extends State<FilterBookRes> {
                             builder: (context) => Details(
                                   book: book,
                                 )));
-                    await BookService().getBook(book.id!);
+                    await bookService.getBook(book.id);
                   },
                 );
               },

@@ -1,11 +1,8 @@
 import 'package:easy_localization/easy_localization.dart';
-import 'package:kitob_ol/core/data/local/token_storage.dart';
 import 'package:kitob_ol/core/di/di.dart';
-import 'package:kitob_ol/provider.dart';
-import 'package:provider/provider.dart';
+import 'package:kitob_ol/home/ui/home.dart';
 import 'package:flutter/material.dart';
 import 'package:kitob_ol/color.dart';
-import 'package:kitob_ol/home/ui/home.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -21,12 +18,7 @@ void main() async {
       startLocale: Locale("en", "US"),
       path: 'assets/translations',
       fallbackLocale: Locale('en', 'US'),
-      child: MultiProvider(
-        providers: [
-          ChangeNotifierProvider(create: (_) => FilterProvider()),
-        ],
-        child: const MyApp(),
-      ),
+      child: MyApp(),
     ),
   );
 }

@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:kitob_ol/home/model/favourite_model.dart';
+import 'package:kitob_ol/home/model/book_model.dart';
 import 'package:kitob_ol/home/ui/details.dart';
 import 'package:kitob_ol/home/service/book_service.dart';
 import 'package:kitob_ol/widget/my_card.dart';
