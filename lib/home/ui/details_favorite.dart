@@ -20,8 +20,8 @@ class DetailsFavorite extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     Map<String, String> h1 = {
-      "Muallif": book.authorName ?? "",
       "Tarjimon": book.translatorName ?? "",
+      "Muallif": book.authorName?.tr() ?? "",
       "Kategoriya": book.categoryName ?? "",
       "ISBN(ID)": book.shitrixCode ?? "",
       "Muqova": book.coverType == "soft" ? "Qattiq" : "Yumshoq",

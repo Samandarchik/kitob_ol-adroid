@@ -69,6 +69,7 @@ class RegisterApiPhone {
             ScaffoldMessenger.of(context).showSnackBar(
                 SnackBar(content: Text("Kod ${phone}ga yuborildi Login")));
           } else if (response.statusCode == 500) {
+            print("reponse body ${response.body}, ${response.statusCode}");
             ScaffoldMessenger.of(context).showSnackBar(SnackBar(
                 content: Text("Kod xato iltimos kodni qaytadan tekshiring")));
           } else if (response.statusCode == 401) {

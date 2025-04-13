@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:kitob_ol/home/model/book_model.dart';
-import 'package:kitob_ol/home/ui/details.dart';
 import 'package:kitob_ol/home/service/book_service.dart';
 import 'package:kitob_ol/widget/my_card.dart';
 
@@ -25,15 +24,6 @@ class _BookListState extends State<BookList> {
 
         return MyCardBook(
           book: book,
-          onTap: () async {
-            Navigator.push(
-                context,
-                MaterialPageRoute(
-                    builder: (context) => Details(
-                          book: book,
-                        )));
-            await bookService.getBook(book.id);
-          },
         );
       },
     );

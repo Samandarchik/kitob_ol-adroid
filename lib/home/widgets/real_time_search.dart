@@ -43,8 +43,6 @@ class _FilterWidgetState extends State<FilterWidget> {
   List<Category> categories = [];
   List<Publisher> publishers = [];
 
-  // Selected values
-
   bool isLoading = true;
 
   @override
@@ -86,7 +84,7 @@ class _FilterWidgetState extends State<FilterWidget> {
               children: [
                 // Language Filter
                 Text(
-                  'selectLanguage'.tr(),
+                  'selectLang'.tr(),
                   style: const TextStyle(
                     fontSize: 16,
                     fontWeight: FontWeight.bold,
@@ -100,11 +98,13 @@ class _FilterWidgetState extends State<FilterWidget> {
                       language.name[context.locale.languageCode] ?? 'Unknown',
                   itemToId: (language) => language.id,
                   selectedId: widget.selectedLanguageId,
-                  hintText: 'searchLanguage'.tr(),
+                  hintText: 'seachLang'.tr(),
                   onSelected: (language) {
                     setState(() {
                       widget.selectedLanguageId = language.id;
                     });
+                    // Call the callback to update parent state
+                    widget.onLanguageChanged(language.id);
                   },
                 ),
                 const SizedBox(height: 24),
@@ -124,11 +124,13 @@ class _FilterWidgetState extends State<FilterWidget> {
                   itemToString: (author) => "${author.name} ${author.surname}",
                   itemToId: (author) => author.id,
                   selectedId: widget.selectedAuthorId,
-                  hintText: 'searchAuthor'.tr(),
+                  hintText: 'selectAuthor'.tr(),
                   onSelected: (author) {
                     setState(() {
                       widget.selectedAuthorId = author.id;
                     });
+                    // Call the callback to update parent state
+                    widget.onAuthorChanged(author.id);
                   },
                 ),
                 const SizedBox(height: 24),
@@ -154,6 +156,8 @@ class _FilterWidgetState extends State<FilterWidget> {
                     setState(() {
                       widget.selectedCategoryId = category.id;
                     });
+                    // Call the callback to update parent state
+                    widget.onCategoryChanged(category.id);
                   },
                 ),
                 const SizedBox(height: 24),
@@ -178,6 +182,8 @@ class _FilterWidgetState extends State<FilterWidget> {
                     setState(() {
                       widget.selectedPublisherId = publisher.id;
                     });
+                    // Call the callback to update parent state
+                    widget.onPublisherChanged(publisher.id);
                   },
                 ),
                 const SizedBox(height: 24),
@@ -240,6 +246,8 @@ class _FilterWidgetState extends State<FilterWidget> {
                       setState(() {
                         widget.isNew = value;
                       });
+                      // Call the callback to update parent state
+                      widget.onNewStatusChanged(value);
                     },
                   ),
                 ),

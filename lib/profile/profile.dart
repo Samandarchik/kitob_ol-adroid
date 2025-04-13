@@ -7,6 +7,7 @@ import 'package:kitob_ol/home/model/user_info_model.dart';
 import 'package:kitob_ol/home/ui/home.dart';
 import 'package:kitob_ol/login/ui/register.dart';
 import 'package:kitob_ol/profile/profile_edit.dart';
+import 'package:kitob_ol/profile/user_data_register.dart';
 import 'package:kitob_ol/profile_service.dart';
 import 'package:kitob_ol/text_style.dart';
 import 'package:kitob_ol/widget/my_botton_text.dart';
@@ -22,6 +23,7 @@ class MyProfile extends StatefulWidget {
 class _MyProfileState extends State<MyProfile> {
   String token = sl<TokenStorage>().getToken();
   UserDataModel? userData;
+  bool userDataIsFull = true;
   final TokenStorage _authService = sl<TokenStorage>();
 
   @override
@@ -38,11 +40,40 @@ class _MyProfileState extends State<MyProfile> {
         if (mounted) {
           setState(() {
             userData = profile;
+            userDataNull();
           });
         }
       } catch (e) {
         print("Xatolik: $e");
       }
+    }
+  }
+
+  void userDataNull() {
+    if (userData?.name == null ||
+        userData!.name!.isEmpty ||
+        userData?.lastName == null ||
+        userData!.lastName!.isEmpty ||
+        userData?.birthday == null ||
+        userData!.birthday!.isEmpty ||
+        userData?.number == null ||
+        userData!.number!.isEmpty ||
+        userData?.email == null ||
+        userData!.email!.isEmpty ||
+        userData?.imageUrl == null ||
+        userData!.imageUrl!.isEmpty) {
+      // At least one field is empty or null
+      Navigator.push(context, MaterialPageRoute(builder: (context) {
+        return UserDataRegister(
+          email: userData?.email,
+          phoneNumber: userData?.number,
+        );
+      }));
+    } else {
+      setState(() {
+        userDataIsFull = false;
+        print("userDataIsFull false");
+      });
     }
   }
 
@@ -124,14 +155,14 @@ class _MyProfileState extends State<MyProfile> {
           children: [
             const Divider(),
             _buildProfileImage(),
-            myText("name".tr(), userData!.name),
-            myText("surname".tr(), userData!.lastName),
-            myText("birthday".tr(), userData!.birthday),
+            myText("name".tr(), userData?.name ?? ""),
+            myText("surname".tr(), userData?.lastName ?? ""),
+            myText("birthday".tr(), userData?.birthday ?? ""),
             myText(
               "phoneNumber".tr(),
-              TextClass().formatPhoneNumber(userData!.number),
+              TextClass().formatPhoneNumber(userData?.number ?? "998000000000"),
             ),
-            myText("email".tr(), userData!.email),
+            myText("email".tr(), userData!.email ?? ""),
             const SizedBox(height: 10),
             MyElevedButtonBorder(
               onTap: () {
@@ -144,7 +175,7 @@ class _MyProfileState extends State<MyProfile> {
                   ),
                 );
               },
-              text: "Tahrirlash",
+              text: "edit".tr(),
             ),
             const SizedBox(height: 30),
           ],
@@ -155,14 +186,18 @@ class _MyProfileState extends State<MyProfile> {
 
   Widget _buildProfileImage() {
     return Center(
-      child: CircleAvatar(
-        radius: 100,
-        backgroundImage: userData!.imageUrl != "null" &&
-                userData!.imageUrl != "/assets/annoymouse_user-hkEn8bkU.jpg"
-            ? NetworkImage(userData!.imageUrl ?? "")
-            : const AssetImage("assets/image/image.png") as ImageProvider,
+        child: ClipOval(
+      child: Image.network(
+        userData?.imageUrl ??
+            "https://i.pinimg.com/736x/b2/66/f7/b266f7c8ecb53960c5eaa19d2a40dc41.jpg",
+        height: MediaQuery.of(context).size.height * 0.25,
+        width: MediaQuery.of(context).size.height * 0.25,
+        errorBuilder: (context, error, stackTrace) => Icon(
+          Icons.person,
+          size: MediaQuery.of(context).size.height * 0.25,
+        ),
       ),
-    );
+    ));
   }
 
   Column myText(String title, String content) {

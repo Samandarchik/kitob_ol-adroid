@@ -57,9 +57,13 @@
     "verificationCode":"Verification Code",
     "search":"Search",
     "selectLang":"Select Language",
+    "seachLang":"Search Language",
     "selectAuthor":"Select Author",
+    "searchAuthor":"Search Author",
     "selectCategory":"Select Category",
+    "searchCategory":"Search Category",
     "selectPublisher":"Select Publisher",
+    "searchPublisher":"Search Publisher",
     "selectBookStatus":"Select Book Status",
     "all":"All",
     "new":"New",
@@ -68,7 +72,6 @@
     "loding":"Loading...",
     "offline":"Offline",
     "paseSave":"Save",
-    
     "online":"Online",
     "part_time":"Part-time",
     "full_time":"Full-time",
@@ -76,6 +79,8 @@
     "rus":"Русский",
     "birthday":"Date of Birth",
     "notBook":"Book is not found",
-    "notVacancy":"Vacancy is not found"
+    "notVacancy":"Vacancy is not found",
+    "soft":"So",
+    "hard":"Hard"
 
 }

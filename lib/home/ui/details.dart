@@ -24,12 +24,12 @@ class Details extends StatelessWidget {
       "translator".tr(): book.translatorName,
       "categorie".tr(): book.categoryName[context.locale.languageCode]!,
       "id".tr(): book.shitrixCode,
-      "cover".tr(): book.coverType == "soft" ? "Qattiq" : "Yumshoq",
+      "cover".tr(): book.coverType == "soft" ? "soft".tr() : "hard".tr(),
       "page".tr(): book.totalPages.toString(),
-      "status".tr(): book.isNew ? "Yangi" : "O'qilgan",
+      "status".tr(): book.isNew ? "new".tr() : "old".tr(),
       "paperFormat".tr(): book.coverFormat,
       "language".tr(): book.languageName[context.locale.languageCode]!,
-      "writing".tr(): book.writingType == "latin" ? "Lotin" : "Ruscha",
+      "writing".tr(): book.writingType == "latin" ? "lotin".tr() : "rus".tr(),
       "publisher".tr(): book.publisherName,
       "year".tr(): book.publishedYear.toString()
     };

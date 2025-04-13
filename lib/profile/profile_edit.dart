@@ -2,11 +2,12 @@ import 'dart:io';
 
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:kitob_ol/color.dart';
 import 'package:kitob_ol/home/model/user_info_model.dart';
 import 'package:kitob_ol/profile/edit_profile_service.dart';
-import 'package:kitob_ol/text_style.dart';
+import 'package:kitob_ol/profile/texteti_bri.dart';
 import 'package:kitob_ol/widget/my_botton_text.dart';
 import 'package:kitob_ol/widget/my_text_field.dart';
 
@@ -73,14 +74,6 @@ class _MyProfileEditState extends State<MyProfileEdit> {
                             fontSize: MediaQuery.of(context).size.width * .072,
                           ),
                         ),
-                        IconButton(
-                          style: ButtonStyle(
-                            backgroundColor: WidgetStatePropertyAll<Color>(
-                                Colors.grey.shade300),
-                          ),
-                          onPressed: () {},
-                          icon: const Icon(Icons.logout),
-                        ),
                       ],
                     ),
                     Divider(),
@@ -107,16 +100,18 @@ class _MyProfileEditState extends State<MyProfileEdit> {
                             child: GestureDetector(
                               onTap: _pickImage,
                               child: Container(
-                                padding: EdgeInsets.all(10),
-                                decoration: BoxDecoration(
-                                  shape: BoxShape.circle,
-                                  border:
-                                      Border.all(color: Colors.white, width: 3),
-                                  color: Colors.black,
-                                ),
-                                child: Icon(Icons.edit,
-                                    color: Colors.white, size: 20),
-                              ),
+                                  padding: EdgeInsets.all(10),
+                                  decoration: BoxDecoration(
+                                    shape: BoxShape.circle,
+                                    border: Border.all(
+                                        color: Colors.white, width: 3),
+                                    color: Colors.black,
+                                  ),
+                                  child: SvgPicture.asset(
+                                    "assets/icon/Gallery Edit.svg",
+                                    width: MediaQuery.of(context).size.width *
+                                        .045,
+                                  )),
                             ),
                           ),
                         ],
@@ -134,23 +129,8 @@ class _MyProfileEditState extends State<MyProfileEdit> {
                       textInputType: TextInputType.text,
                     ),
                     SizedBox(height: 15),
-                    TextField(
-                      onTap: () {
-                        _selectDate(context);
-                      },
-                      controller: birthday,
-                      keyboardType: TextInputType.datetime,
-                      textInputAction: TextInputAction.next,
-                      decoration: InputDecoration(
-                        focusedBorder: OutlineInputBorder(
-                          borderSide: BorderSide(color: kBlack),
-                        ),
-                        border: OutlineInputBorder(),
-                        contentPadding: EdgeInsets.all(8),
-                        labelText: "birthday".tr(),
-                        hintText: "1950-12-31",
-                        labelStyle: kTSFS16,
-                      ),
+                    DateOfBirthField(
+                      dateController: birthday,
                     ),
                     MyTextField(
                       controller: phoneNumber,
@@ -184,7 +164,7 @@ class _MyProfileEditState extends State<MyProfileEdit> {
                     text: "paseSave".tr(),
                     boxColor: imageColor,
                     textColor: kWhite,
-                    onTap: () => showDia(),
+                    onTap: () => showDia(context),
                   ),
                 ],
               ),
@@ -193,41 +173,6 @@ class _MyProfileEditState extends State<MyProfileEdit> {
         ),
       ),
     );
-  }
-
-  Future<void> _selectDate(context) async {
-    DateTime? _picked = await showDatePicker(
-      context: context,
-      initialDate: DateTime.now(),
-      firstDate: DateTime(1960),
-      lastDate: DateTime.now(),
-      builder: (BuildContext context, Widget? child) {
-        return Theme(
-          data: ThemeData.light().copyWith(
-            colorScheme: ColorScheme.light(
-              primary: kBlack, // Change selected date color
-              onPrimary: kWhite, // Text color on selected date
-              surface: kWhite, // Header background color
-              onSurface: Colors.black, // Default text color
-            ),
-            textButtonTheme: TextButtonThemeData(
-              style: TextButton.styleFrom(
-                foregroundColor: kBlack, // Button text color
-              ),
-            ),
-          ),
-          child: child!,
-        );
-      },
-    );
-
-    if (_picked != null) {
-      setState(() {
-        birthday.text =
-            "${_picked.year}-${_picked.month.toString().padLeft(2, '0')}-${_picked.day.toString().padLeft(2, '0')}";
-      });
-    }
-    print(birthday.text);
   }
 
   Future<void> _pickImage() async {
@@ -240,7 +185,7 @@ class _MyProfileEditState extends State<MyProfileEdit> {
     }
   }
 
-  void showDia() => showDialog(
+  void showDia(BuildContext context) => showDialog(
       context: context,
       builder: (context) {
         return AlertDialog(
@@ -256,21 +201,26 @@ class _MyProfileEditState extends State<MyProfileEdit> {
                     String? imageUrl1 =
                         await editProfileService.uploadImage(pickedImage!);
                     if (imageUrl1 != null) {
-                      final UserDataModel? result =
-                          await editProfileService.editProfile(UserDataModel(
-                              name.text,
-                              lastName.text,
-                              birthday.text,
-                              phoneNumber.text,
-                              email.text,
-                              imageUrl1,
-                              "user"));
-                      if (result != null) {
-                        Navigator.pop(context);
-                        Navigator.pop(context, result);
-                      }
+                      editProfileService.editProfile(
+                          UserDataModel(
+                            name: name.text,
+                            lastName: lastName.text,
+                            birthday: birthday.text,
+                            number: phoneNumber.text,
+                            email: email.text,
+                          ),
+                          context);
                     }
                   }
+                  await editProfileService.editProfile(
+                      UserDataModel(
+                        name: name.text,
+                        lastName: lastName.text,
+                        birthday: birthday.text,
+                        number: phoneNumber.text,
+                        email: email.text,
+                      ),
+                      context);
                 },
                 child: Text("${"yes".tr()}  ")),
           ],

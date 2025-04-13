@@ -6,12 +6,11 @@ import 'package:kitob_ol/home/model/book_model.dart';
 class BookService {
   final TokenStorage tokenStorage = sl<TokenStorage>();
   final Dio dio = sl<Dio>();
-  final String apiUrl =
-      "https://gateway.axadjonovsardorbek.uz/books/list?status=active";
 
-  Future<List<BookModel>> fetchBooks() async {
+  Future<List<BookModel>> fetchBooks(int page) async {
     try {
-      final response = await dio.get(apiUrl);
+      final response = await dio.get(
+          "https://gateway.axadjonovsardorbek.uz/books/list?status=active&page=$page");
 
       if (response.statusCode == 200) {
         final data = response.data;

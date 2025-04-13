@@ -7,31 +7,52 @@ class MyTextField extends StatelessWidget {
   final String label;
   final TextInputType textInputType;
   final String prefixText;
+  final bool isRequired;
 
-  const MyTextField(
-      {super.key,
-      required this.controller,
-      required this.label,
-      this.textInputType = TextInputType.text,
-      this.prefixText = "+998 "});
+  const MyTextField({
+    super.key,
+    required this.controller,
+    required this.label,
+    this.textInputType = TextInputType.text,
+    this.prefixText = "",
+    this.isRequired = true,
+  });
 
   @override
   Widget build(BuildContext context) {
     return Container(
       margin: const EdgeInsets.only(top: 12),
       child: TextFormField(
+        validator: (value) {
+          if (isRequired && (value == null || value.isEmpty)) {
+            return "$label kiritilishi shart";
+          }
+          return null;
+        },
         controller: controller,
         keyboardType: textInputType,
         textCapitalization: TextCapitalization.sentences,
         textInputAction: TextInputAction.next,
         cursorColor: kBlack,
         decoration: InputDecoration(
-            focusedBorder:
-                const OutlineInputBorder(borderSide: BorderSide(color: kBlack)),
-            border: const OutlineInputBorder(),
-            contentPadding: const EdgeInsets.all(8),
-            labelText: label,
-            labelStyle: kTSFS16),
+          prefixText: prefixText.isNotEmpty ? prefixText : null,
+          focusedBorder:
+              const OutlineInputBorder(borderSide: BorderSide(color: kBlack)),
+          errorBorder: const OutlineInputBorder(
+            borderSide: BorderSide(color: Colors.red),
+          ),
+          focusedErrorBorder: const OutlineInputBorder(
+            borderSide: BorderSide(color: Colors.red),
+          ),
+          border: const OutlineInputBorder(),
+          contentPadding: const EdgeInsets.all(8),
+          labelText: isRequired ? "$label *" : label,
+          labelStyle: kTSFS16,
+          errorStyle: const TextStyle(
+            color: Colors.red,
+            fontSize: 12,
+          ),
+        ),
       ),
     );
   }

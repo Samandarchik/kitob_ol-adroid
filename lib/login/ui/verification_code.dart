@@ -6,7 +6,6 @@ import 'package:kitob_ol/core/di/di.dart';
 import 'package:kitob_ol/login/service/ver_code.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:kitob_ol/color.dart';
-import 'package:kitob_ol/login/service/token.dart';
 import 'package:kitob_ol/text_style.dart';
 import 'package:kitob_ol/widget/my_botton_text.dart';
 import 'package:kitob_ol/widget/text_class.dart';
@@ -16,14 +15,14 @@ class VerificationCode extends StatefulWidget {
   final bool isEmail;
   final String email;
   final String number;
-  final bool? isRegister;
+  final bool isRegister;
 
   const VerificationCode({
     super.key,
     this.email = "",
     this.number = "",
     required this.isEmail,
-    this.isRegister,
+    required this.isRegister,
   });
 
   @override
@@ -41,6 +40,7 @@ class _VerificationCodeState extends State<VerificationCode> {
   DateTime? sentTime; // Kod yuborilgan vaqt
   Duration countdownDuration = const Duration(minutes: 3); // 3 daqiqa
   late Timer timer;
+  VerificationCodeApi verificationCodeApi = VerificationCodeApi();
   int remainingSeconds = 0;
   void startTimer() {
     timer = Timer.periodic(const Duration(seconds: 1), (timer) {
@@ -74,13 +74,6 @@ class _VerificationCodeState extends State<VerificationCode> {
     startTimer(); // Timer boshlash
   }
 
-  // // SMS yuborilgan vaqtni saqlash
-  // Future<void> _saveSmsTimestamp() async {
-  //   final prefs = await SharedPreferences.getInstance();
-  //   await prefs.setInt('sms_sent_time', DateTime.now().millisecondsSinceEpoch);
-  // }
-
-  // Saqlangan vaqtni yuklash va hisoblash
   Future<void> _loadRemainingTime() async {
     final prefs = await SharedPreferences.getInstance();
     int? sentTime = prefs.getInt('sms_sent_time');
@@ -114,15 +107,6 @@ class _VerificationCodeState extends State<VerificationCode> {
       }
     });
   }
-
-  // Kod yuborilganida vaqtni saqlash
-  // void _sendSms() {
-  //   setState(() {
-  //     _remainingTime = smsTimeout;
-  //   });
-  //   _saveSmsTimestamp();
-  //   _startTimer();
-  // }
 
   @override
   Widget build(BuildContext context) {
@@ -178,15 +162,26 @@ class _VerificationCodeState extends State<VerificationCode> {
                     text: "pasNext".tr(),
                     boxColor: imageColor,
                     textColor: kWhite,
-                    onTap: () {
-                      if (textcode.text.length == 6) {
-                        VerificationCodeApi().verificationCode(
-                            textcode.text, widget.email, context, false);
-                      } else {
-                        ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-                            content: Text("Sms orqali kelgan kodni kiriting")));
-                      }
-                    },
+                    onTap: widget.isRegister
+                        ? () {
+                            print("Register ${widget.isRegister}");
+
+                            if (textcode.text.length == 6) {
+                              verificationCodeApi.verificationCode(
+                                  textcode.text,
+                                  widget.email,
+                                  context,
+                                  widget.isRegister);
+                            } else {
+                              ScaffoldMessenger.of(context).showSnackBar(
+                                  SnackBar(
+                                      content: Text(
+                                          "Sms orqali kelgan kodni kiriting")));
+                            }
+                          }
+                        : () {
+                            print("Register ${widget.isRegister} 1");
+                          },
                   ),
                 ],
               ),

@@ -58,13 +58,17 @@
     "verificationCode":"Kodni tasdiqlash",
     "search":"Qidirish",
     "selectLang":"Tilni tanlang",
+    "seachLang":"Tilni qidirish",
     "selectAuthor":"Muallifni tanlang",
+    "searchAuthor":"Muallifni qidirish",
     "selectCategory":"Kategoriyani tanlang",
+    "searchCategory":"Kategoriyani qidirish",
     "selectPublisher":"Nashriyotni tanlang",
+    "searchPublisher":"Nashriyotni qidirish",
     "selectBookStatus":"Kitob holatini tanlang",
     "all":"Barcha",
     "new":"Yangi",
-    "old":"Eski",
+    "old":"O'qilgan",
     "addBook":"Kitob qo'shish",
     "loding":"Yuklanmoqda",
     "offline":"Offline",
@@ -74,7 +78,6 @@
     "lotin":"Lotin",
     "rus":"Русский",
     "birthday":"Tug'ilgan kun",
-    "notBook":"Kitoblar mavjud emas",
-    "notVacancy":"Ishlar mavjud emas"
-
+    "soft":"Yumshoq",
+    "hard":"Qattiq"
 }

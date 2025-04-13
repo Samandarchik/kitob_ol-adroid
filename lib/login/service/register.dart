@@ -58,7 +58,7 @@ class RegisterApiEmail {
       MaterialPageRoute(
         builder: (context) => VerificationCode(
           isEmail: true,
-          isRegister: isRegister,
+          isRegister: !isRegister,
           email: email,
         ),
       ),

@@ -42,7 +42,7 @@ class _FilterPageState extends State<FilterPage> {
 
   Future<void> fetchPriceRange() async {
     await BookService()
-        .fetchBooks(); // fetchBooks ichida minPrice va maxPrice yangilanadi
+        .fetchBooks(1); // fetchBooks ichida minPrice va maxPrice yangilanadi
     await tokenStorage.getPrice();
 
     setState(() {
@@ -79,26 +79,31 @@ class _FilterPageState extends State<FilterPage> {
                     setState(() {
                       selectedLanguage = id;
                     });
+                    print("Til o'zgartirildi: $id");
                   },
                   onAuthorChanged: (String? id) {
                     setState(() {
                       selectedAuthor = id;
                     });
+                    print("Muallif o'zgartirildi: $id");
                   },
                   onCategoryChanged: (String? id) {
                     setState(() {
                       selectedCategory = id;
                     });
+                    print("Kategoriya o'zgartirildi: $id");
                   },
                   onPublisherChanged: (String? id) {
                     setState(() {
                       selectedPublisher = id;
                     });
+                    print("Nashriyot o'zgartirildi: $id");
                   },
                   onNewStatusChanged: (bool? value) {
                     setState(() {
                       isNew = value;
                     });
+                    print("Kitob holati o'zgartirildi: $value");
                   },
                 ),
 
@@ -125,6 +130,8 @@ class _FilterPageState extends State<FilterPage> {
                         (values.end / 1000).round() * 1000,
                       );
                     });
+                    print(
+                        "Narx oralig'i o'zgartirildi: ${_currentRangeValues.start.toInt()} - ${_currentRangeValues.end.toInt()}");
                   },
                 ),
 
@@ -145,8 +152,16 @@ class _FilterPageState extends State<FilterPage> {
                     top: 10,
                     textColor: kWhite,
                     onTap: () {
+                      print("Qidirish tugmasi bosildi");
+                      print("Til: $selectedLanguage");
+                      print("Muallif: $selectedAuthor");
+                      print("Kategoriya: $selectedCategory");
+                      print("Nashriyot: $selectedPublisher");
+                      print("Tarjimon: $selectedTranslation");
+                      print("Yangi: $isNew");
                       print(
-                          "selectedLanguage: $selectedLanguage, selectedCategory: $selectedCategory, selectedTranslation: $selectedTranslation selectedLanguage: $selectedLanguage ");
+                          "Narx oralig'i: ${_currentRangeValues.start.toInt()} - ${_currentRangeValues.end.toInt()}");
+
                       Navigator.push(
                           context,
                           MaterialPageRoute(
@@ -155,6 +170,8 @@ class _FilterPageState extends State<FilterPage> {
                                       categoryId: selectedCategory,
                                       translatorId: selectedTranslation,
                                       languageId: selectedLanguage,
+                                      publisherId: selectedPublisher,
+                                      isNew: isNew,
                                       priceFrom:
                                           _currentRangeValues.start.toInt(),
                                       priceTo:

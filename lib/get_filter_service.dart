@@ -37,7 +37,7 @@ class ApiService {
           .map((json) => Districts.fromJson(json))
           .toList();
     } else {
-      throw Exception("Cities yuklab bo'lmadi!");
+      throw Exception("Districts yuklab bo'lmadi!");
     }
   }
 

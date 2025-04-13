@@ -1,9 +1,13 @@
+import 'package:flutter/material.dart';
 import 'package:image/image.dart' as img;
 import 'dart:io';
 
 import 'package:dio/dio.dart';
 import 'package:kitob_ol/core/di/di.dart';
 import 'package:kitob_ol/home/model/user_info_model.dart';
+import 'package:kitob_ol/profile/profile.dart';
+import 'package:path/path.dart';
+import 'package:path_provider/path_provider.dart';
 
 class EditProfileService {
   final Dio dio = sl<Dio>();
@@ -15,7 +19,7 @@ class EditProfileService {
   Future<String?> uploadImage(File imageFile) async {
     try {
       final int sizeInBytes = await imageFile.length();
-      const maxSize = 2 * 1024 * 1024; // 2MB
+      const maxSize = 989042; // 989042 bytes (yakuniy o'lcham)
 
       File resizedFile = imageFile;
 
@@ -28,22 +32,32 @@ class EditProfileService {
 
         if (originalImage == null) return null;
 
+        // Rasmning o'lchamini kesish va sifatini sozlash
+        final double scaleFactor = (maxSize / sizeInBytes).toDouble();
+        final newWidth = (originalImage.width * scaleFactor).toInt();
+        final newHeight = (originalImage.height * scaleFactor).toInt();
+
+        // Kichraytirilgan rasmni yaratish
         final resizedImage = img.copyResize(
           originalImage,
-          width: (originalImage.width * 0.5).toInt(), // 50% ga kichraytirish
+          width: newWidth,
+          height: newHeight,
         );
 
+        // Rasmni yangi formatda kodlash va diskda saqlash
         final resizedBytes = img.encodeJpg(resizedImage, quality: 85);
-        final tempDir = Directory.systemTemp;
+        final tempDir = await getTemporaryDirectory();
         resizedFile = await File('${tempDir.path}/resized_image.jpg')
             .writeAsBytes(resizedBytes);
+
+        print("Rasm ulchami: ${resizedFile.lengthSync()} bytes");
       }
 
       FormData formData = FormData.fromMap({
         'file': await MultipartFile.fromFile(resizedFile.path),
       });
 
-      final response = await Dio().post(
+      final response = await dio.post(
         'https://gateway.axadjonovsardorbek.uz/img-upload',
         data: formData,
       );
@@ -60,26 +74,29 @@ class EditProfileService {
     }
   }
 
-  Future<UserDataModel?> editProfile(final UserDataModel userDataModel) async {
+  Future<void> editProfile(
+      UserDataModel userDataModel, BuildContext context) async {
     try {
       final response = await dio.put(
         'https://auth.axadjonovsardorbek.uz/auth/user/update',
         data: {
           "first_name": userDataModel.name,
           "last_name": userDataModel.lastName,
-          "image_url": userDataModel.imageUrl,
+          if (userDataModel.imageUrl != null)
+            "image_url": userDataModel.imageUrl,
           "phone_number": userDataModel.number,
           "email": userDataModel.email,
           "date_of_birth": userDataModel.birthday,
         },
       );
       if (response.statusCode == 200 || response.statusCode == 201) {
-        return userDataModel;
+        Navigator.pushReplacement(
+            context, MaterialPageRoute(builder: (context) => MyProfile()));
       } else {
-        return null;
+        ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+          content: Text("${response.data}, ${response.statusCode}"),
+        ));
       }
-    } catch (e) {
-      return null;
-    }
+    } catch (e) {}
   }
 }

@@ -14,6 +14,7 @@ class VerificationCodeApi {
   Future<Map<String, String>> verificationCode(
       String code, String email, BuildContext context, bool isRegister) async {
     try {
+      print("isRegister $isRegister");
       Map<String, String> body = {"confirmation_code": code, "email": email};
       final response = await http.post(
           Uri.parse(
@@ -39,6 +40,8 @@ class VerificationCodeApi {
             MaterialPageRoute(builder: (context) => HomePage()),
             (route) => false);
       } else if (response.statusCode == 500) {
+        print("reponse body ${response.body}, ${response.statusCode}");
+
         ScaffoldMessenger.of(context).showSnackBar(SnackBar(
             content: Text("Kod xato iltimos kodni qaytadan tekshiring")));
       } else {

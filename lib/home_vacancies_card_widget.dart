@@ -1,3 +1,4 @@
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:kitob_ol/color.dart';
 import 'package:kitob_ol/home/service/ish.dart';
@@ -44,7 +45,7 @@ class HomeVacanciesCardWidget extends StatelessWidget {
                       ),
                     ),
                     Text(
-                      ish.cityName["uz"]!,
+                      ish.cityName[context.locale.languageCode]!,
                       style: TextStyle(fontSize: 14),
                     ),
                   ],
@@ -64,9 +65,9 @@ class HomeVacanciesCardWidget extends StatelessWidget {
             ),
             SizedBox(height: 10),
             Text(
-                "• ${ish.workingStyles == "offline" ? "Masofaviy" : 'Ofisda'}"),
+                "• ${ish.workingStyles == "offline" ? "offline".tr() : 'online'.tr()}"),
             Text(
-                "• ${ish.workingTypes == "full_time" ? "To'liq ish kuni" : "Malum soatlarda"}"),
+                "• ${ish.workingTypes == "full_time" ? "full_time".tr() : "part_time".tr()}"),
             SizedBox(
               height: 20,
             ),

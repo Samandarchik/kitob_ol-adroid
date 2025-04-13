@@ -10,6 +10,7 @@ import 'package:kitob_ol/text_style.dart';
 import 'package:kitob_ol/widget/app_bar.dart';
 import 'package:kitob_ol/widget/drawer.dart';
 import 'package:kitob_ol/widget/my_botton_text.dart';
+import 'package:kitob_ol/widget/my_card.dart';
 import 'package:kitob_ol/widget/slider.dart';
 
 class HomePage extends StatefulWidget {
@@ -23,6 +24,7 @@ class _HomePageState extends State<HomePage> {
   BookService bookService = BookService();
   List<BookModel> futureBooks = [];
   bool book = true; // Initially, we show books by default
+  int page = 1;
 
   @override
   void initState() {
@@ -32,7 +34,7 @@ class _HomePageState extends State<HomePage> {
 
   Future<void> fetchBooks() async {
     // tokenstorage.getToken();
-    final books = await bookService.fetchBooks();
+    final books = await bookService.fetchBooks(page);
     setState(() {
       futureBooks = books;
     });
@@ -102,4 +104,17 @@ class _HomePageState extends State<HomePage> {
       ),
     );
   }
+
+  ListView bookList(List<BookModel> books) => ListView.builder(
+        shrinkWrap: true, // Ensures ListView doesn't take all space
+        physics: NeverScrollableScrollPhysics(),
+        itemCount: books.length,
+        itemBuilder: (context, index) {
+          BookModel book = books[index];
+
+          return MyCardBook(
+            book: book,
+          );
+        },
+      );
 }
